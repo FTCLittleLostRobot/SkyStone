@@ -1,41 +1,39 @@
 /* Little Lost Robots
-   Core Devs: Danielle
+   Core Devs: Caden
 */
 
-package org.firstinspires.ftc.teamcode.Competition;
+package org.firstinspires.ftc.teamcode.Competition2018;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.controllers.ColorFinder;
+import org.firstinspires.ftc.teamcode.StateMachines.DabEmoteStateMachine;
 import org.firstinspires.ftc.teamcode.controllers.MecanumMove;
-import org.firstinspires.ftc.teamcode.StateMachines.SamplingStateMachine;
 
-@Autonomous(name="Mecanum:Sampling", group="Mecanum")
-public class MecanumAutoSampling_Iterative extends OpMode {
+@Autonomous(name="Mecanum:Dabbing", group="Mecanum")
+@Disabled
+public class MecanumAutoDabbing_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;
-    private SamplingStateMachine samplingStateMachine;
+    private DabEmoteStateMachine DabEmoteStateMachine;
     private MecanumMove moveRobot;
-    private ColorFinder colorFinder;
 
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
         this.robot = new HardwareMecanumBase();
         this.moveRobot = new MecanumMove();
-        this.colorFinder = new ColorFinder();
-        this.samplingStateMachine = new SamplingStateMachine();
+        this.DabEmoteStateMachine = new DabEmoteStateMachine();
 
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
 
         /* Step 3: Setup of controllers  */
         this.moveRobot.init(robot);
-        this.colorFinder.init(hardwareMap);
 
         /* Step 4: Setup of state machines  */
-        this.samplingStateMachine.init(telemetry, colorFinder, moveRobot);
+        // DELETE THIS: BUT REMEMBER TO FIX THIS CODE - this.DabEmoteStateMachine.init(telemetry, moveRobot);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -47,7 +45,7 @@ public class MecanumAutoSampling_Iterative extends OpMode {
 
     @Override
     public void start() {
-        samplingStateMachine.Start();
+        DabEmoteStateMachine.Start();
     }
 
     /*
@@ -56,8 +54,8 @@ public class MecanumAutoSampling_Iterative extends OpMode {
     @Override
     public void loop()
     {
-        //this goes into the StateMachine, "SamplingStateMachine" and then goes through all the states it needs
-        samplingStateMachine.ProcessState();
+        //this goes into the StateMachine, "DabEmoteStateMachine" and then goes through all the states it needs
+        DabEmoteStateMachine.ProcessState();
     }
 
     /*

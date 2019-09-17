@@ -3,8 +3,9 @@
 */
 
 
-package org.firstinspires.ftc.teamcode.Competition;
+package org.firstinspires.ftc.teamcode.Competition2018;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,8 +30,9 @@ import org.firstinspires.ftc.teamcode.HardwareMecanumBase;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Mecanum: Teleop", group="Mecanum")
-public class MecanumTeleop_Iterative extends OpMode{
+@TeleOp(name="Mecanum: Teleop 2018", group="Mecanum")
+@Disabled
+public class MecanumTeleop_Iterative2018 extends OpMode{
 
     /* Declare OpMode members. */
     private HardwareMecanumBase robot = null;

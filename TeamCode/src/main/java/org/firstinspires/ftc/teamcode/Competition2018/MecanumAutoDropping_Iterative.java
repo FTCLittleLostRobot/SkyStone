@@ -2,16 +2,18 @@
    Core Devs: Danielle
 */
 
-package org.firstinspires.ftc.teamcode.Competition;
+package org.firstinspires.ftc.teamcode.Competition2018;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.StateMachines.LandingStateMachine;
 import org.firstinspires.ftc.teamcode.controllers.LanderEncoder;
 import org.firstinspires.ftc.teamcode.controllers.MecanumMove;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
 @Autonomous(name="Mecanum: Dropping", group="Mecanum")
+@Disabled
 public class MecanumAutoDropping_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;

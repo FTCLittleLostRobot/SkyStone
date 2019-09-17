@@ -6,10 +6,11 @@ package org.firstinspires.ftc.teamcode.controllers;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
+//import android.support.annotation.Nullable;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
@@ -57,7 +58,7 @@ public class ColorFinder {
      * As you can see below, I added a lot of colors.
      * https://www.rapidtables.com/convert/color/rgb-to-hsv.html - Great website for finding colors
      */
-    @Nullable
+    //@Nullable
     public Image getVuforiaImagefromFrame()  throws InterruptedException {
         VuforiaLocalizer.CloseableFrame frame = vuforia.getFrameQueue().take();
         int format = PIXEL_FORMAT.RGB565;

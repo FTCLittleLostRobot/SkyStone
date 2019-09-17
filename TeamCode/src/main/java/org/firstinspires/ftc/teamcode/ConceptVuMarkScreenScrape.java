@@ -34,7 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
+//import android.support.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -64,7 +64,7 @@ import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 @TeleOp(name="Concept: VuMark Id", group ="Concept")
 @Disabled
-public class ConceptVuMarkIdentification extends LinearOpMode {
+public class ConceptVuMarkScreenScrape extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
@@ -125,7 +125,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
 
     }
 
-    @Nullable
+  //  @Nullable
     private Image getImagefromFrame(VuforiaLocalizer.CloseableFrame frame, int format) {
         long numImgs = frame.getNumImages();
         for (int i = 0; i <numImgs; i++) {

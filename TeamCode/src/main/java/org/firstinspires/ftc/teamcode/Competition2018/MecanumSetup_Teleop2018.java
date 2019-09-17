@@ -4,10 +4,9 @@
 */
 
 
-package org.firstinspires.ftc.teamcode.Competition;
+package org.firstinspires.ftc.teamcode.Competition2018;
 
-import android.graphics.Bitmap;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,17 +18,15 @@ import org.firstinspires.ftc.teamcode.controllers.LanderNoEncoder;
 
 
 import org.firstinspires.ftc.teamcode.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.controllers.LanderNoEncoder;
-import org.firstinspires.ftc.teamcode.controllers.MecanumMove;
 
 /*
  *   This program should be used to make sure all wires are in and in the correct ports.
  *   If a wire is in the wrong port or not in at all this program will let you know!
  */
 
-@TeleOp(name="Mecanum: Setup", group="TestingMecanum")
-
-public class MecanumSetup_Teleop extends OpMode {
+@TeleOp(name="Mecanum: Setup 2018", group="TestingMecanum")
+@Disabled
+public class MecanumSetup_Teleop2018 extends OpMode {
 
     /* Declare OpMode members. */
     private HardwareMecanumBase robot = new HardwareMecanumBase(); // use the class created to define a Mencanums 's hardware
