@@ -58,12 +58,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
+import org.firstinspires.ftc.teamcode.controllers.ColorFinder;
 
 //https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 //https://www.youtube.com/watch?v=wckaGJFxwlw
 
 @TeleOp(name="Concept: VuMark Id", group ="Concept")
-@Disabled
 public class ConceptVuMarkScreenScrape extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -71,7 +71,7 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia;
     enum ColorTarget{
-        Yellow, Red, Blue, White, Green
+        Yellow, Red, Blue, White, Green, Black
     }
 
     @Override public void runOpMode() {
@@ -85,7 +85,8 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
         // OR...  Do Not Activate the Camera Monitor View, to save power
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters()
 
-        parameters.vuforiaLicenseKey = "Adqx6DT/////AAABmZlkTzS5r0pXkD69c956JPRphYPsOI8mY5p+KC7CmdxkdZcT8LaXbgvfDIigrnO/PtTjO70OelYnZ8Ch085qgo0syqNC1QYXs35CcbtxvYxBC5givpm8vLxnxgo+3Fd+O4XUFiUS2EDBKxlANbBCXm8yEuXYXxWJtwlzY92ivgQkdqedHoz/uzSBTgK8rnGhgiklZqKTBU9mJTbCJ9uEXTXH+w5w3p6UQw9uMXnT+DMZQE6OGfYkL19zxaI/nAfkgUaFFcuKlQamQC+MceMshEFhqogJtGoeUhj7Nrv8+DcBhkNeju8u1WV6FlZAD6OyWbdgPsHjKlALNDhvecd95mWDa1lflssHFgbtPhPHUIMo";
+        parameters.vuforiaLicenseKey =
+                "Adqx6DT/////AAABmZlkTzS5r0pXkD69c956JPRphYPsOI8mY5p+KC7CmdxkdZcT8LaXbgvfDIigrnO/PtTjO70OelYnZ8Ch085qgo0syqNC1QYXs35CcbtxvYxBC5givpm8vLxnxgo+3Fd+O4XUFiUS2EDBKxlANbBCXm8yEuXYXxWJtwlzY92ivgQkdqedHoz/uzSBTgK8rnGhgiklZqKTBU9mJTbCJ9uEXTXH+w5w3p6UQw9uMXnT+DMZQE6OGfYkL19zxaI/nAfkgUaFFcuKlQamQC+MceMshEFhqogJtGoeUhj7Nrv8+DcBhkNeju8u1WV6FlZAD6OyWbdgPsHjKlALNDhvecd95mWDa1lflssHFgbtPhPHUIMo";
 
         /*
          * We also indicate which camera on the RC that we wish to use.
@@ -143,25 +144,31 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
      * https://www.rapidtables.com/convert/color/rgb-to-hsv.html - Great website for finding colors
      */
 
-    public int FindColor(Bitmap bm_ing, ColorTarget colorTarget)  {
+    public int FindColor(Bitmap bm_img, ColorTarget colorTarget)  {
+
         Color cur_color = null;
         int cur_color_int, rgb[] = new int[3];
         float hsv[] = new float[3];
         int hueMax = 0;
 
-        int width = bm_ing.getWidth(); // width in landscape mode
-        int height = bm_ing.getHeight(); // height in landscape mode
+        int width = bm_img.getWidth(); // width in landscape mode
+        int height = bm_img.getHeight(); // height in landscape mode
         int columnWidth = width / 5;
 
         int columnFound = -1;
         int columnMaxValue = 0;
 
+        //ByteBuffer pixelBuffer = ByteBuffer.allocate(bm_img.getHeight() * bm_img.getRowBytes());
+        //bm_img.copyPixelsToBuffer(pixelBuffer);
+
         for (int column = 0; column < 5; column++) {
             int columnCounter = 0;
 
-            for (int i = 100; i < height; i += 3) {
-                for (int j = column * columnWidth; j < (column + 1) * columnWidth; j++) {
-                    cur_color_int = bm_ing.getPixel(j, i);
+            for (int i = 50; i < height; i += 3) {
+                for (int j = column * columnWidth; j < (column + 1) * columnWidth; j += 3) {
+                    cur_color_int = bm_img.getPixel(j, i);
+
+//                    cur_color_int = pixelBuffer.get(j + (i * width))  ;
                     rgb[0] = cur_color.red(cur_color_int);
                     rgb[1] = cur_color.green(cur_color_int);
                     rgb[2] = cur_color.blue(cur_color_int);
@@ -170,47 +177,56 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
 
                     hueMax = Math.max((int) hsv[0], hueMax);
 
-                    if (colorTarget == ColorTarget.Yellow) {
-                        if ((hsv[0] > 30) && (hsv[0] < 50)) {
-                            columnCounter++;
-                        }
-                    }
-                    else if (colorTarget == ColorTarget.White)
-                    {
-                        if ((hsv[0] > 0) && (hsv[0] < 0) && (hsv[1] >= 0) && (hsv[1] < .25 )) {
-                            columnCounter++;
-                        }
-                    }
-                    else if (colorTarget == ColorTarget.Red)
-                    {
-                        if ((hsv[0] > 0) && (hsv[0] < 0) && (hsv[1] > .75) && (hsv[1] <= 1)) {
-                            columnCounter++;
-                        }
-                    }
-                    else if (colorTarget == ColorTarget.Blue)
-                    {
-                        if ((hsv[0] > 220) && (hsv[0] < 250)) {
-                            columnCounter++;
-                        }
-                    }
-                    else if (colorTarget == ColorTarget.Green)
-                    {
-                        if ((hsv[0] > 100) && (hsv[0] < 120) && (hsv[1] > .75) && (hsv[1] <= 1)) {
-                            columnCounter++;
+                    // Sites used for determining these values:
+                    // http://colorizer.org/
+                    if (hsv[2] > .15) {
+                        if (colorTarget == ColorTarget.Yellow) {
+                            if ((hsv[0] > 30) && (hsv[0] < 50) && (hsv[1] >= .75) && (hsv[1] <= 1) && (hsv[2] >= 0.8) ) {
+                                columnCounter++;
+                                telemetry.addData("colorTarget ", colorTarget);
+                            }
+                        } else if (colorTarget == ColorTarget.White) {
+                            if ((hsv[0] > 0) && (hsv[0] < 0) && (hsv[1] >= 0) && (hsv[1] < .25)) {
+                                columnCounter++;
+                                telemetry.addData("colorTarget ", colorTarget);
+
+                            }
+                        } else if (colorTarget == ColorTarget.Red) {
+                            if ((hsv[0] > 0) && (hsv[0] < 0) && (hsv[1] > .75) && (hsv[1] <= 1)) {
+                                columnCounter++;
+                                telemetry.addData("colorTarget ", colorTarget);
+
+                            }
+                        } else if (colorTarget == ColorTarget.Blue) {
+                            if ((hsv[0] > 220) && (hsv[0] < 250)) {
+                                columnCounter++;
+                                telemetry.addData("colorTarget ", colorTarget);
+
+                            }
+                        } else if (colorTarget == ColorTarget.Green) {
+                            if ((hsv[0] > 100) && (hsv[0] < 120) && (hsv[1] > .75) && (hsv[1] <= 1)) {
+                                columnCounter++;
+                                telemetry.addData("colorTarget ", colorTarget);
+
+                            }
+                        } else if (colorTarget == ColorTarget.Black) {
+                            if ((hsv[0] == 0) && (hsv[1] == 0) && (hsv[2] <= 5)) {
+                                columnCounter++;
+                                telemetry.addData("colorTarget ", colorTarget);
+
+                            }
                         }
                     }
                 }
             }
-            if (columnCounter > 10) {
+            if (columnCounter > 25) {
                 if (columnCounter > columnMaxValue) {
                     columnMaxValue = columnCounter;
                     columnFound = column;
                 }
             }
         }
-
-        return columnFound;
-    }
+        return columnFound;  }
 
     private String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
