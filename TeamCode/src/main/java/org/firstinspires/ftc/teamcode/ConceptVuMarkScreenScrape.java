@@ -36,29 +36,15 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 //import android.support.annotation.Nullable;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
-import org.firstinspires.ftc.teamcode.controllers.ColorFinder;
 
 //https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 //https://www.youtube.com/watch?v=wckaGJFxwlw
@@ -94,6 +80,7 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
          * for a competition robot, the front camera might be more convenient.
          */
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
         vuforia = new VuforiaLocalizerImpl(parameters);
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
         vuforia.setFrameQueueCapacity(1);
@@ -104,9 +91,11 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
         while (opModeIsActive()) {
 
             try {
+                telemetry.addData("State", "Getting Image");
                 Bitmap bm = getImage();
-                int colorMum = FindColor(bm, ColorTarget.Yellow);
-                telemetry.addData("Column: ", colorMum);
+                telemetry.addData("State", "Finding Color");
+                int colorMum = FindColor(bm, ColorTarget.Black);
+                telemetry.addData("Column", colorMum);
             } catch(InterruptedException ex){
                 telemetry.addData("error", ex.getMessage());
             }
@@ -153,7 +142,7 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
 
         int width = bm_img.getWidth(); // width in landscape mode
         int height = bm_img.getHeight(); // height in landscape mode
-        int columnWidth = width / 5;
+        int columnWidth = width / 3;
 
         int columnFound = -1;
         int columnMaxValue = 0;
@@ -161,11 +150,11 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
         //ByteBuffer pixelBuffer = ByteBuffer.allocate(bm_img.getHeight() * bm_img.getRowBytes());
         //bm_img.copyPixelsToBuffer(pixelBuffer);
 
-        for (int column = 0; column < 5; column++) {
+        for (int column = 0; column < 3; column++) {
             int columnCounter = 0;
 
-            for (int i = 50; i < height; i += 3) {
-                for (int j = column * columnWidth; j < (column + 1) * columnWidth; j += 3) {
+            for (int i = 50; i < height; i += 20) {
+                for (int j = column * columnWidth; j < (column + 1) * columnWidth; j += 10) {
                     cur_color_int = bm_img.getPixel(j, i);
 
 //                    cur_color_int = pixelBuffer.get(j + (i * width))  ;
@@ -183,35 +172,41 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
                         if (colorTarget == ColorTarget.Yellow) {
                             if ((hsv[0] > 30) && (hsv[0] < 50) && (hsv[1] >= .75) && (hsv[1] <= 1) && (hsv[2] >= 0.8) ) {
                                 columnCounter++;
+                                telemetry.addData("Colum counter",columnCounter);
                                 telemetry.addData("colorTarget ", colorTarget);
                             }
                         } else if (colorTarget == ColorTarget.White) {
                             if ((hsv[0] > 0) && (hsv[0] < 0) && (hsv[1] >= 0) && (hsv[1] < .25)) {
                                 columnCounter++;
+                                telemetry.addData("Colum counter",columnCounter);
                                 telemetry.addData("colorTarget ", colorTarget);
 
                             }
                         } else if (colorTarget == ColorTarget.Red) {
                             if ((hsv[0] > 0) && (hsv[0] < 0) && (hsv[1] > .75) && (hsv[1] <= 1)) {
                                 columnCounter++;
+                                telemetry.addData("Colum counter",columnCounter);
                                 telemetry.addData("colorTarget ", colorTarget);
 
                             }
                         } else if (colorTarget == ColorTarget.Blue) {
                             if ((hsv[0] > 220) && (hsv[0] < 250)) {
                                 columnCounter++;
+                                telemetry.addData("Colum counter",columnCounter);
                                 telemetry.addData("colorTarget ", colorTarget);
 
                             }
                         } else if (colorTarget == ColorTarget.Green) {
                             if ((hsv[0] > 100) && (hsv[0] < 120) && (hsv[1] > .75) && (hsv[1] <= 1)) {
                                 columnCounter++;
+                                telemetry.addData("Colum counter",columnCounter);
                                 telemetry.addData("colorTarget ", colorTarget);
 
                             }
                         } else if (colorTarget == ColorTarget.Black) {
                             if ((hsv[0] == 0) && (hsv[1] == 0) && (hsv[2] <= 5)) {
                                 columnCounter++;
+                                telemetry.addData("Colum counter",columnCounter);
                                 telemetry.addData("colorTarget ", colorTarget);
 
                             }
@@ -219,7 +214,7 @@ public class ConceptVuMarkScreenScrape extends LinearOpMode {
                     }
                 }
             }
-            if (columnCounter > 25) {
+            if (columnCounter > 10) {
                 if (columnCounter > columnMaxValue) {
                     columnMaxValue = columnCounter;
                     columnFound = column;
