@@ -17,6 +17,7 @@ public class MecanumRotateStateMachine {
     Double degrees;
     MecanumRotateStateMachine.RobotState state;
 
+
     enum RobotState
     {
         Start,
@@ -30,6 +31,7 @@ public class MecanumRotateStateMachine {
         this.telemetry = telemetry;
         this.moveRobot = mecanumMove;
         this.degrees= degrees;
+
 
         telemetry.addData("Say", "Hello Driver");    //
         state = MecanumRotateStateMachine.RobotState.Start;
@@ -52,8 +54,9 @@ public class MecanumRotateStateMachine {
         switch (state)
         {
             case Rotate:
-                this.moveRobot.Start(10, 0, 0, 0, degrees );
+                this.moveRobot.Start(10, 0, 0, 1, degrees );
                 state = RobotState.Rotating;
+                break;
 
             case Rotating:
                 if (this.moveRobot.IsDone()) {
@@ -61,6 +64,7 @@ public class MecanumRotateStateMachine {
                     state = RobotState.Done;
                 }
                 break;
+
 
             case Done:
                 state = MecanumRotateStateMachine.RobotState.Done;

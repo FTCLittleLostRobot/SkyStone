@@ -119,7 +119,7 @@ public class MecanumTeleop_Iterative extends OpMode{
         robot.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
 
          telemetry.addData("SpeedMultplier", robot.SpeedMultiplier);
-
+         telemetry.addData("right stick x value", gamepad1.right_stick_x);
 
     }
 

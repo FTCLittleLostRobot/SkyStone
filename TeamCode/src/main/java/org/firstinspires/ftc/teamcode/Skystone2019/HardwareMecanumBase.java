@@ -174,7 +174,7 @@ public class HardwareMecanumBase {
                 break;
 
             case RightBackDrive:
-                v = r * Math.sin(robotAngle) + rotation;
+                v = r * Math.sin(robotAngle) - rotation;
                 break;
 
 
@@ -196,7 +196,7 @@ public class HardwareMecanumBase {
         final double v1 = r * Math.cos(robotAngle) + rotation;
         final double v2 = r * Math.sin(robotAngle) - rotation;
         final double v3 = r * Math.sin(robotAngle) + rotation;
-        final double v4 = r * Math.cos(robotAngle) + rotation;
+        final double v4 = r * Math.cos(robotAngle) - rotation;
 
         //DrivePower(WheelControl.LeftFrontDrive, v2);  //Julia 12-1-6:35 switch left front with right front
         //DrivePower(WheelControl.RightFrontDrive, v1);

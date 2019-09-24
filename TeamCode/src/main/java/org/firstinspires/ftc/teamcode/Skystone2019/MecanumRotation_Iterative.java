@@ -30,9 +30,14 @@ public class MecanumRotation_Iterative extends OpMode {
 
         /* Step 3: Setup of controllers  */
         this.moveRobot.init(robot);
+        //float right_stick_x;
+        //right_stick_x= 1;
+
 
         /* Step 4: Setup of state machines  */
-        this.rotateStateMachine.init(telemetry, 90.0, moveRobot);
+        this.rotateStateMachine.init(telemetry, 1.0, moveRobot);
+        //todo why won't right stick and left stick work?
+        //robot.MoveMecanum(0, 0, right_stick_x);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
