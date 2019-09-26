@@ -5,25 +5,38 @@
 package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
+import com.qualcomm.robotcore.robocol.TelemetryMessage;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
+import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryInternal;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 public class MecanumMove {
 
     public static final double GO_FORWARD = -1;
     public static final double GO_BACK = 1;
     public static final double GO_RIGHT = -1;
     public static final double GO_LEFT = 1;
-
+    public enum RotationDirection{
+        Right,
+        Left
+    }
 
     HardwareMecanumBase hwBase;
 
     int targetSpin = 0;
     int targetEncoderValue = 0;
 
+
     public void init(HardwareMecanumBase hwBase){
         this.hwBase = hwBase;
-    } 
-        
-    public void Start(int speed, double inches, double x, double y, double rotation) {
+    }
+
+    public void StartMove(int speed, double inches, double x, double y, double rotation) {
 
         targetSpin  = this.hwBase.GetWheelSpinDirection(HardwareMecanumBase.WheelControl.LeftFrontDrive,x,y,rotation);
 
@@ -38,6 +51,33 @@ public class MecanumMove {
 
         this.hwBase.SpeedMultiplier = speed;
         this.hwBase.MoveMecanum(x,y,rotation);
+    }
+
+
+
+    public void StartRotate(Telemetry telemetry, int speed, double angle, RotationDirection direction) {
+        telemetry.addData("Current State", direction.toString());
+
+        int encoderTicks = 1523 / 2;
+        targetSpin = 1;
+
+
+        if (hwBase.left_front_drive != null){
+            // Determine new target position, and pass to motor controller
+            this.hwBase.left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.left_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+
+            int newLeftFrontTarget = this.hwBase.left_front_drive.getCurrentPosition() +encoderTicks;
+            targetEncoderValue = newLeftFrontTarget;
+
+        }
+
+        this.hwBase.SpeedMultiplier = speed;
+        this.hwBase.MoveMecanum(0,0, 1);
     }
 
     public boolean IsDone() {

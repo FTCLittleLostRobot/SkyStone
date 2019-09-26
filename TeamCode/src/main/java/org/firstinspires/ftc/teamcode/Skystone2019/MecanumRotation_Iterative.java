@@ -7,6 +7,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
@@ -37,7 +38,7 @@ public class MecanumRotation_Iterative extends OpMode {
         /* Step 4: Setup of state machines  */
         this.rotateStateMachine.init(telemetry, 1.0, moveRobot);
         //todo why won't right stick and left stick work?
-        //robot.MoveMecanum(0, 0, right_stick_x);
+        //moveRobot.StartRotate(telemetry, 2, 90, MecanumMove.RotationDirection.Right);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //

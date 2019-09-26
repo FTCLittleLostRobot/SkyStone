@@ -54,7 +54,7 @@ public class MecanumRotateStateMachine {
         switch (state)
         {
             case Rotate:
-                this.moveRobot.Start(10, 0, 0, 1, degrees );
+                this.moveRobot.StartRotate(telemetry, 50, 90, MecanumMove.RotationDirection.Right );
                 state = RobotState.Rotating;
                 break;
 

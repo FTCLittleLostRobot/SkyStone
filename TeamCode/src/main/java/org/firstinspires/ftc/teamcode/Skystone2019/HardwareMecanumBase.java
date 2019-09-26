@@ -53,7 +53,7 @@ public class HardwareMecanumBase {
 
     /* local OpMode members. */
     public HardwareMap hardwareMap = null;
-
+    private static boolean ONBOT_ACTIVE = true;
     private static final double COUNTS_PER_MOTOR_REV = 537.6;  // eg: Countable events per revolution of Output shaft
     private static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
     private static final double LIFT_GEAR_REDUCTION = 2.0;     // This is < 2.0 if geared UP
@@ -77,23 +77,31 @@ public class HardwareMecanumBase {
         hardwareMap = ahwMap;
         // i changed the front two motors fron Reverse to Fowards or Fowards to reverse
         // Define and Initialize Motors
+        /*
+        todo: If code is can't find motor then add back in and use Android Studio, TryGet WILL NOT WORK WITH ONBOT
         left_front_drive = hardwareMap.tryGet(DcMotor.class, "left_front");
+        right_front_drive = hardwareMap.tryGet(DcMotor.class, "right_front");
+        left_back_drive = hardwareMap.tryGet(DcMotor.class, "left_back");
+        right_back_drive = hardwareMap.tryGet(DcMotor.class, "right_back");
+        */
+        left_front_drive = hardwareMap.get(DcMotor.class, "left_front");
+        right_front_drive = hardwareMap.get(DcMotor.class, "right_front");
+        left_back_drive = hardwareMap.get(DcMotor.class, "left_back");
+        right_back_drive = hardwareMap.get(DcMotor.class, "right_back");
+
         if (left_front_drive != null) {
             left_front_drive.setDirection(DcMotor.Direction.FORWARD);
         }
 
-        right_front_drive = hardwareMap.tryGet(DcMotor.class, "right_front");
         if (right_front_drive != null){
             right_front_drive.setDirection(DcMotor.Direction.REVERSE);
 
         }
 
-        left_back_drive = hardwareMap.tryGet(DcMotor.class, "left_back");
         if (left_back_drive != null) {
             left_back_drive.setDirection(DcMotor.Direction.FORWARD);
         }
 
-        right_back_drive = hardwareMap.tryGet(DcMotor.class, "right_back");
         if (right_back_drive != null) {
             right_back_drive.setDirection(DcMotor.Direction.REVERSE);
         }

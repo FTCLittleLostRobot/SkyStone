@@ -22,13 +22,14 @@ public class MecanumMove {
         this.hwBase = hwBase;
     } 
         
-    public void Start(int speed, double inches, double x, double y, double rotation) {
+    public void StartMove(int speed, double inches, double x, double y, double rotation) {
 
         targetSpin  = this.hwBase.GetWheelSpinDirection(HardwareMecanumBase.WheelControl.LeftFrontDrive,x,y,rotation);
 
 
         if (hwBase.left_front_drive != null){
-            // Determine new target position, and pass to motor controller
+            // Determine new
+            // target position, and pass to motor controller
             int newLeftFrontTarget = this.hwBase.left_front_drive.getCurrentPosition() +
                     (targetSpin * (int) (inches * HardwareMecanumBase.WHEEL_COUNTS_PER_INCH));
             targetEncoderValue = newLeftFrontTarget;
