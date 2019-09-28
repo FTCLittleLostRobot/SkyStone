@@ -6,45 +6,41 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
-public class MecanumRotateStateMachine {
+public class MecanumMoveStateMachine {
 
     Telemetry telemetry;
     HardwareMecanumBase robot = new HardwareMecanumBase(); // use the class created to define a Pushbot's hardware
     MecanumMove moveRobot;
-    Double degrees;
-    MecanumRotateStateMachine.RobotState state;
+    MecanumMoveStateMachine.RobotState state;
 
 
     enum RobotState
     {
         Start,
-        Rotate,
-        Rotating,
+        Move,
+        Moving,
         Done
     }
 
-    public void init(Telemetry telemetry, Double degrees , MecanumMove mecanumMove) {
+    public void init(Telemetry telemetry, MecanumMove mecanumMove) {
 
         this.telemetry = telemetry;
         this.moveRobot = mecanumMove;
-        this.degrees= degrees;
 
-
-        telemetry.addData("Say", "Hello Driver");    //
-        state = MecanumRotateStateMachine.RobotState.Start;
+        state = MecanumMoveStateMachine.RobotState.Start;
     }
 
     public void Start()
     {
-        state = MecanumRotateStateMachine.RobotState.Rotate;
+        state = MecanumMoveStateMachine.RobotState.Move;
     }
 
     public boolean IsDone()
     {
-        return (state == MecanumRotateStateMachine.RobotState.Done);
+        return (state == MecanumMoveStateMachine.RobotState.Done);
     }
 
     public void ProcessState()
@@ -53,12 +49,13 @@ public class MecanumRotateStateMachine {
 
         switch (state)
         {
-            case Rotate:
-                this.moveRobot.StartRotate(telemetry, 50, degrees, MecanumMove.RotationDirection.Right );
-                state = RobotState.Rotating;
+            case Move:
+
+                this.moveRobot.StartMove(50, 22.75, 0, 1, 0);
+                state = RobotState.Moving;
                 break;
 
-            case Rotating:
+            case Moving:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
                     state = RobotState.Done;
@@ -67,7 +64,7 @@ public class MecanumRotateStateMachine {
 
 
             case Done:
-                state = MecanumRotateStateMachine.RobotState.Done;
+                state = MecanumMoveStateMachine.RobotState.Done;
                 break;
         }
     }

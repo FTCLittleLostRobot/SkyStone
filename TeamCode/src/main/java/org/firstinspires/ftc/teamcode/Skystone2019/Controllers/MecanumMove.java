@@ -4,6 +4,7 @@
 
 package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import com.qualcomm.robotcore.robocol.TelemetryMessage;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -30,6 +31,7 @@ public class MecanumMove {
 
     int targetSpin = 0;
     int targetEncoderValue = 0;
+    int targetRotation = 0;
 
 
     public void init(HardwareMecanumBase hwBase){
@@ -58,8 +60,22 @@ public class MecanumMove {
     public void StartRotate(Telemetry telemetry, int speed, double angle, RotationDirection direction) {
         telemetry.addData("Current State", direction.toString());
 
-        int encoderTicks = 1523 / 2;
-        targetSpin = 1;
+        int encoderTicks = 0;
+
+        if (angle == 90) {
+            encoderTicks = 1560 / 2; //23
+        }
+        if (angle == 180) {
+            encoderTicks = 1578;
+        }
+
+        if (direction == RotationDirection.Left){
+            targetRotation = 1;
+        }
+        else {
+            targetRotation = -1;
+        }
+        targetSpin  = this.hwBase.GetWheelSpinDirection(HardwareMecanumBase.WheelControl.LeftFrontDrive,0,0,targetRotation);
 
 
         if (hwBase.left_front_drive != null){
@@ -71,13 +87,14 @@ public class MecanumMove {
 
 
 
-            int newLeftFrontTarget = this.hwBase.left_front_drive.getCurrentPosition() +encoderTicks;
+            int newLeftFrontTarget = this.hwBase.left_front_drive.getCurrentPosition() + (targetSpin * encoderTicks);
             targetEncoderValue = newLeftFrontTarget;
+
 
         }
 
         this.hwBase.SpeedMultiplier = speed;
-        this.hwBase.MoveMecanum(0,0, 1);
+        this.hwBase.MoveMecanum(0,0, targetRotation);
     }
 
     public boolean IsDone() {
