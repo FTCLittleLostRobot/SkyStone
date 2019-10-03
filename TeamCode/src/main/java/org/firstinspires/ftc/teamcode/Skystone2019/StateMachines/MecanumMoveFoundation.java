@@ -6,15 +6,14 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.qualcomm.robotcore.robot.RobotState;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
-public class MecanumMoveStateMachine {
+public class MecanumMoveFoundation {
 
     Telemetry telemetry;
     MecanumMove moveRobot;
-    MecanumMoveStateMachine.RobotState state;
+    MecanumMoveFoundation.RobotState state;
 
 
 
@@ -22,8 +21,16 @@ public class MecanumMoveStateMachine {
     enum RobotState
     {
         Start,
-        Move,
-        Moving,
+        MoveStraight,
+        MovingStraight,
+        PullBack,
+        PullingBack,
+        StrafeLeft,
+        StrafingLeft,
+        MoveFowards,
+        MovingFowards,
+        PushPlatform,
+        PushingPlatform,
         Done
     }
 
@@ -34,17 +41,17 @@ public class MecanumMoveStateMachine {
         this.moveRobot.init(robot);
 
 
-        state = MecanumMoveStateMachine.RobotState.Start;
+        state = MecanumMoveFoundation.RobotState.Start;
     }
 
     public void Start()
     {
-        state = MecanumMoveStateMachine.RobotState.Move;
+        state = RobotState.MoveStraight;
     }
 
     public boolean IsDone()
     {
-        return (state == MecanumMoveStateMachine.RobotState.Done);
+        return (state == MecanumMoveFoundation.RobotState.Done);
     }
 
     public void ProcessState()
@@ -53,13 +60,13 @@ public class MecanumMoveStateMachine {
 
         switch (state)
         {
-            case Move:
+            case MoveStraight:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, 22.75, 0, -1, 0);
-                state = RobotState.Moving;
+                this.moveRobot.StartMove(50, 35, 0, -1, 0);
+                state = RobotState.MovingFowards;
                 break;
 
-            case Moving:
+            case MovingFowards:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
                     state = RobotState.Done;
@@ -67,8 +74,13 @@ public class MecanumMoveStateMachine {
                 break;
 
 
+
+
+
+
+
             case Done:
-                state = MecanumMoveStateMachine.RobotState.Done;
+                state = MecanumMoveFoundation.RobotState.Done;
                 break;
         }
     }

@@ -4,15 +4,8 @@
 
 package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import com.qualcomm.robotcore.robocol.TelemetryMessage;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
-import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryInternal;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
@@ -45,9 +38,15 @@ public class MecanumMove {
 
         if (hwBase.left_front_drive != null){
             // Determine new target position, and pass to motor controller
+            this.hwBase.left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.left_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             int newLeftFrontTarget = this.hwBase.left_front_drive.getCurrentPosition() +
                     (targetSpin * (int) (inches * HardwareMecanumBase.WHEEL_COUNTS_PER_INCH));
             targetEncoderValue = newLeftFrontTarget;
+
 
         }
 
