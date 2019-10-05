@@ -1,5 +1,5 @@
 /* Little Lost Robots
-   Core Devs: Danielle
+   Core Devs: Danielle, Ryan
 */
 
 package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
@@ -9,11 +9,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
-public class MecanumMoveFoundation {
+public class MecanumMoveFoundationStateMachine {
 
     Telemetry telemetry;
     MecanumMove moveRobot;
-    MecanumMoveFoundation.RobotState state;
+    MecanumMoveFoundationStateMachine.RobotState state;
 
 
 
@@ -41,7 +41,7 @@ public class MecanumMoveFoundation {
         this.moveRobot.init(robot);
 
 
-        state = MecanumMoveFoundation.RobotState.Start;
+        state = MecanumMoveFoundationStateMachine.RobotState.Start;
     }
 
     public void Start()
@@ -51,7 +51,7 @@ public class MecanumMoveFoundation {
 
     public boolean IsDone()
     {
-        return (state == MecanumMoveFoundation.RobotState.Done);
+        return (state == MecanumMoveFoundationStateMachine.RobotState.Done);
     }
 
     public void ProcessState()
@@ -80,7 +80,7 @@ public class MecanumMoveFoundation {
 
 
             case Done:
-                state = MecanumMoveFoundation.RobotState.Done;
+                state = MecanumMoveFoundationStateMachine.RobotState.Done;
                 break;
         }
     }
