@@ -42,6 +42,10 @@ public class MecanumMove {
             this.hwBase.right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             this.hwBase.left_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             this.hwBase.right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            this.hwBase.left_front_drive.setPower(0);
+            this.hwBase.right_front_drive.setPower(0);
+            this.hwBase.left_back_drive.setPower(0);
+            this.hwBase.right_back_drive.setPower(0);
 
             int newLeftFrontTarget = this.hwBase.left_front_drive.getCurrentPosition() +
                     (targetSpin * (int) (inches * HardwareMecanumBase.WHEEL_COUNTS_PER_INCH));

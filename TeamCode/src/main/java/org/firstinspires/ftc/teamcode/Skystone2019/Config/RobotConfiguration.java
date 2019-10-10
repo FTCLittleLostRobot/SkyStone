@@ -6,8 +6,8 @@ package org.firstinspires.ftc.teamcode.Skystone2019.Config;
 
 public class RobotConfiguration {
 
-    public int FoundationInchesFromWall = 28;
-    public int FoundationInchesMovedTowardsWall = 28;
+    public int FoundationInchesFromWall = 25;
+    public int FoundationInchesMovedTowardsWall = 25;
     public int FoundationInchesToTheLeftMoved = 30;
     public int FoundationInchesMoveNextToPlatForm = 9;
     public int FoundationInchesPlatFormPushed = 8;
