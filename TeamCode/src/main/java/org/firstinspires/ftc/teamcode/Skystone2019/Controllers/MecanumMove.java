@@ -62,10 +62,10 @@ public class MecanumMove {
         int encoderTicks = 0;
 
         if (angle == 90) {
-            encoderTicks = 1560 / 2; //23
+            encoderTicks = 1163 / 2; //23
         }
         if (angle == 180) {
-            encoderTicks = 1578;
+            encoderTicks = 1270;
         }
 
         if (direction == RotationDirection.Left){
