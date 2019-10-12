@@ -1,5 +1,5 @@
 /* Little Lost Robots
-   Core Devs: Caden
+   Core Devs: Danielle
 */
 
 
@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
 @Autonomous(name="TestingBase: Find Block Iterative Test", group="TestingBase")
+
 public class MecanumTestCameraTeleop_Iterative extends OpMode {
 
     /* Declare OpMode members. */
@@ -122,26 +123,27 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
                  */
                 if (foundColumn == 0 )
                 {
-                    this.moveRobot.StartMove(50, 24, GO_LEFT, GO_FORWARD,0 );
+
+                    this.moveRobot.StartMove(50, 10, GO_LEFT, GO_FORWARD,0 );
                     state = RobotState.PushBloock;
                 }
                 else if (foundColumn == 1 )
                 {
-                    this.moveRobot.StartMove(30, 24, GO_LEFT, GO_FORWARD,0 );
+                    this.moveRobot.StartMove(50, 10, GO_LEFT, GO_FORWARD,0 );
                     state = RobotState.PushBloock;
                 }
                 else if (foundColumn == 2)
                 {
-                    this.moveRobot.StartMove(50, 30,0, GO_FORWARD,0 );
+                    this.moveRobot.StartMove(50, 10,0, GO_FORWARD,0 );
                     state = RobotState.PushBloock;
                 }
                 else if (foundColumn == 3 )
                 {
-                    this.moveRobot.StartMove(30, 24, GO_RIGHT, GO_FORWARD,0 );
+                    this.moveRobot.StartMove(50, 10, GO_RIGHT, GO_FORWARD,0 );
                     state = RobotState.PushBloock;
                 }
                 else if (foundColumn == 4 ) {
-                    this.moveRobot.StartMove(50, 24, GO_RIGHT, GO_FORWARD, 0);
+                    this.moveRobot.StartMove(50, 10, GO_RIGHT, GO_FORWARD, 0);
                     state = RobotState.PushBloock;
                 }
 
@@ -171,6 +173,8 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
                 break;
         }
         telemetry.addData("Current State", state.toString());
+        telemetry.addData ("Found In", this.foundColumn);
+
         telemetry.update();
     }
 

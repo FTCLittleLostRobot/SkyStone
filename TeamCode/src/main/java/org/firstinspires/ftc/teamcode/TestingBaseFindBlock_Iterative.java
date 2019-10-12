@@ -121,7 +121,7 @@ public class TestingBaseFindBlock_Iterative extends OpMode {
         switch (state)
         {
             case Setup:
-                encoderDrive_Start(FORWARD_SPEED, 24, 24);  // S1: Forward 47 Inches with 5 Sec timeout
+               // encoderDrive_Start(FORWARD_SPEED, 24, 24);  // S1: Forward 47 Inches with 5 Sec timeout
                 state = RobotState.Start;
                 break;
 
