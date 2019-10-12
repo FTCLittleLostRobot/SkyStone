@@ -27,10 +27,23 @@ public class MecanumPractice_Iterative extends OpMode {
         /* Step 3: Setup of controllers  */
 
         /* Step 4: Setup of state machines  */
-        this.moveFoundationStateMachine.init(telemetry, robot);
+        //this.moveFoundationStateMachine.init(telemetry, robot, true, true);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
+    }
+
+
+    @Override
+    public void init_loop() {
+        if (gamepad1.x){
+            this.moveFoundationStateMachine.init(telemetry, robot, true, false);
+            telemetry.addData("Say", "Welcome to the blue team");
+        }
+        else if (gamepad1.b){
+            this.moveFoundationStateMachine.init(telemetry, robot, true, true);
+            telemetry.addData("Say", "Welcome to the Red Team");
+        }
     }
 
     @Override
