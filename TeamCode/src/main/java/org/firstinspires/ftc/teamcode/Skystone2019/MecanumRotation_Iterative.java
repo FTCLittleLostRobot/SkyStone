@@ -56,9 +56,9 @@ public class MecanumRotation_Iterative extends OpMode {
     {
         moveStateMachine.ProcessState();
 
-        if (moveStateMachine.IsDone()) {
-            rotateStateMachine.ProcessState();
-        }
+//        if (moveStateMachine.IsDone()) {
+//            rotateStateMachine.ProcessState();
+//        }
     }
 
     @Override

@@ -92,6 +92,91 @@ public class MecanumSkyStoneStateMachine {
                     this.moveRobot.Complete();
                     state = RobotState.DetectBlock;
                 }
+                break;
+
+            case BackUp1:
+                //y = 1 makes it go backwards
+                //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(50, 5, 0, 1, 0);
+                state = RobotState.BackingUp1;
+                break;
+
+            case BackingUp1:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.StrafeRight1;
+                }
+                break;
+
+            case StrafeRight1:
+                //y = 1 makes it go backwards
+                //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(50, 75, 1, 0, 0);
+                state = RobotState.StrafingRight1;
+                break;
+
+            case StrafingRight1:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.DropBlock1;
+                }
+                break;
+
+            case StrafeLeft1:
+                //y = 1 makes it go backwards
+                //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(50, 75, -1, 0, 0);
+                state = RobotState.StrafingLeft1;
+                break;
+
+            case StrafingLeft1:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.SquareAgainstWall;
+                }
+                break;
+
+            case SquareAgainstWall:
+                //y = 1 makes it go backwards
+                //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(25, 5, -1, 0, 0);
+                state = RobotState.SquaringAgainstWall;
+                break;
+
+            case SquaringAgainstWall:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.StrafeInfrontOfBlock;
+                }
+                break;
+
+            case BackUp2:
+                //y = 1 makes it go backwards
+                //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(50, 5, 0, 1, 0);
+                state = RobotState.BackingUp2;
+                break;
+
+            case BackingUp2:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.StrafeRight2;
+                }
+                break;
+
+            case StrafeRight2:
+                //y = 1 makes it go backwards
+                //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(50, 75, 1, 0, 0);
+                state = RobotState.StrafingRight2;
+                break;
+
+            case StrafingRight2:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.DropBlock2;
+                }
+                break;
 
             case Done:
                 state = MecanumSkyStoneStateMachine.RobotState.Done;

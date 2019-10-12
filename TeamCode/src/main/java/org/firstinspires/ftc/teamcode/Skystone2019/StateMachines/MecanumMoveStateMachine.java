@@ -55,7 +55,7 @@ public class MecanumMoveStateMachine {
         {
             case Move:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, 22.75, 0, -1, 0);
+                this.moveRobot.StartMove(50, 22.75, 1, 0, 0);
                 state = RobotState.Moving;
                 break;
 
