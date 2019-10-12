@@ -106,7 +106,7 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
                 break;
 
             case DetectColorFromImage:
-                foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinder.ColorTarget.Yellow);
+                foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinder.ColorTarget.Yellow, telemetry);
                 telemetry.addData("column", foundColumn);
                 state = RobotState.CheckForGold;
                 break;

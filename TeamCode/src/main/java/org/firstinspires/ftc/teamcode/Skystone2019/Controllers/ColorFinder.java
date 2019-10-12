@@ -12,6 +12,7 @@ import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
@@ -75,7 +76,7 @@ public class ColorFinder {
         return bm_img;
     }
 
-    public int FindColor (Bitmap bm_img, ColorTarget colorTarget) {
+    public int FindColor (Bitmap bm_img, ColorTarget colorTarget, Telemetry telemetry) {
         Color cur_color = null;
         int cur_color_int, rgb[] = new int[3];
         float hsv[] = new float[3];
@@ -86,10 +87,7 @@ public class ColorFinder {
         int columnWidth = width / 5;
 
         int columnFound = -1;
-        int columnMaxValue = 0;
-
-//ByteBuffer pixelBuffer = ByteBuffer.allocate(bm_img.getHeight() * bm_img.getRowBytes());
-//bm_img.copyPixelsToBuffer(pixelBuffer);
+        int columnMaxValue = 50;
 
         for (int column = 0; column < 3; column++) {
             int columnCounter = 0;
@@ -98,11 +96,9 @@ public class ColorFinder {
                 for (int j = column * columnWidth; j < (column + 1) * columnWidth; j += 3) {
                     cur_color_int = bm_img.getPixel(j, i);
 
-//                    cur_color_int = pixelBuffer.get(j + (i * width))  ;
                     rgb[0] = cur_color.red(cur_color_int);
                     rgb[1] = cur_color.green(cur_color_int);
                     rgb[2] = cur_color.blue(cur_color_int);
-
 
                     Color.RGBToHSV(rgb[0], rgb[1], rgb[2], hsv);
 
@@ -132,8 +128,9 @@ public class ColorFinder {
                             columnCounter++;
                         }
                     } else if (colorTarget == ColorTarget.Black){
-                        if ((hsv[0] >= 0) && (hsv[0] <= 10) && (hsv [1] >= 0 )&& (hsv[1] <= 1));
-                        columnCounter++;
+                        if ((hsv[0] >= 0) && (hsv[0] <= 10) && (hsv [1] >= 0 )&& (hsv[1] <= 1)) {
+                            columnCounter++;
+                        }
 
                     }
 
@@ -143,8 +140,10 @@ public class ColorFinder {
             if (columnCounter > 25) {
                 if (columnCounter > columnMaxValue) {
                     columnMaxValue = columnCounter;
-                    columnFound = column;
-                }
+                    columnFound = column;                }
+
+                telemetry.addData ("ColumnCounter", columnCounter);
+
             }
         }
         return columnFound;
