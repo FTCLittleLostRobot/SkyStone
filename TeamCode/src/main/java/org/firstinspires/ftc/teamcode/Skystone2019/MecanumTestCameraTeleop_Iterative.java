@@ -6,6 +6,7 @@
 package org.firstinspires.ftc.teamcode.Skystone2019;
 
 import android.graphics.Bitmap;
+import com.qualcomm.robotcore.robot.RobotState;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -106,9 +107,9 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
                 break;
 
             case DetectColorFromImage:
-                foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinder.ColorTarget.Yellow, telemetry);
+                foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinder.ColorTarget.Black, telemetry);
                 telemetry.addData("column", foundColumn);
-                state = RobotState.CheckForGold;
+                state = RobotState.Done;
                 break;
 
             case CheckForGold:
@@ -174,6 +175,11 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
         }
         telemetry.addData("Current State", state.toString());
         telemetry.addData ("Found In", this.foundColumn);
+        telemetry.addData("Width", colorFinder.width);
+        telemetry.addData("Height", colorFinder.height);
+        telemetry.addData("Column 0", colorFinder.column0);
+        telemetry.addData("Column 1", colorFinder.column1);
+        telemetry.addData("Column 2", colorFinder.column2);
 
         telemetry.update();
     }

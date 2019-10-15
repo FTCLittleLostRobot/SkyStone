@@ -25,6 +25,14 @@ public class ColorFinder {
     public enum ColorTarget{
         Yellow, Red, Blue, White, Green, Black,
     }
+
+
+    public int width = 0;
+    public int height = 0;
+    public int columnCounter = 0;
+    public int column0 = 0;
+    public int column1 = 0;
+    public int column2 = 0;
     HardwareMap hwMap;
 
     public void init(HardwareMap hwMap) {
@@ -82,15 +90,15 @@ public class ColorFinder {
         float hsv[] = new float[3];
         int hueMax = 0;
 
-        int width = bm_img.getWidth(); // width in landscape mode
-        int height = bm_img.getHeight(); // height in landscape mode
-        int columnWidth = width / 5;
+        width = bm_img.getWidth(); // width in landscape mode
+        height = bm_img.getHeight(); // height in landscape mode
+        int columnWidth = width / 3;
 
         int columnFound = -1;
         int columnMaxValue = 50;
 
         for (int column = 0; column < 3; column++) {
-            int columnCounter = 0;
+            columnCounter = 0;
 
             for (int i = 50; i < height; i += 5) {
                 for (int j = column * columnWidth; j < (column + 1) * columnWidth; j += 3) {
@@ -128,8 +136,9 @@ public class ColorFinder {
                             columnCounter++;
                         }
                     } else if (colorTarget == ColorTarget.Black){
-                        if ((hsv[0] >= 0) && (hsv[0] <= 10) && (hsv [1] >= 0 )&& (hsv[1] <= 1)) {
+                        if ((hsv[0] <= 30) && (hsv[1] <= .10) && (hsv [2] <= 10 )) {
                             columnCounter++;
+                            //Hue, Saturation, and Value/brightnes
                         }
 
                     }
@@ -137,6 +146,9 @@ public class ColorFinder {
 
                 }
             }
+
+
+
             if (columnCounter > 25) {
                 if (columnCounter > columnMaxValue) {
                     columnMaxValue = columnCounter;
@@ -145,6 +157,16 @@ public class ColorFinder {
                 telemetry.addData ("ColumnCounter", columnCounter);
 
             }
+            if (column == 0){
+                column0 = columnCounter;
+            }
+            if (column == 1){
+                column1 = columnCounter;
+            }
+            if (column == 2){
+                column2 = columnCounter;
+            }
+
         }
         return columnFound;
     }
