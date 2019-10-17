@@ -68,7 +68,7 @@ public class MecanumMove {
             this.hwBase.right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             this.targetRightBackEncoderValue = this.hwBase.right_back_drive.getCurrentPosition() +
-                    (targetRightBackEncoderValue * (int) (inches * HardwareMecanumBase.WHEEL_COUNTS_PER_INCH));
+                    (targetRightBackSpin * (int) (inches * HardwareMecanumBase.WHEEL_COUNTS_PER_INCH));
         }
 
         this.hwBase.SpeedMultiplier = speed;
@@ -131,15 +131,12 @@ public class MecanumMove {
                 isWheelDone = this.hwBase.left_front_drive.getCurrentPosition() <= targetLeftFrontEncoderValue; // if it is negative
             }
 
-            if (isWheelDone){
-                hwBase.left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            }
-            else {
+            if (!isWheelDone){
                 areAllWheelsDone = false;
             }
         }
 
-        if (hwBase.right_front_drive != null){
+        /*if (hwBase.right_front_drive != null){
             // this tells the robot if it is positive or negative
             if(targetRightFrontSpin > 0){
                 isWheelDone = this.hwBase.right_front_drive.getCurrentPosition() >= targetRightFrontEncoderValue; // if it is positive
@@ -148,10 +145,7 @@ public class MecanumMove {
                 isWheelDone = this.hwBase.right_front_drive.getCurrentPosition() <= targetRightFrontEncoderValue; // if it is negative
             }
 
-            if (isWheelDone){
-                hwBase.right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            }
-            else {
+            if (!isWheelDone){
                 areAllWheelsDone = false;
             }
         }
@@ -165,10 +159,7 @@ public class MecanumMove {
                 isWheelDone = this.hwBase.left_back_drive.getCurrentPosition() <= targetLeftBackEncoderValue; // if it is negative
             }
 
-            if (isWheelDone){
-                hwBase.left_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            }
-            else {
+            if (!isWheelDone){
                 areAllWheelsDone = false;
             }
         }
@@ -182,13 +173,10 @@ public class MecanumMove {
                 isWheelDone = this.hwBase.right_back_drive.getCurrentPosition() <= targetRightBackEncoderValue; // if it is negative
             }
 
-            if (isWheelDone){
-                hwBase.right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            }
-            else {
+            if (!isWheelDone){
                 areAllWheelsDone = false;
             }
-        }
+        }*/
 
         return areAllWheelsDone;
     }

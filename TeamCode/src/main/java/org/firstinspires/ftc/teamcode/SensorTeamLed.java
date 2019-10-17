@@ -1,5 +1,5 @@
 /* Little Lost Robots
-   Core Devs: Danielle,
+   Core Devs: Ryan,
 */
 
 /* Copyright (c) 2017 FIRST. All rights reserved.
@@ -36,26 +36,24 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-/*
-@Autonomous(name="Test: Motor Encoder RunTo", group="Mencanum")
 
+@Autonomous(name="Test: Team Finding", group="Mencanum")
 public class SensorTeamLed extends OpMode {
-public class
-}
-
 
     @Override
-    public void init() {
-        public void init_loop() {
-            if (gamepad1.x){
-                this.moveFoundationStateMachine.init(telemetry, robot, true, false);
-                telemetry.addData("Say", "Welcome to the blue team");
-            }
-            else if (gamepad1.b){
-                this.moveFoundationStateMachine.init(telemetry, robot, true, true);
-                telemetry.addData("Say", "Welcome to the Red Team");
-            }
-        }}
+    public void init() {}
 
+    @Override
+    public void init_loop() {
+        if (gamepad1.x){
+            telemetry.addData("Say", "Welcome to the blue team");
+        }
+        else if (gamepad1.b){
+            telemetry.addData("Say", "Welcome to the Red Team");
+        }
+    }
 
- */
+    @Override
+    public void loop() {}
+}
+
