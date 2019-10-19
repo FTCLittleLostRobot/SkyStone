@@ -54,6 +54,7 @@ public class MecanumMoveFoundationStateMachine {
         this.moveRobot.init(robot);
         this.isCloseSquare = isCloseSquare;
         this.isRed = isRed;
+        this.moveRobot.init(robot);
 
         state = MecanumMoveFoundationStateMachine.RobotState.Start;
     }

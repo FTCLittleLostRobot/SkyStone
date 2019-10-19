@@ -22,19 +22,19 @@ public class MecanumMove {
     HardwareMecanumBase hwBase;
 
     int targetLeftFrontSpin = 0;
-    int targetLeftFrontEncoderValue = 0;
+    public int targetLeftFrontEncoderValue = 0;
     int targetRightFrontSpin = 0;
-    int targetRightFrontEncoderValue = 0;
+    public int targetRightFrontEncoderValue = 0;
     int targetLeftBackSpin = 0;
-    int targetLeftBackEncoderValue = 0;
+    public int targetLeftBackEncoderValue = 0;
     int targetRightBackSpin = 0;
-    int targetRightBackEncoderValue = 0;
+    public int targetRightBackEncoderValue = 0;
 
     public void init(HardwareMecanumBase hwBase){
         this.hwBase = hwBase;
     }
 
-    public void StartMove(int speed, double inches, double x, double y, double rotation) {
+    public void StartMove(int speed, double inches, double x, double y, double rotation ) {
 
         targetLeftFrontSpin = this.hwBase.GetWheelSpinDirection(HardwareMecanumBase.WheelControl.LeftFrontDrive,x,y,rotation);
         targetRightFrontSpin = this.hwBase.GetWheelSpinDirection(HardwareMecanumBase.WheelControl.RightFrontDrive,x,y,rotation);
@@ -131,52 +131,13 @@ public class MecanumMove {
                 isWheelDone = this.hwBase.left_front_drive.getCurrentPosition() <= targetLeftFrontEncoderValue; // if it is negative
             }
 
-            if (!isWheelDone){
+            if (isWheelDone) {
+                this.hwBase.ResetMotors();
+            }
+            else {
                 areAllWheelsDone = false;
             }
         }
-
-        /*if (hwBase.right_front_drive != null){
-            // this tells the robot if it is positive or negative
-            if(targetRightFrontSpin > 0){
-                isWheelDone = this.hwBase.right_front_drive.getCurrentPosition() >= targetRightFrontEncoderValue; // if it is positive
-            }
-            else {
-                isWheelDone = this.hwBase.right_front_drive.getCurrentPosition() <= targetRightFrontEncoderValue; // if it is negative
-            }
-
-            if (!isWheelDone){
-                areAllWheelsDone = false;
-            }
-        }
-
-        if (hwBase.left_back_drive != null){
-            // this tells the robot if it is positive or negative
-            if(targetLeftBackSpin > 0){
-                isWheelDone = this.hwBase.left_back_drive.getCurrentPosition() >= targetLeftBackEncoderValue; // if it is positive
-            }
-            else {
-                isWheelDone = this.hwBase.left_back_drive.getCurrentPosition() <= targetLeftBackEncoderValue; // if it is negative
-            }
-
-            if (!isWheelDone){
-                areAllWheelsDone = false;
-            }
-        }
-
-        if (hwBase.right_back_drive != null){
-            // this tells the robot if it is positive or negative
-            if(targetRightBackSpin > 0){
-                isWheelDone = this.hwBase.right_back_drive.getCurrentPosition() >= targetRightBackEncoderValue; // if it is positive
-            }
-            else {
-                isWheelDone = this.hwBase.right_back_drive.getCurrentPosition() <= targetRightBackEncoderValue; // if it is negative
-            }
-
-            if (!isWheelDone){
-                areAllWheelsDone = false;
-            }
-        }*/
 
         return areAllWheelsDone;
     }
