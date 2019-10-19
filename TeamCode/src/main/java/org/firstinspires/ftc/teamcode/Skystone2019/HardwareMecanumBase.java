@@ -111,9 +111,14 @@ public class HardwareMecanumBase {
 
     public void ResetMotors() {
         // Set all motors to zero power
-        if (left_front_drive != null) {
-            left_front_drive.setPower(0);
-            left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (right_back_drive != null) {
+            right_back_drive.setPower(0);
+            right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+
+        if (left_back_drive != null) {
+            left_back_drive.setPower(0);
+            left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         if (right_front_drive != null) {
@@ -121,13 +126,9 @@ public class HardwareMecanumBase {
             right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
-        if (right_back_drive != null) {
-            right_back_drive.setPower(0);
-            right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        if (left_back_drive != null) {
-            left_back_drive.setPower(0);
-            left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (left_front_drive != null) {
+            left_front_drive.setPower(0);
+            left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
 
