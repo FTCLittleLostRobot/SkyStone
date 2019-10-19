@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name="Test: Team Finding", group="Mencanum")
-public class SensorTeamLed extends OpMode {
+public class SensorTeamChoose extends OpMode {
 
     @Override
     public void init() {}
