@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateSt
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveStateMachine;
 
-@Autonomous(name="Mecanum:Rotation", group="Mecanum")
-public class MecanumRotation_Iterative extends OpMode {
+@Autonomous(name="Mecanum:MoveTest", group="Mecanum")
+public class MecanumMoveTest_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;
     private MecanumRotateStateMachine rotateStateMachine;

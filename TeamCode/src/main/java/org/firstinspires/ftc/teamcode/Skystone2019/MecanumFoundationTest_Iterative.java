@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveFoundationStateMachine;
 
-@Autonomous(name="Mecanum:practice", group="Mecanum")
-public class MecanumPractice_Iterative extends OpMode {
+@Autonomous(name="Mecanum:FoundationTest", group="Mecanum")
+public class MecanumFoundationTest_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;
     private MecanumMoveFoundationStateMachine moveFoundationStateMachine;
@@ -27,10 +27,9 @@ public class MecanumPractice_Iterative extends OpMode {
         /* Step 3: Setup of controllers  */
 
         /* Step 4: Setup of state machines  */
-        //this.moveFoundationStateMachine.init(telemetry, robot, true, true);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Press Blue Or Red Button To Select Team");    //
     }
 
 
