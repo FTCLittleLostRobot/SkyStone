@@ -4,7 +4,7 @@
 
 package org.firstinspires.ftc.teamcode.Skystone2019.Config;
 
-public class RobotConfiguration {
+public class RobotConfigurationC implements IConfiguration {
 
     public int FoundationInchesFromWall = 28;
     public int FoundationInchesMovedTowardsWall = 28;

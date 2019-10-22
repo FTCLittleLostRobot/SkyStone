@@ -7,6 +7,8 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.robot.RobotState;
+
+import org.firstinspires.ftc.teamcode.Skystone2019.Config.IConfiguration;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
@@ -16,6 +18,7 @@ public class MecanumMoveFoundationStateMachine {
     Telemetry telemetry;
     MecanumMove moveRobot;
     MecanumMoveFoundationStateMachine.RobotState state;
+    IConfiguration robotConfig;
 
     boolean isCloseSquare;
     boolean isRed;
@@ -56,6 +59,8 @@ public class MecanumMoveFoundationStateMachine {
         this.isRed = isRed;
         this.moveRobot.init(robot);
 
+        // Setup the configuration object
+        robotConfig = new ConfigFactory().Get();
         state = MecanumMoveFoundationStateMachine.RobotState.Start;
     }
 
@@ -77,7 +82,7 @@ public class MecanumMoveFoundationStateMachine {
         {
             case MoveStraight:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesFromWall, 0, -1, 0);
                 state = RobotState.MovingStraight;
                 break;
 
@@ -90,7 +95,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case PullBack:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedTowardsWall, 0, 1, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedTowardsWall, 0, 1, 0);
                 state = RobotState.PullingBack;
                 break;
 
@@ -109,7 +114,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case StrafeLeftRed:
                 //x = -1 makes it go right
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesSidewaysMoved, 1, 0, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesSidewaysMoved, 1, 0, 0);
                 state = RobotState.StrafingLeftRed;
                 break;
 
@@ -122,7 +127,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case StrafeRightBlue:
                 //x = -1 makes it go right
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesSidewaysMoved, -1, 0, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesSidewaysMoved, -1, 0, 0);
                 state = RobotState.StrafingRightBlue;
                 break;
 
@@ -136,7 +141,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case MoveFowards:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMoveNextToPlatForm, 0, -1, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesMoveNextToPlatForm, 0, -1, 0);
                 state = RobotState.MovingFowards;
                 break;
 
@@ -155,7 +160,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case PushPlatformRed:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesPlatFormPushed, -1, 0, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesPlatFormPushed, -1, 0, 0);
                 state = RobotState.PushingPlatformRed;
                 break;
 
@@ -168,7 +173,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case PushPlatformBlue:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesPlatFormPushed, 1, 0, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesPlatFormPushed, 1, 0, 0);
                 state = RobotState.PushingPlatformBlue;
                 break;
 
@@ -183,10 +188,10 @@ public class MecanumMoveFoundationStateMachine {
             case TowardsRedBridge:
                 //y = 1 makes it go backwards
                 if (isCloseSquare) {
-                    this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedTowardsBridgeClose, 1, 1, 0);
+                    this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedTowardsBridgeClose, 1, 1, 0);
                 }
                 else {
-                    this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedTowardsBridgeFar, 1, -1, 0);
+                    this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedTowardsBridgeFar, 1, -1, 0);
                 }
                 state = RobotState.MovingTowardsRedBridge;
                 break;
@@ -201,7 +206,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case UnderRedBridge:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedUnderBridge, 1, 0, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedUnderBridge, 1, 0, 0);
                 state = RobotState.MovingUnderRedBridge;
                 break;
 
@@ -216,10 +221,10 @@ public class MecanumMoveFoundationStateMachine {
             case TowardBlueBridge:
                 //y = 1 makes it go backwards
                 if (isCloseSquare) {
-                    this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedTowardsBridgeClose, -1, 1, 0);
+                    this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedTowardsBridgeClose, -1, 1, 0);
                 }
                 else {
-                    this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedTowardsBridgeFar, -1, -1, 0);
+                    this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedTowardsBridgeFar, -1, -1, 0);
                 }
                 state = RobotState.MovingTowardBlueBridge;
                 break;
@@ -234,7 +239,7 @@ public class MecanumMoveFoundationStateMachine {
 
             case UnderBlueBridge:
                 //y = 1 makes it go backwards
-                this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesMovedUnderBridge, -1, 0, 0);
+                this.moveRobot.StartMove(50, robotConfig.FoundationInchesMovedUnderBridge, -1, 0, 0);
                 state = RobotState.MovingUnderBlueBridge;
                 break;
 
