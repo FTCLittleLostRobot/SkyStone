@@ -44,6 +44,7 @@ public class HardwareMecanumBase {
         RightFrontDrive,
         LeftBackDrive,
         RightBackDrive,
+        CoreHex
     }
 
     /* Public OpMode members. */
@@ -52,6 +53,7 @@ public class HardwareMecanumBase {
     public DcMotor right_front_drive = null;
     public DcMotor left_back_drive = null;
     public DcMotor right_back_drive = null;
+    public DcMotor Core_Hex = null;
 
 
     /* local OpMode members. */
@@ -86,10 +88,26 @@ public class HardwareMecanumBase {
         left_back_drive = hardwareMap.tryGet(DcMotor.class, "left_back");
         right_back_drive = hardwareMap.tryGet(DcMotor.class, "right_back");
         */
-        left_front_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "left_front");
-        right_front_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "right_front");
-        left_back_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "left_back");
-        right_back_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "right_back");
+        try {
+            left_front_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "left_front");
+        }
+        catch (IllegalArgumentException ex) {}
+        try {
+            right_front_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "right_front");
+        }
+        catch (IllegalArgumentException ex) {}
+        try {
+            left_back_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "left_back");
+        }
+        catch (IllegalArgumentException ex) {}
+        try {
+            right_back_drive = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "right_back");
+        }
+        catch (IllegalArgumentException ex) {}
+        try {
+            Core_Hex = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "Core_Hex");
+        }
+        catch (IllegalArgumentException ex) {}
 
         if (left_front_drive != null) {
             left_front_drive.setDirection(DcMotor.Direction.FORWARD);
@@ -106,6 +124,9 @@ public class HardwareMecanumBase {
 
         if (right_back_drive != null) {
             right_back_drive.setDirection(DcMotor.Direction.REVERSE);
+        }
+        if (Core_Hex != null) {
+            Core_Hex.setDirection(DcMotor.Direction.FORWARD);
         }
 
         ResetMotors();
@@ -132,6 +153,10 @@ public class HardwareMecanumBase {
             left_front_drive.setPower(0);
             left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+       if (Core_Hex != null) {
+            Core_Hex.setPower(0);
+            Core_Hex.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
     }
 
     public void DrivePower(WheelControl wheel, double power) {
@@ -149,7 +174,9 @@ public class HardwareMecanumBase {
             case RightFrontDrive:
                 right_front_drive.setPower(power * ((double) SpeedMultiplier / 100));
                 break;
-
+           case CoreHex:
+                Core_Hex.setPower(power * ((double) SpeedMultiplier / 100));
+                break;
             default:
                 break;
 

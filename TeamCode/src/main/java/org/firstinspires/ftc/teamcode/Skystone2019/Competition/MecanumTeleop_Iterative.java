@@ -8,7 +8,10 @@ package org.firstinspires.ftc.teamcode.Skystone2019.Competition;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.CoreHexStateMachine;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
 
 /**
  * This file provides basic Telop driving for the testing Mencanum robot.
@@ -21,17 +24,21 @@ import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Mecanum: Teleop v1", group="Mecanum")
+@TeleOp(name="Mecanum: Teleop v2", group="Mecanum")
 public class MecanumTeleop_Iterative extends OpMode{
 
     /* Declare OpMode members. */
     private HardwareMecanumBase robot = null;
-
+    private CoreHexStateMachine coreHexStateMachineRight;
+    private CoreHexStateMachine coreHexStateMachineLeft;
     private float starting_left_x = 0;  //this makes the robot strafe right and left
     private float starting_left_y = 0;  //this makes the robot go forwards and backwards
     private float starting_right_x = 0; // this makes the robot rotate
+    private boolean starting_b = false; // this moves the CoreHex/thing that picks up blocks to the right
+    private boolean starting_x = false; // this moves the coreHex/thing that picks up blocks to the left
     private boolean ButtonCheck = false;    //left and right bumper; faster, slower
-
+    private boolean CoreHexLiftCheckRight = false;
+    private boolean CoreHexLiftCheckLeft = false;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -42,9 +49,14 @@ public class MecanumTeleop_Iterative extends OpMode{
 
         robot = new HardwareMecanumBase();
 
-
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
+
+        this.coreHexStateMachineRight = new CoreHexStateMachine();
+        this.coreHexStateMachineRight.init(telemetry, robot, CoreHex.RotationDirection.Right);
+
+        this.coreHexStateMachineLeft = new CoreHexStateMachine();
+        this.coreHexStateMachineLeft.init(telemetry, robot, CoreHex.RotationDirection.Left);
 
         /* Step 3: Setup of controllers  */
         /* Step 4: Setup of state machines  */
@@ -83,6 +95,8 @@ public class MecanumTeleop_Iterative extends OpMode{
         double right_stick_x;
         boolean left_bumper;    //boolean means it can only be true or false
         boolean right_bumper;
+        boolean button_b;
+        boolean button_x;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left_stick_x = -gamepad1.left_stick_x - starting_left_x;
@@ -90,7 +104,8 @@ public class MecanumTeleop_Iterative extends OpMode{
         right_stick_x= -gamepad1.right_stick_x - starting_right_x;
         left_bumper = gamepad1.left_bumper;
         right_bumper= gamepad1.right_bumper;
-
+        button_b = gamepad2.b;
+        button_x = gamepad2.x;
 
         // if you hit the right bumper it will go faster if you hit the left bumper it will go slower, both will set it to regular
         if (left_bumper && right_bumper) {
@@ -107,7 +122,6 @@ public class MecanumTeleop_Iterative extends OpMode{
         }
         else if (right_bumper) {
             if (ButtonCheck == false) {
-
                 robot.IncreaseSpeed();
                 ButtonCheck = true;
             }
@@ -116,11 +130,40 @@ public class MecanumTeleop_Iterative extends OpMode{
             ButtonCheck = false;
         }
 
-        robot.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
+        if (gamepad2.x){
+         //   if (CoreHexLiftCheckLeft == false) {
+                coreHexStateMachineLeft.Start();
+           //     CoreHexLiftCheckLeft = true;
+            //}
+        }
+        else if (gamepad2.b){
+            //if (CoreHexLiftCheckRight == lfalse) {
+            coreHexStateMachineRight.Start();
+          //  coreHexStateMachineRight.ProcessState();
+
+            //}
+        }
+        //if (CoreHexLiftCheckLeft = true){
+            coreHexStateMachineLeft.ProcessState();
+           // if (coreHexStateMachineLeft.IsDone()) {
+            //    CoreHexLiftCheckLeft = false;
+          //  }
+
+        //}
+      //  if (CoreHexLiftCheckRight = true){
+            coreHexStateMachineRight.ProcessState();
+            //if (coreHexStateMachineRight.IsDone()) {
+           //     CoreHexLiftCheckRight = false;
+            //}
+       // }
+
+
+
+        //robot.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
 
          telemetry.addData("SpeedMultplier", robot.SpeedMultiplier);
          telemetry.addData("right stick x value", gamepad1.right_stick_x);
-
+         telemetry.addData("CoreHexLiftCheckRight", CoreHexLiftCheckRight);
     }
 
     /*
