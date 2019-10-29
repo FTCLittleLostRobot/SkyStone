@@ -11,37 +11,42 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class CoreHex {
     public enum RotationDirection {
-        Right,
-        Left
+        Down,
+        Up
+
     }
 
+    public enum CoreHexMotors{
+        BlockLifter,
+        BlockGrabber
+    }
     DcMotor coreHex = null;
-    int startingPos = -1;
-    int newTarget = -1;
 
-    public void init(HardwareMecanumBase hwBase) {
-        coreHex = hwBase.Core_Hex;
-        startingPos = coreHex.getCurrentPosition();
-        coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    public void init(HardwareMecanumBase hwBase, CoreHexMotors motor ) {
+        if (motor == CoreHexMotors.BlockLifter){
+            coreHex = hwBase.Block_Lifter;
+        }
+        else {
+            coreHex = hwBase.Block_Grabber;
+        }
     }
 
 
     public void Start(Telemetry telemetry, RotationDirection direction) {
         int newTarget = -1;
 
-        if (direction == RotationDirection.Right){
-            coreHex.setDirection(DcMotor.Direction.REVERSE);
+        if (direction == RotationDirection.Down){
+            newTarget = -77;
         }
         else {
-            coreHex.setDirection(DcMotor.Direction.FORWARD);
+            newTarget = 0;
         }
-        newTarget = coreHex.getCurrentPosition() + 63;
         coreHex.setTargetPosition(newTarget);
         coreHex.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         coreHex.setPower(0.1);
 
 
-        telemetry.addData("Starting Position", startingPos);
         telemetry.addData("Current Position", coreHex.getCurrentPosition());
         telemetry.addData("New Target", newTarget);
     }

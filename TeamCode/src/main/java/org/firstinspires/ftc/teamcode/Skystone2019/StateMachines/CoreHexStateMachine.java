@@ -7,6 +7,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex.CoreHexMotors;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex.RotationDirection;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
@@ -26,21 +27,22 @@ public class CoreHexStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, HardwareMecanumBase robot, RotationDirection rotationDirection) {
+    public void init(Telemetry telemetry, HardwareMecanumBase robot, CoreHexMotors motor) {
 
         this.telemetry = telemetry;
 
         this.coreHex = new CoreHex();
-        this.coreHex.init(robot);
+        this.coreHex.init(robot, motor);
 
-        this.rotationDirection = rotationDirection;
 
         state = CoreHexStateMachine.RobotState.Start;
     }
 
-    public void Start()
+    public void Start( RotationDirection rotationDirection)
     {
         state = CoreHexStateMachine.RobotState.Rotate;
+        this.rotationDirection = rotationDirection;
+
     }
 
     public boolean IsDone()

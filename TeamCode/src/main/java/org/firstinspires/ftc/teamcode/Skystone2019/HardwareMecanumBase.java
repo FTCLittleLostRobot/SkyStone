@@ -44,7 +44,8 @@ public class HardwareMecanumBase {
         RightFrontDrive,
         LeftBackDrive,
         RightBackDrive,
-        CoreHex
+        BlockLifter,
+        BlockGrabber
     }
 
     /* Public OpMode members. */
@@ -53,7 +54,8 @@ public class HardwareMecanumBase {
     public DcMotor right_front_drive = null;
     public DcMotor left_back_drive = null;
     public DcMotor right_back_drive = null;
-    public DcMotor Core_Hex = null;
+    public DcMotor Block_Lifter = null;
+    public DcMotor Block_Grabber = null;
 
 
     /* local OpMode members. */
@@ -105,7 +107,12 @@ public class HardwareMecanumBase {
         }
         catch (IllegalArgumentException ex) {}
         try {
-            Core_Hex = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "Core_Hex");
+            Block_Lifter = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "Block_Lifter");
+        }
+        catch (IllegalArgumentException ex) {}
+
+        try {
+            Block_Grabber = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "Block_Grabber");
         }
         catch (IllegalArgumentException ex) {}
 
@@ -125,8 +132,12 @@ public class HardwareMecanumBase {
         if (right_back_drive != null) {
             right_back_drive.setDirection(DcMotor.Direction.REVERSE);
         }
-        if (Core_Hex != null) {
-            Core_Hex.setDirection(DcMotor.Direction.FORWARD);
+        if (Block_Grabber != null) {
+            Block_Grabber.setDirection(DcMotor.Direction.FORWARD);
+        }
+
+        if (Block_Lifter != null) {
+            Block_Lifter.setDirection(DcMotor.Direction.FORWARD);
         }
 
         ResetMotors();
@@ -137,25 +148,34 @@ public class HardwareMecanumBase {
         if (right_back_drive != null) {
             right_back_drive.setPower(0);
             right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         }
 
         if (left_back_drive != null) {
             left_back_drive.setPower(0);
             left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         }
 
         if (right_front_drive != null) {
             right_front_drive.setPower(0);
             right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         }
 
         if (left_front_drive != null) {
             left_front_drive.setPower(0);
             left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         }
-       if (Core_Hex != null) {
-            Core_Hex.setPower(0);
-            Core_Hex.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (Block_Grabber != null) {
+            Block_Grabber.setPower(0);
+            Block_Grabber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+        if (Block_Lifter != null) {
+            Block_Lifter.setPower(0);
+            Block_Lifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
     }
 
@@ -174,8 +194,11 @@ public class HardwareMecanumBase {
             case RightFrontDrive:
                 right_front_drive.setPower(power * ((double) SpeedMultiplier / 100));
                 break;
-           case CoreHex:
-                Core_Hex.setPower(power * ((double) SpeedMultiplier / 100));
+            case BlockLifter:
+                Block_Lifter.setPower(power * ((double) SpeedMultiplier / 100));
+                break;
+            case BlockGrabber:
+                Block_Grabber.setPower(power * ((double) SpeedMultiplier / 100));
                 break;
             default:
                 break;
@@ -241,7 +264,7 @@ public class HardwareMecanumBase {
         DrivePower(WheelControl.LeftFrontDrive, v1);
         DrivePower(WheelControl.RightFrontDrive, v2);
         DrivePower(WheelControl.LeftBackDrive,v3);
-        DrivePower(WheelControl.RightBackDrive, v4 * 2.1);
+        DrivePower(WheelControl.RightBackDrive, v4);
     }
 
 
