@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import android.graphics.Bitmap;
+import com.qualcomm.robotcore.robot.RobotState;
 
 import com.vuforia.Image;
 
@@ -15,7 +16,6 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.Skystone2019.MecanumTestCameraTeleop_Iterative;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
 
 public class MecanumSkyStoneStateMachine {
@@ -26,13 +26,13 @@ public class MecanumSkyStoneStateMachine {
     MecanumSkyStoneStateMachine.RobotState state;
     MecanumRotateStateMachine rotateStateMachine;
 
-    //THIS IS IF THE ROBOT IS FACING BACKWARDS THE WHOLE TIME!
+    // THIS IS IF THE ROBOT IS FACING FORWARDS
     static final double FORWARD_SPEED = 0.1;
     static final double TURN_SPEED = 0.25;
-    static final double GO_FORWARD = 1;
-    static final double GO_BACK = -1;
-    static final double GO_RIGHT = 1;
-    static final double GO_LEFT = -1;
+    static final double GO_FORWARD = -1;
+    static final double GO_BACK = 1;
+    static final double GO_RIGHT = -1;
+    static final double GO_LEFT = 1;
     private Image vuforiaImageObject;
     private Bitmap bitmapFromVuforia;
     int foundColumn = -1;
@@ -49,6 +49,10 @@ public class MecanumSkyStoneStateMachine {
         ConvertImageFromScreen,
         DetectColorFromImage,
         CheckForSkystone,
+        Turn90ToFaceFront,
+        Turning90ToFaceFront,
+        Turn180ToFaceFront,
+        Turning180ToFaceFront,
         MovingTowardsBlock,
         CollectBlock,
         CollectingBlock,
@@ -80,16 +84,16 @@ public class MecanumSkyStoneStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, HardwareMecanumBase robot) {
+    public void init(Telemetry telemetry, HardwareMecanumBase robot, ColorFinder colorFinder) {
 
         this.telemetry = telemetry;
-        this.colorFinder = new ColorFinder();
+        this.colorFinder = colorFinder;
 
         this.moveRobot = new MecanumMove();
         this.moveRobot.init(robot);
 
         this.rotateStateMachine = new MecanumRotateStateMachine();
-        this.rotateStateMachine.init(telemetry, 90.0 , robot);
+        this.rotateStateMachine.init(telemetry,  robot);
 
 
         state = MecanumSkyStoneStateMachine.RobotState.Start;
@@ -97,7 +101,7 @@ public class MecanumSkyStoneStateMachine {
 
     public void Start()
     {
-        rotateStateMachine.Start();
+        rotateStateMachine.Start(90.0);
         state = RobotState.MoveForwards;
     }
 
@@ -120,7 +124,7 @@ public class MecanumSkyStoneStateMachine {
             case MoveForwards:
                 //y = 1 makes it go backwards
                 //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
-                this.moveRobot.StartMove(50, 17, 0, -1, 0);
+                this.moveRobot.StartMove(50, 17, 0, MecanumMove.GO_BACK, 0);
                 state = RobotState.MovingForwards;
                 break;
 
@@ -192,13 +196,26 @@ public class MecanumSkyStoneStateMachine {
             case MovingTowardsBlock:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
+                    state = RobotState.Turn90ToFaceFront;
+                }
+                break;
+            case Turn90ToFaceFront:
+                this.moveRobot.StartRotate(telemetry, 70, 180.0, MecanumMove.RotationDirection.Right );
+
+                state = RobotState.Turning90ToFaceFront;
+                break;
+
+            case Turning90ToFaceFront:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
                     state = RobotState.CollectBlock;
                 }
                 break;
 
 
+
             case CollectBlock:
-                this.moveRobot.StartMove(20, 2, GO_FORWARD, 0, 90); // We need the robot to go forwards and turn so the block stays in our grip and doesn't move much.
+                this.moveRobot.StartMove(20, 2, 0, GO_FORWARD, 0); // We need the robot to go forwards and turn so the block stays in our grip and doesn't move much.
                 break;
 
             case CollectingBlock:
@@ -215,20 +232,18 @@ public class MecanumSkyStoneStateMachine {
             case ReOrienting:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
-                    state = RobotState.FaceTowardsSkyBridge;
+                    state = RobotState.FaceingTowardsSkyBridge;
+                    rotateStateMachine.Start(90.0);
                 }
-                break;
-
-            case FaceTowardsSkyBridge:
-                rotateStateMachine.ProcessState();
-                state = RobotState.FaceingTowardsSkyBridge;
                 break;
 
             case FaceingTowardsSkyBridge:
-                if (this.moveRobot.IsDone()) {
-                    this.moveRobot.Complete();
+                if (this.rotateStateMachine.IsDone()) {
                     state = RobotState.MoveUnderSkyBridge1;
                 }
+                else
+                    rotateStateMachine.ProcessState();
+
                 break;
 
             case MoveUnderSkyBridge1:

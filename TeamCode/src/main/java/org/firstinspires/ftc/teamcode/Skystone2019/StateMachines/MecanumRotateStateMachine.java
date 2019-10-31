@@ -27,11 +27,10 @@ public class MecanumRotateStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, Double degrees , HardwareMecanumBase robot) {
+    public void init(Telemetry telemetry, HardwareMecanumBase robot) {
 
         this.telemetry = telemetry;
         this.moveRobot = new MecanumMove();
-        this.degrees= degrees;
         this.moveRobot.init(robot);
 
 
@@ -40,8 +39,9 @@ public class MecanumRotateStateMachine {
         state = MecanumRotateStateMachine.RobotState.Start;
     }
 
-    public void Start()
+    public void Start(Double degrees)
     {
+        this.degrees= degrees;
         state = MecanumRotateStateMachine.RobotState.Rotate;
     }
 
