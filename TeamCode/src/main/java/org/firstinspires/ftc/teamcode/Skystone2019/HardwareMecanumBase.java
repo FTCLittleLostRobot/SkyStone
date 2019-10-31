@@ -261,9 +261,9 @@ public class HardwareMecanumBase {
 
         //DrivePower(WheelControl.LeftFrontDrive, v2);  //Julia 12-1-6:35 switch left front with right front
         //DrivePower(WheelControl.RightFrontDrive, v1);
-        DrivePower(WheelControl.LeftFrontDrive, v1);
-        DrivePower(WheelControl.RightFrontDrive, v2);
-        DrivePower(WheelControl.LeftBackDrive,v3);
+        DrivePower(WheelControl.LeftFrontDrive, v1 * 0.95);
+        DrivePower(WheelControl.RightFrontDrive, v2 );
+        DrivePower(WheelControl.LeftBackDrive,v3 * 0.90);
         DrivePower(WheelControl.RightBackDrive, v4);
     }
 
