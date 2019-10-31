@@ -84,10 +84,10 @@ public class MecanumMove {
         int targetLeftFrontRotation;
 
         if (angle == 90) {
-            encoderTicks = 1560 / 2; //23
+            encoderTicks = 640 / 2; //23
         }
         if (angle == 180) {
-            encoderTicks = 1578;
+            encoderTicks = 1280;
         }
 
         if (direction == RotationDirection.Left){
