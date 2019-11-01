@@ -6,15 +6,14 @@
 package org.firstinspires.ftc.teamcode.Skystone2019;
 
 import android.graphics.Bitmap;
-import com.qualcomm.robotcore.robot.RobotState;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.vuforia.Image;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
-import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 
 @Autonomous(name="TestingBase: Find Block Iterative Test", group="TestingBase")
 
@@ -22,8 +21,9 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
 
     /* Declare OpMode members. */
     HardwareMecanumBase robot = new HardwareMecanumBase(); // use the class created to define a Pushbot's hardware
+    MecanumMotor mecanumMotor = new MecanumMotor();
     ColorFinder colorFinder = null;
-    MecanumMove moveRobot;
+    MecanumEncoderMove moveRobot;
 
 
     static final double FORWARD_SPEED = 0.1;
@@ -61,11 +61,12 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
          * The init() method of the hardware class does all the work here
          */
         this.robot.init(hardwareMap);
-        this.moveRobot = new MecanumMove();
+        this.mecanumMotor.init(this.robot);
+        this.moveRobot = new MecanumEncoderMove();
         this.colorFinder = new ColorFinder();
 
         this.colorFinder.init(hardwareMap);
-        this.moveRobot.init(robot);
+        this.moveRobot.init(mecanumMotor);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //

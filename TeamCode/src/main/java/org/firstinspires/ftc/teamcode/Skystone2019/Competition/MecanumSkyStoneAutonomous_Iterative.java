@@ -5,12 +5,11 @@
 package org.firstinspires.ftc.teamcode.Skystone2019.Competition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.vuforia.Image;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumSkyStoneStateMachine;
 
@@ -19,25 +18,29 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;
     private MecanumSkyStoneStateMachine MecanumSkyStoneStateMachine;
-    private MecanumMove moveRobot;
+    private MecanumEncoderMove moveRobot;
+    private MecanumMotor mecanumRobot;
     private ColorFinder colorFinder;
 
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
         this.robot = new HardwareMecanumBase();
-        this.moveRobot = new MecanumMove();
+        this.mecanumRobot = new MecanumMotor();
+        this.moveRobot = new MecanumEncoderMove();
         this.colorFinder = new ColorFinder();
         this.MecanumSkyStoneStateMachine = new MecanumSkyStoneStateMachine();
+
         /* Step 2: Setup of hardware  */
-        robot.init(hardwareMap);
+        this.robot.init(hardwareMap);
+        this.mecanumRobot.init(robot);
 
         /* Step 3: Setup of controllers  */
-        this.moveRobot.init(robot);
+        this.moveRobot.init(this.mecanumRobot);
         this.colorFinder.init(hardwareMap);
 
         /* Step 4: Setup of state machines  */
-        this.MecanumSkyStoneStateMachine.init(telemetry, robot, colorFinder);
+        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //

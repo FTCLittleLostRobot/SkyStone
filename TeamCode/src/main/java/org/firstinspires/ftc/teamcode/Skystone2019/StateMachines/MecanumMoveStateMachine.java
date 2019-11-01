@@ -7,20 +7,21 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import com.qualcomm.robotcore.robot.Robot;
-import com.qualcomm.robotcore.robot.RobotState;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
 public class MecanumMoveStateMachine {
 
     Telemetry telemetry;
-    MecanumMove moveRobot;
+    MecanumEncoderMove moveRobot;
     MecanumMoveStateMachine.RobotState state;
-    HardwareMecanumBase robot;
+    MecanumMotor motors;
 
-
-
+    double inches = 0;
+    double x = 0;
+    double y = 0;
+    double rotation = 0;
 
     enum RobotState
     {
@@ -30,18 +31,22 @@ public class MecanumMoveStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, HardwareMecanumBase robot) {
+    public void init(Telemetry telemetry, MecanumMotor motors) {
 
         this.telemetry = telemetry;
-        this.moveRobot = new MecanumMove();
-        this.robot = robot;
-        this.moveRobot.init(robot);
+        this.moveRobot = new MecanumEncoderMove();
+        this.motors = motors;
+        this.moveRobot.init(motors);
 
         state = MecanumMoveStateMachine.RobotState.Start;
     }
 
-    public void Start()
+    public void Start(double inches, double x, double y, double rotation)
     {
+        this.inches = inches;
+        this.x = x;
+        this.y = y;
+        this.rotation = rotation;
         state = MecanumMoveStateMachine.RobotState.Move;
     }
 
@@ -54,21 +59,21 @@ public class MecanumMoveStateMachine {
     {
         telemetry.addData("Current State", state.toString());
         telemetry.addData("targetLeftFrontEncoderValue", this.moveRobot.targetLeftFrontEncoderValue);
-        telemetry.addData("Current LeftFront Position", this.robot.left_front_drive.getCurrentPosition());
+        telemetry.addData("Current LeftFront Position", this.motors.LeftFrontMotor.getCurrentPosition());
 
         telemetry.addData("targetRightFrontEncoderValue", this.moveRobot.targetRightFrontEncoderValue);
-        telemetry.addData("Current RightFront Position", this.robot.right_front_drive.getCurrentPosition());
+        telemetry.addData("Current RightFront Position", this.motors.RightFrontMotor.getCurrentPosition());
 
         telemetry.addData("targetLeftBackEncoderValue", this.moveRobot.targetLeftBackEncoderValue);
-        telemetry.addData("Current LeftBack Position", this.robot.left_back_drive.getCurrentPosition());
+        telemetry.addData("Current LeftBack Position", this.motors.LeftBackMotor.getCurrentPosition());
 
         telemetry.addData("targetRightBackEncoderValue", this.moveRobot.targetRightBackEncoderValue);
-        telemetry.addData("Current RightBack Position", this.robot.right_back_drive.getCurrentPosition());
+        telemetry.addData("Current RightBack Position", this.motors.RightBackMotor.getCurrentPosition());
 
         switch (state)
         {
             case Move:
-                this.moveRobot.StartMove(50, 22.75, 0, -1, 0);
+                this.moveRobot.StartMove(50, inches, x, y, rotation);
                 state = RobotState.Moving;
                 break;
 

@@ -6,22 +6,19 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import android.graphics.Bitmap;
-import com.qualcomm.robotcore.robot.RobotState;
 
 import com.vuforia.Image;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
 
 public class MecanumSkyStoneStateMachine {
 
     Telemetry telemetry;
-    MecanumMove moveRobot;
+    MecanumEncoderMove moveRobot;
     ColorFinder colorFinder;
     MecanumSkyStoneStateMachine.RobotState state;
     MecanumRotateStateMachine rotateStateMachine;
@@ -84,16 +81,16 @@ public class MecanumSkyStoneStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, HardwareMecanumBase robot, ColorFinder colorFinder) {
+    public void init(Telemetry telemetry, MecanumMotor motors, ColorFinder colorFinder) {
 
         this.telemetry = telemetry;
         this.colorFinder = colorFinder;
 
-        this.moveRobot = new MecanumMove();
-        this.moveRobot.init(robot);
+        this.moveRobot = new MecanumEncoderMove();
+        this.moveRobot.init(motors);
 
         this.rotateStateMachine = new MecanumRotateStateMachine();
-        this.rotateStateMachine.init(telemetry,  robot);
+        this.rotateStateMachine.init(telemetry,  motors);
 
 
         state = MecanumSkyStoneStateMachine.RobotState.Start;
@@ -124,7 +121,7 @@ public class MecanumSkyStoneStateMachine {
             case MoveForwards:
                 //y = 1 makes it go backwards
                 //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
-                this.moveRobot.StartMove(50, 17, 0, MecanumMove.GO_BACK, 0);
+                this.moveRobot.StartMove(50, 17, 0, MecanumEncoderMove.GO_BACK, 0);
                 state = RobotState.MovingForwards;
                 break;
 
@@ -200,7 +197,7 @@ public class MecanumSkyStoneStateMachine {
                 }
                 break;
             case Turn90ToFaceFront:
-                this.moveRobot.StartRotate(telemetry, 70, 180.0, MecanumMove.RotationDirection.Right );
+                this.moveRobot.StartRotate(telemetry, 70, 180.0, MecanumEncoderMove.RotationDirection.Right );
 
                 state = RobotState.Turning90ToFaceFront;
                 break;
@@ -247,7 +244,7 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case MoveUnderSkyBridge1:
-                this.moveRobot.StartMove(50, 42, MecanumMove.GO_FORWARD, 0, 0);
+                this.moveRobot.StartMove(50, 42, MecanumEncoderMove.GO_FORWARD, 0, 0);
                 state = RobotState.MovingUnderSkyBridge1;
                 break;
 
@@ -259,7 +256,7 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case BackUp1:
-                this.moveRobot.StartMove(50, 47, MecanumMove.GO_BACK, 0, 0);
+                this.moveRobot.StartMove(50, 47, MecanumEncoderMove.GO_BACK, 0, 0);
                 state = RobotState.BackingUp1;
                 break;
 

@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
 /*
@@ -23,12 +24,29 @@ public class MecanumSetup_Teleop extends OpMode {
 
     /* Declare OpMode members. */
     private HardwareMecanumBase robot = new HardwareMecanumBase(); // use the class created to define a Mencanums 's hardware
+    private MecanumMotor mecanumMotor = new MecanumMotor();
     private DcMotor left_front_drive = null;   //front left wheel
     private DcMotor right_front_drive = null;  //front right wheel
     private DcMotor left_back_drive = null;    //back left wheel
     private DcMotor right_back_drive = null;   //back right wheel
 
+    /*
+     * Code to run ONCE when the driver hits INIT
+     */
+    @Override
+    public void init() {
+        robot.init(hardwareMap);
+        mecanumMotor.init(robot);
 
+        // Is every motor on correctly? This checks each motor and lift.
+        this.CheckMotor(robot.left_front_drive, "left_front");
+        this.CheckMotor(robot.right_front_drive, "right_front");
+        this.CheckMotor(robot.left_back_drive, "left_back");
+        this.CheckMotor(robot.right_back_drive, "right_back");
+
+        telemetry.addData("Say", "Hello Driver");    //this shows the robot is ready
+
+    }
 
     private void CheckMotor(DcMotor motor, String  motorName)
     {
@@ -39,65 +57,43 @@ public class MecanumSetup_Teleop extends OpMode {
         }
     }
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
-    @Override
-    public void init() {
-
-
-
-        robot.init(hardwareMap);
-        // Is every motor on correctly? This checks each motor and lift.
-        this.CheckMotor(robot.left_front_drive, "left_front");
-        this.CheckMotor(robot.right_front_drive, "right_front");
-        this.CheckMotor(robot.left_back_drive, "left_back");
-            this.CheckMotor(robot.right_back_drive, "right_back");
-
-
-        telemetry.addData("Say", "Hello Driver");    //this shows the robot is ready
-
-    }
-
     @Override
     public void loop () {
 
-
-
         // this moves the right front wheel; You need to press the left up
         if (gamepad1.left_stick_y == -1) {
-            robot.DrivePower(HardwareMecanumBase.WheelControl.RightFrontDrive, -0.3);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.RightFrontDrive, -0.3);
             telemetry.addData("Testing:", "right_front");
         }
         else{
-            robot.DrivePower(HardwareMecanumBase.WheelControl.RightFrontDrive, 0);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.RightFrontDrive, 0);
         }
 
         // this moves the left front wheel; You need to press the left stick to the left
         if (gamepad1.left_stick_x == -1) {
-            robot.DrivePower(HardwareMecanumBase.WheelControl.LeftFrontDrive, -0.3);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.LeftFrontDrive, -0.3);
             telemetry.addData("Testing:", "left_front");
         }
         else{
-            robot.DrivePower(HardwareMecanumBase.WheelControl.LeftFrontDrive, 0);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.LeftFrontDrive, 0);
         }
 
         // this moves the left back wheel; You need to press the left stick down
         if (gamepad1.left_stick_y == 1) {
-            robot.DrivePower(HardwareMecanumBase.WheelControl.LeftBackDrive, -0.3);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.LeftBackDrive, -0.3);
             telemetry.addData("Testing:", "left_back");
         }
         else{
-            robot.DrivePower(HardwareMecanumBase.WheelControl.LeftBackDrive, 0);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.LeftBackDrive, 0);
         }
 
         // this moves the right back wheel; You need to press the left stick to the right
         if (gamepad1.left_stick_x == 1) {
-            robot.DrivePower(HardwareMecanumBase.WheelControl.RightBackDrive, -0.3);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.RightBackDrive, -0.3);
             telemetry.addData("Testing:", "right_back");
         }
         else{
-            robot.DrivePower(HardwareMecanumBase.WheelControl.RightBackDrive, 0);
+            mecanumMotor.DrivePower(MecanumMotor.WheelControl.RightBackDrive, 0);
         }
 
 

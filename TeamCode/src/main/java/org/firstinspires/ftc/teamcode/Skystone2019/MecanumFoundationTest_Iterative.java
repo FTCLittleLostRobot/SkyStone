@@ -7,22 +7,24 @@ package org.firstinspires.ftc.teamcode.Skystone2019;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveFoundationStateMachine;
 
 @Autonomous(name="Mecanum:FoundationTest", group="Mecanum")
 public class MecanumFoundationTest_Iterative extends OpMode {
 
-    private HardwareMecanumBase robot;
+    private HardwareMecanumBase robot = new HardwareMecanumBase();
+    private MecanumMotor motors = new MecanumMotor();
     private MecanumMoveFoundationStateMachine moveFoundationStateMachine;
 
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
-        this.robot = new HardwareMecanumBase();
         this.moveFoundationStateMachine = new MecanumMoveFoundationStateMachine();
 
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
+        motors.init(robot);
 
         /* Step 3: Setup of controllers  */
 
@@ -36,11 +38,11 @@ public class MecanumFoundationTest_Iterative extends OpMode {
     @Override
     public void init_loop() {
         if (gamepad1.x){
-            this.moveFoundationStateMachine.init(telemetry, robot, true, false);
+            this.moveFoundationStateMachine.init(telemetry, motors, true, false);
             telemetry.addData("Say", "Welcome to the blue team");
         }
         else if (gamepad1.b){
-            this.moveFoundationStateMachine.init(telemetry, robot, true, true);
+            this.moveFoundationStateMachine.init(telemetry, motors, true, true);
             telemetry.addData("Say", "Welcome to the Red Team");
         }
     }

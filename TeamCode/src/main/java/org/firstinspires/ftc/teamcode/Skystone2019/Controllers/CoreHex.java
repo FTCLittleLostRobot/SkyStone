@@ -30,6 +30,9 @@ public class CoreHex {
         else {
             coreHex = hwBase.Block_Grabber;
         }
+        coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        coreHex.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        coreHex.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
 

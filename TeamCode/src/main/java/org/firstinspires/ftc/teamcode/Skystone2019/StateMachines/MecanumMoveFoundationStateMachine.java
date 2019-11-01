@@ -6,17 +6,17 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.qualcomm.robotcore.robot.RobotState;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.IConfiguration;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
 
 public class MecanumMoveFoundationStateMachine {
 
     Telemetry telemetry;
-    MecanumMove moveRobot;
+    MecanumEncoderMove moveRobot;
     MecanumMoveFoundationStateMachine.RobotState state;
     IConfiguration robotConfig;
 
@@ -50,10 +50,10 @@ public class MecanumMoveFoundationStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, HardwareMecanumBase robot, boolean isCloseSquare, boolean isRed) {
+    public void init(Telemetry telemetry, MecanumMotor robot, boolean isCloseSquare, boolean isRed) {
 
         this.telemetry = telemetry;
-        this.moveRobot = new MecanumMove();
+        this.moveRobot = new MecanumEncoderMove();
         this.moveRobot.init(robot);
         this.isCloseSquare = isCloseSquare;
         this.isRed = isRed;

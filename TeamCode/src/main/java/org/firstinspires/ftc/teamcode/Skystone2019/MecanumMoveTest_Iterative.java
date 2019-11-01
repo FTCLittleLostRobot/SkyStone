@@ -7,39 +7,37 @@ package org.firstinspires.ftc.teamcode.Skystone2019;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveStateMachine;
 
 @Autonomous(name="Mecanum:MoveTest", group="Mecanum")
 public class MecanumMoveTest_Iterative extends OpMode {
 
-    private HardwareMecanumBase robot;
+    private HardwareMecanumBase robot = new HardwareMecanumBase();
+    private MecanumMotor motors = new MecanumMotor();
     private MecanumRotateStateMachine rotateStateMachine;
     private MecanumMoveStateMachine moveStateMachine;
 
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
-        this.robot = new HardwareMecanumBase();
         this.rotateStateMachine = new MecanumRotateStateMachine();
         this.moveStateMachine = new MecanumMoveStateMachine();
 
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
+        motors.init(robot);
 
         /* Step 3: Setup of controllers  */
 
         /* Step 4: Setup of state machines  */
-        this.rotateStateMachine.init(telemetry, robot);
-        this.moveStateMachine.init(telemetry, robot);
+        this.rotateStateMachine.init(telemetry, motors);
+        this.moveStateMachine.init(telemetry, motors);
 
-//        this.rotateStateMachine = new MecanumRotateStateMachine();
-  //      this.rotateStateMachine.init(telemetry, 90.0 , robot);
-
-        //moveRobot.StartRotate(telemetry, 2, 90, MecanumMove.RotationDirection.Right);
+        this.rotateStateMachine = new MecanumRotateStateMachine();
+        this.rotateStateMachine.init(telemetry, motors);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -48,7 +46,7 @@ public class MecanumMoveTest_Iterative extends OpMode {
     @Override
     public void start() {
         rotateStateMachine.Start(90.0);
-        moveStateMachine.Start();
+        moveStateMachine.Start(10, -1, 0, 0);
     }
 
     @Override

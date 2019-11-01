@@ -6,14 +6,15 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMove;
 
 
 public class MecanumRotateStateMachine {
 
     Telemetry telemetry;
-    MecanumMove moveRobot;
+    MecanumEncoderMove moveRobot;
 
     Double degrees;
     MecanumRotateStateMachine.RobotState state;
@@ -27,11 +28,11 @@ public class MecanumRotateStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, HardwareMecanumBase robot) {
+    public void init(Telemetry telemetry, MecanumMotor motors) {
 
         this.telemetry = telemetry;
-        this.moveRobot = new MecanumMove();
-        this.moveRobot.init(robot);
+        this.moveRobot = new MecanumEncoderMove();
+        this.moveRobot.init(motors);
 
 
 
@@ -57,7 +58,7 @@ public class MecanumRotateStateMachine {
         switch (state)
         {
             case Rotate:
-                this.moveRobot.StartRotate(telemetry, 70, degrees, MecanumMove.RotationDirection.Right );
+                this.moveRobot.StartRotate(telemetry, 70, degrees, MecanumEncoderMove.RotationDirection.Right );
                 state = RobotState.Rotating;
                 break;
 

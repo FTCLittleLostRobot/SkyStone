@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.CoreHexStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
@@ -29,17 +30,14 @@ import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateSt
 public class MecanumTeleop_Iterative extends OpMode{
 
     /* Declare OpMode members. */
-    private HardwareMecanumBase robot = null;
+    private HardwareMecanumBase robot = new HardwareMecanumBase();
+    private MecanumMotor motors = new MecanumMotor();
     private CoreHexStateMachine coreHexStateMachineBlockGrabber;
     private CoreHexStateMachine coreHexStateMachineBlockLifter;
     private float starting_left_x = 0;  //this makes the robot strafe right and left
     private float starting_left_y = 0;  //this makes the robot go forwards and backwards
     private float starting_right_x = 0; // this makes the robot rotate
-    private boolean starting_b = false; // this moves the CoreHex/thing that picks up blocks to the right
-    private boolean starting_x = false; // this moves the coreHex/thing that picks up blocks to the left
     private boolean ButtonCheck = false;    //left and right bumper; faster, slower
-    private boolean CoreHexLiftCheckRight = false;
-    private boolean CoreHexLiftCheckLeft = false;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -47,10 +45,10 @@ public class MecanumTeleop_Iterative extends OpMode{
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
-        robot = new HardwareMecanumBase();
 
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
+        motors.init(robot);
 
         this.coreHexStateMachineBlockGrabber = new CoreHexStateMachine();
         this.coreHexStateMachineBlockGrabber.init(telemetry, robot, CoreHex.CoreHexMotors.BlockGrabber);
@@ -104,19 +102,19 @@ public class MecanumTeleop_Iterative extends OpMode{
         // if you hit the right bumper it will go faster if you hit the left bumper it will go slower, both will set it to regular
         if (left_bumper && right_bumper) {
             if (ButtonCheck == false){
-                robot.ResetSpeed();
+                motors.ResetSpeed();
                 ButtonCheck = true;
             }
         }
         else if (left_bumper) {
             if (ButtonCheck == false){
-                robot.DecreaseSpeed();
+                motors.DecreaseSpeed();
                 ButtonCheck = true;
             }
         }
         else if (right_bumper) {
             if (ButtonCheck == false) {
-                robot.IncreaseSpeed();
+                motors.IncreaseSpeed();
                 ButtonCheck = true;
             }
         }
@@ -146,12 +144,13 @@ public class MecanumTeleop_Iterative extends OpMode{
         coreHexStateMachineBlockLifter.ProcessState();
 
 
-        robot.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
+        motors.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
 
-        telemetry.addData("SpeedMultplier", robot.SpeedMultiplier);
+        telemetry.addData("SpeedMultplier", motors.GetSpeedMultiplier());
         telemetry.addData("right stick x value", gamepad1.right_stick_x);
-        telemetry.addData("CoreHexLiftCheckRight", CoreHexLiftCheckRight);
     }
+
+
 
     /*
      * Code to run ONCE after the driver hits STOP
