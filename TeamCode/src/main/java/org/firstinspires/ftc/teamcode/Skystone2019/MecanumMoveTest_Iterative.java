@@ -33,11 +33,11 @@ public class MecanumMoveTest_Iterative extends OpMode {
         /* Step 3: Setup of controllers  */
 
         /* Step 4: Setup of state machines  */
-        this.rotateStateMachine.init(telemetry, motors);
+        //this.rotateStateMachine.init(telemetry, motors);
         this.moveStateMachine.init(telemetry, motors);
 
-        this.rotateStateMachine = new MecanumRotateStateMachine();
-        this.rotateStateMachine.init(telemetry, motors);
+        //this.rotateStateMachine = new MecanumRotateStateMachine();
+        //this.rotateStateMachine.init(telemetry, motors);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -45,8 +45,8 @@ public class MecanumMoveTest_Iterative extends OpMode {
 
     @Override
     public void start() {
-        rotateStateMachine.Start(90.0);
-        moveStateMachine.Start(10, -1, 0, 0);
+        //rotateStateMachine.Start(90.0);
+        moveStateMachine.Start(2, -1, -1, 0);
     }
 
     @Override

@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import android.graphics.Bitmap;
+import com.qualcomm.robotcore.robot.RobotState;
 
 import com.vuforia.Image;
 
@@ -19,9 +20,12 @@ public class MecanumSkyStoneStateMachine {
 
     Telemetry telemetry;
     MecanumEncoderMove moveRobot;
+    MecanumEncoderMove rotateRobot;
+
     ColorFinder colorFinder;
     MecanumSkyStoneStateMachine.RobotState state;
     MecanumRotateStateMachine rotateStateMachine;
+    MecanumMoveStateMachine moveStateMachine;
 
     // THIS IS IF THE ROBOT IS FACING FORWARDS
     static final double FORWARD_SPEED = 0.1;
@@ -45,9 +49,8 @@ public class MecanumSkyStoneStateMachine {
         CheckScreen,
         ConvertImageFromScreen,
         DetectColorFromImage,
+        FaceFront,
         CheckForSkystone,
-        Turn90ToFaceFront,
-        Turning90ToFaceFront,
         Turn180ToFaceFront,
         Turning180ToFaceFront,
         MovingTowardsBlock,
@@ -55,11 +58,11 @@ public class MecanumSkyStoneStateMachine {
         CollectingBlock,
         ReOrientate,
         ReOrienting,
-        FaceTowardsSkyBridge,
-        FaceingTowardsSkyBridge,
 
         MoveUnderSkyBridge1,
         MovingUnderSkyBridge1,
+        DropBlock,
+        DropingBlock,
         BackUp1,
         BackingUp1,
         SquareAgainstWall,
@@ -89,8 +92,14 @@ public class MecanumSkyStoneStateMachine {
         this.moveRobot = new MecanumEncoderMove();
         this.moveRobot.init(motors);
 
+        this.rotateRobot = new MecanumEncoderMove();
+        this.rotateRobot.init(motors);
+
         this.rotateStateMachine = new MecanumRotateStateMachine();
         this.rotateStateMachine.init(telemetry,  motors);
+
+        this.moveStateMachine = new MecanumMoveStateMachine();
+        this.moveStateMachine.init(telemetry,  motors);
 
 
         state = MecanumSkyStoneStateMachine.RobotState.Start;
@@ -99,7 +108,7 @@ public class MecanumSkyStoneStateMachine {
     public void Start()
     {
         rotateStateMachine.Start(90.0);
-        state = RobotState.MoveForwards;
+        state = RobotState.CheckScreen;
     }
 
     public boolean IsDone()
@@ -114,21 +123,24 @@ public class MecanumSkyStoneStateMachine {
         telemetry.addData("Column 0", colorFinder.column0);
         telemetry.addData("Column 1", colorFinder.column1);
         telemetry.addData("Column 2", colorFinder.column2);
-
+        telemetry.addData("targetLeftFrontEncoderValue", moveRobot.targetLeftFrontEncoderValue);
+        telemetry.addData("CurrentLeftFrontPosition", moveRobot.GetLeftMotorEncodePosition());
         telemetry.update();
+
+
         switch (state)
         {
             case MoveForwards:
                 //y = 1 makes it go backwards
                 //this.moveRobot.StartMove(50, ConfigFactory.Get().FoundationInchesFromWall, 0, -1, 0);
-                this.moveRobot.StartMove(50, 17, 0, MecanumEncoderMove.GO_BACK, 0);
+                this.moveRobot.StartMove(30, 15, 0, MecanumEncoderMove.GO_BACK, 0);
                 state = RobotState.MovingForwards;
                 break;
 
             case MovingForwards:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
-                    state = RobotState.CheckScreen;
+                    state = RobotState.Done;
                 }
                 break;
 
@@ -157,27 +169,39 @@ public class MecanumSkyStoneStateMachine {
             case DetectColorFromImage:
                 foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinder.ColorTarget.Black, telemetry);
                 telemetry.addData("column", foundColumn);
-                state = RobotState.CheckForSkystone;
+                state = RobotState.Turn180ToFaceFront;
                 break;
 
+            case Turn180ToFaceFront:
+                this.rotateRobot.StartRotate(telemetry, 70, 180.0, MecanumEncoderMove.RotationDirection.Right );
+
+                state = RobotState.Turning180ToFaceFront;
+                break;
+
+            case Turning180ToFaceFront:
+                if (this.rotateRobot.IsDone()) {
+                    this.rotateRobot.Complete();
+                    state = RobotState.CheckForSkystone;
+                }
+                break;
             case CheckForSkystone:
                 if (foundColumn == 0 )
                 {
 
-                    this.moveRobot.StartMove(50, 6, GO_LEFT, GO_FORWARD,0 );
+                    this.moveRobot.StartMove(50, 6, GO_LEFT, 0,0 );
                     state = RobotState.MovingTowardsBlock;
                     skyStonePosition = 0;
                 }
                 else if (foundColumn == 1 )
                 {
-                    this.moveRobot.StartMove(50, 6, GO_LEFT, GO_FORWARD,0 );
+                    this.moveRobot.StartMove(50, 3, GO_LEFT, 0,0 );
                     state = RobotState.MovingTowardsBlock;
                     skyStonePosition = 1;
 
                 }
                 else if (foundColumn == 2)
                 {
-                    this.moveRobot.StartMove(50, 6,0, GO_FORWARD,0 );
+                    this.moveRobot.StartMove(20, 2, GO_LEFT, GO_FORWARD, 0 );
                     state = RobotState.MovingTowardsBlock;
                     skyStonePosition = 2;
 
@@ -193,68 +217,60 @@ public class MecanumSkyStoneStateMachine {
             case MovingTowardsBlock:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
-                    state = RobotState.Turn90ToFaceFront;
+                    state = RobotState.Done; ///////////////////////
                 }
                 break;
-            case Turn90ToFaceFront:
-                this.moveRobot.StartRotate(telemetry, 70, 180.0, MecanumEncoderMove.RotationDirection.Right );
-
-                state = RobotState.Turning90ToFaceFront;
-                break;
-
-            case Turning90ToFaceFront:
-                if (this.moveRobot.IsDone()) {
-                    this.moveRobot.Complete();
-                    state = RobotState.CollectBlock;
-                }
-                break;
-
 
 
             case CollectBlock:
-                this.moveRobot.StartMove(20, 2, 0, GO_FORWARD, 0); // We need the robot to go forwards and turn so the block stays in our grip and doesn't move much.
+                //this.moveRobot.StartMove(20, 2, 0, GO_FORWARD, 0); // We need the robot to go forwards and turn so the block stays in our grip and doesn't move much.
+                //Core Hex stuff
+                state = RobotState.CollectingBlock;
                 break;
 
             case CollectingBlock:
-                if (this.moveRobot.IsDone()) {
-                    this.moveRobot.Complete();
-                    state = RobotState.ReOrientate;
-                }
+                // IS Core Hex stuff done
+                state = RobotState.ReOrientate;
+
                 break;
 
             case ReOrientate:
-                this.moveRobot.StartMove(20, 4, GO_FORWARD, 0, 0);
+                this.moveRobot.StartMove(20, 4, GO_BACK, 0, 0);
                 break;
 
             case ReOrienting:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
-                    state = RobotState.FaceingTowardsSkyBridge;
-                    rotateStateMachine.Start(90.0);
-                }
-                break;
-
-            case FaceingTowardsSkyBridge:
-                if (this.rotateStateMachine.IsDone()) {
                     state = RobotState.MoveUnderSkyBridge1;
+                    moveStateMachine.Start(10, -1, 0, 0);
                 }
-                else
-                    rotateStateMachine.ProcessState();
-
                 break;
 
             case MoveUnderSkyBridge1:
-                this.moveRobot.StartMove(50, 42, MecanumEncoderMove.GO_FORWARD, 0, 0);
+                moveStateMachine.ProcessState();
                 state = RobotState.MovingUnderSkyBridge1;
                 break;
 
             case MovingUnderSkyBridge1:
                 if (this.moveRobot.IsDone()) {
                     this.moveRobot.Complete();
-                    state = RobotState.BackUp1;
+                    state = RobotState.DropBlock;
                 }
                 break;
 
+            case DropBlock:
+                //Drop Block with core Hex
+                state = RobotState.DropingBlock;
+                moveStateMachine.Start(10, -1, 0, 0);
+                break;
+
+            case DropingBlock:
+                if (this.moveRobot.IsDone()) {
+                    this.moveRobot.Complete();
+                    state = RobotState.BackUp1;
+                    moveStateMachine.Start(10, -1, 0, 0);
+                }
+                break;
             case BackUp1:
                 this.moveRobot.StartMove(50, 47, MecanumEncoderMove.GO_BACK, 0, 0);
                 state = RobotState.BackingUp1;

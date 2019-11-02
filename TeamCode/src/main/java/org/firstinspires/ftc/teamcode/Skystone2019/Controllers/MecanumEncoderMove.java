@@ -83,11 +83,19 @@ public class MecanumEncoderMove {
 
     public void StartMove(int speed, double inches, double x, double y, double rotation ) {
 
+        if (x != 0 && y != 0)
+        {
+            useRunToPosition = false;
+        }
+        else
+        {
+            useRunToPosition = true;
+        }
+
         targetLeftFrontSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.LeftFrontDrive,x,y,rotation);
         targetRightFrontSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.RightFrontDrive,x,y,rotation);
         targetLeftBackSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.LeftBackDrive,x,y,rotation);
         targetRightBackSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.RightBackDrive,x,y,rotation);
-
 
         if (this.mecanumMotors.LeftFrontMotor != null){
             this.targetLeftFrontEncoderValue = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() +
@@ -134,10 +142,10 @@ public class MecanumEncoderMove {
         int targetLeftFrontRotation;
 
         if (angle == 90) {
-            encoderTicks = 640 / 2; //23
+            encoderTicks = 580; //23
         }
         if (angle == 180) {
-            encoderTicks = 1280;
+            encoderTicks = 1260;
         }
 
         if (direction == RotationDirection.Left){
@@ -193,6 +201,12 @@ public class MecanumEncoderMove {
     public void Complete() {
         // Stop all motion;
         this.mecanumMotors.ResetMotors();
+
+    }
+
+    public int GetLeftMotorEncodePosition()
+    {
+        return this.mecanumMotors.LeftFrontMotor.getCurrentPosition();
     }
 }
 

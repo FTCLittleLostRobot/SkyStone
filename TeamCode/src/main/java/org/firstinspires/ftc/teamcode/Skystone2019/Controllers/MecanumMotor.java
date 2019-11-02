@@ -78,6 +78,11 @@ public class MecanumMotor {
         if (this.LeftFrontMotor != null) {
             this.LeftFrontMotor.setPower(0);
         }
+
+        this.RightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.LeftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.RightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.LeftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void DrivePower(WheelControl wheel, double power) {
