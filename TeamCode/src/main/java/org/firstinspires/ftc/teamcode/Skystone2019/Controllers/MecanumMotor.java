@@ -19,12 +19,12 @@ public class MecanumMotor {
     public DcMotor LeftBackMotor = null;
     public DcMotor RightBackMotor = null;
 
+    private HardwareMecanumBase hardwareBase = null;
+
     private double LeftFrontMotorPowerAdjustment = 1;
     private double RightFrontMotorPowerAdjustment = 1.1;
     private double LeftBackMotorPowerAdjustment = 1.1;
     private double RightBackMotorPowerAdjustment = 1;
-
-    private HardwareMecanumBase hardwareBase = null;
 
     private int SpeedMultiplier = 50;
 
@@ -125,12 +125,12 @@ public class MecanumMotor {
     {
         double v = CalculateMecanumPosition(wheel, x, y, rotation);
 
-        if (v >= 0) {
+        if (v > 0.001)
             return 1;
-        }
-        else {
+        else if (v < -.001)
             return -1;
-        }
+        else
+            return 0;
     }
 
     public void MoveMecanum(double x, double y, double rotation)
@@ -151,7 +151,7 @@ public class MecanumMotor {
     public double CalculateMecanumPosition(WheelControl wheel, double x, double y, double rotation)
     {
         double r = Math.hypot( x, y);
-        double robotAngle = Math.atan2(y,x) - Math.PI / 4;
+        double robotAngle = Math.atan2(y,x) - Math.PI / (double)4;
         double v = 0;
 
         switch (wheel)

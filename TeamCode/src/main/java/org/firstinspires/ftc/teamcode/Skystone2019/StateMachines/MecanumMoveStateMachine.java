@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.robot.RobotState;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
@@ -59,21 +60,28 @@ public class MecanumMoveStateMachine {
     {
         telemetry.addData("Current State", state.toString());
         telemetry.addData("targetLeftFrontEncoderValue", this.moveRobot.targetLeftFrontEncoderValue);
+        telemetry.addData("targetLeftFrontSpinValue", this.moveRobot.targetLeftFrontSpin);
         telemetry.addData("Current LeftFront Position", this.motors.LeftFrontMotor.getCurrentPosition());
+        telemetry.addData("---", "");
 
         telemetry.addData("targetRightFrontEncoderValue", this.moveRobot.targetRightFrontEncoderValue);
+        telemetry.addData("targetRightFrontSpinValue", this.moveRobot.targetRightFrontSpin);
         telemetry.addData("Current RightFront Position", this.motors.RightFrontMotor.getCurrentPosition());
+        telemetry.addData("---", "");
 
         telemetry.addData("targetLeftBackEncoderValue", this.moveRobot.targetLeftBackEncoderValue);
+        telemetry.addData("targetLeftBackSpinValue", this.moveRobot.targetLeftBackSpin);
         telemetry.addData("Current LeftBack Position", this.motors.LeftBackMotor.getCurrentPosition());
+        telemetry.addData("---", "");
 
         telemetry.addData("targetRightBackEncoderValue", this.moveRobot.targetRightBackEncoderValue);
+        telemetry.addData("targetRightBackSpinValue", this.moveRobot.targetRightBackSpin);
         telemetry.addData("Current RightBack Position", this.motors.RightBackMotor.getCurrentPosition());
 
         switch (state)
         {
             case Move:
-                this.moveRobot.StartMove(50, inches, x, y, rotation);
+                this.moveRobot.StartMove(10, inches, x, y, rotation);
                 state = RobotState.Moving;
                 break;
 

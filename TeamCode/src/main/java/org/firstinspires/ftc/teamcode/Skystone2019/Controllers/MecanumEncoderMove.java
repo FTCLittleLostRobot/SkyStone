@@ -32,16 +32,20 @@ public class MecanumEncoderMove {
     private Boolean useRunToPosition = true;
     private int targetPositionTolerance = 30;
 
-    private int targetLeftFrontSpin = 0;
+    public double targetLeftFrontPower = 0;
+    public int targetLeftFrontSpin = 0;
     public int targetLeftFrontEncoderValue = 0;
 
-    private int targetRightFrontSpin = 0;
+    public double targetRightFrontPower = 0;
+    public int targetRightFrontSpin = 0;
     public int targetRightFrontEncoderValue = 0;
 
-    private int targetLeftBackSpin = 0;
+    public double targetLeftBackPower = 0;
+    public int targetLeftBackSpin = 0;
     public int targetLeftBackEncoderValue = 0;
 
-    private int targetRightBackSpin = 0;
+    public double targetRightBackPower = 0;
+    public int targetRightBackSpin = 0;
     public int targetRightBackEncoderValue = 0;
 
     public void init(MecanumMotor mMotors){
@@ -92,26 +96,26 @@ public class MecanumEncoderMove {
             useRunToPosition = true;
         }
 
-        targetLeftFrontSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.LeftFrontDrive,x,y,rotation);
-        targetRightFrontSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.RightFrontDrive,x,y,rotation);
-        targetLeftBackSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.LeftBackDrive,x,y,rotation);
-        targetRightBackSpin = this.mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.RightBackDrive,x,y,rotation);
+        targetLeftFrontPower = this.mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.LeftFrontDrive,x,y,rotation);
+        targetRightFrontPower = this.mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.RightFrontDrive,x,y,rotation);
+        targetLeftBackPower = this.mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.LeftBackDrive,x,y,rotation);
+        targetRightBackPower = this.mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.RightBackDrive,x,y,rotation);
 
         if (this.mecanumMotors.LeftFrontMotor != null){
             this.targetLeftFrontEncoderValue = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() +
-                    (targetLeftFrontSpin * (int) (inches * WHEEL_COUNTS_PER_INCH));
+                    (int) (targetLeftFrontPower * (inches * WHEEL_COUNTS_PER_INCH));
         }
         if (this.mecanumMotors.RightFrontMotor != null){
             this.targetRightFrontEncoderValue = this.mecanumMotors.RightFrontMotor.getCurrentPosition() +
-                    (targetRightFrontSpin * (int) (inches * WHEEL_COUNTS_PER_INCH));
+                    (int) (targetRightFrontPower * (inches * WHEEL_COUNTS_PER_INCH));
         }
         if (this.mecanumMotors.LeftBackMotor != null){
             this.targetLeftBackEncoderValue = this.mecanumMotors.LeftBackMotor.getCurrentPosition() +
-                    (targetLeftBackSpin * (int) (inches * WHEEL_COUNTS_PER_INCH));
+                    (int) (targetLeftBackPower * (inches * WHEEL_COUNTS_PER_INCH));
         }
         if (this.mecanumMotors.RightBackMotor != null){
             this.targetRightBackEncoderValue = this.mecanumMotors.RightBackMotor.getCurrentPosition() +
-                    (targetRightBackSpin * (int) (inches * WHEEL_COUNTS_PER_INCH));
+                    (int) (targetRightBackPower * (inches * WHEEL_COUNTS_PER_INCH));
         }
 
         if (useRunToPosition)
@@ -137,6 +141,10 @@ public class MecanumEncoderMove {
         telemetry.addData("Current State", direction.toString());
 
         this.useRunToPosition = false;
+        targetLeftFrontSpin = 0;
+        targetRightFrontSpin = 0;
+        targetLeftBackSpin = 0;
+        targetRightBackSpin = 0;
 
         int encoderTicks = 0;
         int targetLeftFrontRotation;
@@ -154,40 +162,46 @@ public class MecanumEncoderMove {
         else {
             targetLeftFrontRotation = -1;
         }
-        targetLeftFrontSpin = mecanumMotors.GetWheelSpinDirection(MecanumMotor.WheelControl.LeftFrontDrive,0,0, targetLeftFrontRotation);
 
-
+        targetLeftFrontPower = mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.LeftFrontDrive,0,0, targetLeftFrontRotation);
         if (this.mecanumMotors.LeftFrontMotor != null){
-
-            int newLeftFrontTarget = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() + (targetLeftFrontSpin * encoderTicks);
-            targetLeftFrontEncoderValue = newLeftFrontTarget;
+            targetLeftFrontEncoderValue = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() + (targetLeftFrontSpin * encoderTicks);
         }
 
         this.mecanumMotors.SetSpeedToValue(speed);
         this.mecanumMotors.MoveMecanum(0,0, targetLeftFrontRotation);
     }
 
+    private boolean IsWheelDone(DcMotor motor, double spinDirection, int targetEncoderValue)
+    {
+        if (motor != null)
+        {
+            if (spinDirection > 0.0)
+                return motor.getCurrentPosition() >= targetEncoderValue;
+            else
+                return motor.getCurrentPosition() <= targetEncoderValue;
+        }
+        else
+            return true;
+    }
+
     public boolean IsDone() {
-        boolean isWheelDone;
         boolean areAllWheelsDone = true;
 
         if (!useRunToPosition) {
-            if (this.mecanumMotors.LeftFrontMotor != null) {
-                // this tells the robot if it is positive or negative
-                if (targetLeftFrontSpin > 0) {
-                    isWheelDone = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() >= targetLeftFrontEncoderValue; // if it is positive
-                } else {
-                    isWheelDone = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() <= targetLeftFrontEncoderValue; // if it is negative
-                }
-
-                if (isWheelDone) {
-                    this.Complete();
-                } else {
-                    areAllWheelsDone = false;
-                }
+            if (Math.abs(targetLeftFrontPower) > Math.abs(targetRightFrontPower))
+            {
+                areAllWheelsDone = IsWheelDone(this.mecanumMotors.LeftFrontMotor, targetLeftFrontPower, targetLeftFrontEncoderValue);
+            }
+            else
+            {
+                areAllWheelsDone = IsWheelDone(this.mecanumMotors.RightFrontMotor, targetRightFrontPower, targetRightFrontEncoderValue);
             }
 
-            return areAllWheelsDone;
+            if (areAllWheelsDone)
+            {
+                return true;
+            } else { return false; }
         }
         else
         {
