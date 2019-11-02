@@ -33,7 +33,7 @@ public class ConfigFactory {
         }
         else
         {
-            return new RobotConfigurationDefault();
+            return new RobotConfigurationC();
         }
     }
 }

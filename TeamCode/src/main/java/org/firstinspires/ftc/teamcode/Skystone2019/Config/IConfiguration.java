@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.Skystone2019.Config;
 
 public interface IConfiguration {
-    int FoundationInchesFromWall = 0;
-    int FoundationInchesMovedTowardsWall = 0;
-    int FoundationInchesSidewaysMoved = 0;
-    int FoundationInchesMoveNextToPlatForm = 0;
-    int FoundationInchesPlatFormPushed = 0;
-    int FoundationInchesMovedTowardsBridgeClose = 0;
-    int FoundationInchesMovedTowardsBridgeFar = 0;
-    int FoundationInchesMovedUnderBridge = 0;
+    int FoundationInchesFromWall = 41;
+    int FoundationInchesMovedTowardsWall = 41;
+    int FoundationInchesMoveNextToPlatForm = 9;
+    int FoundationInchesSidewaysMoved = 30;
+    int FoundationInchesPlatFormPushed = 8;
+    int FoundationInchesMovedTowardsBridgeClose = 26;
+    int FoundationInchesMovedTowardsBridgeFar = 26;
+    int FoundationInchesMovedUnderBridge = 18;
 }

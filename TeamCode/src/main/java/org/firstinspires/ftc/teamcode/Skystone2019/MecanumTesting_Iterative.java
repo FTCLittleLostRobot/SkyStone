@@ -46,13 +46,21 @@ public class MecanumTesting_Iterative extends OpMode {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
+        setUpStateMachine.Start();
+    }
+
+    @Override
+    public void init_loop()
+    {
+        setUpStateMachine.ProcessState();
     }
 
     @Override
     public void start() {
-        rotateStateMachine.Start(90.0);
-        moveStateMachine.Start(10, 0, 1, 0);
-        setUpStateMachine.Start();
+
+
+//        rotateStateMachine.Start(90.0);
+//        moveStateMachine.Start(10, 0, 1, 0)
     }
 
     @Override

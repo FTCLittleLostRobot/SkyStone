@@ -2,16 +2,17 @@
    Core Devs: Danielle, Ryan
 */
 
-package org.firstinspires.ftc.teamcode.Skystone2019;
+package org.firstinspires.ftc.teamcode.Skystone2019.Competition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
+import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveFoundationStateMachine;
 
-@Autonomous(name="Mecanum:FoundationTest", group="Mecanum")
-public class MecanumFoundationTest_Iterative extends OpMode {
+@Autonomous(name="Mecanum:Foundation", group="Mecanum")
+public class MecanumFoundation_Iterative extends OpMode {
 
     private HardwareMecanumBase robot = new HardwareMecanumBase();
     private MecanumMotor motors = new MecanumMotor();
@@ -49,6 +50,8 @@ public class MecanumFoundationTest_Iterative extends OpMode {
 
     @Override
     public void start() {
+
+        this.moveFoundationStateMachine.init(telemetry, motors, true, false);
         moveFoundationStateMachine.Start();
     }
 

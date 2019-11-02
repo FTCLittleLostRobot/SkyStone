@@ -138,6 +138,22 @@ public class MecanumEncoderMove {
 
 
     public void StartRotate(Telemetry telemetry, int speed, double angle, RotationDirection direction) {
+        int encoderTicks = 0;
+
+        if (angle == 90) {
+            encoderTicks = 580; //23
+        }
+        else if (angle == 180) {
+            encoderTicks = 1325;
+        }
+        else if (angle == 45) {
+            encoderTicks = 250;
+        }
+
+        StartRotateDirectEncoderTicks(telemetry, speed, encoderTicks, direction);
+    }
+
+    public void StartRotateDirectEncoderTicks(Telemetry telemetry, int speed, int encoderTicks, RotationDirection direction) {
         telemetry.addData("Current State", direction.toString());
 
         this.useRunToPosition = false;
@@ -146,15 +162,7 @@ public class MecanumEncoderMove {
         targetLeftBackSpin = 0;
         targetRightBackSpin = 0;
 
-        int encoderTicks = 0;
         int targetLeftFrontRotation;
-
-        if (angle == 90) {
-            encoderTicks = 580; //23
-        }
-        if (angle == 180) {
-            encoderTicks = 1260;
-        }
 
         if (direction == RotationDirection.Left){
             targetLeftFrontRotation = 1;
@@ -165,7 +173,7 @@ public class MecanumEncoderMove {
 
         targetLeftFrontPower = mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.LeftFrontDrive,0,0, targetLeftFrontRotation);
         if (this.mecanumMotors.LeftFrontMotor != null){
-            targetLeftFrontEncoderValue = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() + (targetLeftFrontSpin * encoderTicks);
+            targetLeftFrontEncoderValue = this.mecanumMotors.LeftFrontMotor.getCurrentPosition() + (targetLeftFrontRotation * encoderTicks);
         }
 
         this.mecanumMotors.SetSpeedToValue(speed);
