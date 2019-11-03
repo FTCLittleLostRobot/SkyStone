@@ -17,10 +17,12 @@ public class SetUpStateMachine {
     HardwareMecanumBase robot;
     Gamepad gamepad1;
     public boolean BlueTeam = false;
+    public boolean RedTeam = false;
     public boolean StartDepot = false;
     public boolean StartFoundation = false;
     public boolean EndNeutralBridge = false;
     public boolean EndWall = false;
+    public boolean JustGoingUnderBridge;
     public String configData = "";
 
     enum RobotState
@@ -29,6 +31,7 @@ public class SetUpStateMachine {
         RedOrBlueQ,
         FoundationOrDepotQ,
         EndingPositionFartherOrCloserQ,
+        JustGoingUnderBridge,
         Done
     }
 
@@ -73,7 +76,7 @@ public class SetUpStateMachine {
                     state = RobotState.FoundationOrDepotQ;
                 }
                 else if (B){
-                    BlueTeam = false;
+                    RedTeam = true;
                     configData = configData + "Alliance: RedTeam || ";
                     state = RobotState.FoundationOrDepotQ;
 
@@ -107,15 +110,31 @@ public class SetUpStateMachine {
                 if (B){
                     EndWall = true;
                     configData = configData + "EndingPosition: Closer to Wall ";
-                    state = RobotState.Done;
+                    state = RobotState.JustGoingUnderBridge;
                 }
                 else if (X){
                     EndNeutralBridge = true;
                     configData = configData + "EndingPosition: Closer to Neutral Bridge ";
-                    state = RobotState.Done;
+                    state = RobotState.JustGoingUnderBridge;
                 }
                 else {
                     state = RobotState.EndingPositionFartherOrCloserQ;
+                }
+                break;
+            case JustGoingUnderBridge:
+                telemetry.addData("Are we just going under the bridge?", "Y: yes || A: no");
+                if (Y){
+                    JustGoingUnderBridge = true;
+                    configData = configData + "JustGoingUnderBridge";
+                    state = RobotState.Done;
+                }
+                else if (A){
+                    JustGoingUnderBridge = false;
+                    configData = configData + "Doing Autonomous program";
+                    state = RobotState.Done;
+                }
+                else {
+                    state = RobotState.JustGoingUnderBridge;
                 }
                 break;
 

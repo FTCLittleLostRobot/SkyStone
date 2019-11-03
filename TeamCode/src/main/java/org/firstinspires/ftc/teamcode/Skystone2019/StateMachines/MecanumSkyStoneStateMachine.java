@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
+
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
 
@@ -24,6 +26,7 @@ public class MecanumSkyStoneStateMachine {
     MecanumEncoderMove moveRobot;
     ColorFinder colorFinder;
     MecanumSkyStoneStateMachine.RobotState state;
+    SetUpStateMachine setUpStateMachine;
     IConfiguration robotConfig;
 
     // THIS IS IF THE ROBOT IS FACING FORWARDS
