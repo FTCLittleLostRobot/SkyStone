@@ -10,9 +10,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.CoreHexStateMachine;
 /*
  *   This program should be used to make sure all wires are in and in the correct ports.
  *   If a wire is in the wrong port or not in at all this program will let you know!
@@ -25,6 +26,9 @@ public class MecanumSetup_Teleop extends OpMode {
     /* Declare OpMode members. */
     private HardwareMecanumBase robot = new HardwareMecanumBase(); // use the class created to define a Mencanums 's hardware
     private MecanumMotor mecanumMotor = new MecanumMotor();
+    private CoreHexStateMachine coreHexStateMachineLifter = new CoreHexStateMachine();
+    private CoreHexStateMachine coreHexStateMachineGrabber = new CoreHexStateMachine();
+
     private DcMotor left_front_drive = null;   //front left wheel
     private DcMotor right_front_drive = null;  //front right wheel
     private DcMotor left_back_drive = null;    //back left wheel
@@ -37,12 +41,17 @@ public class MecanumSetup_Teleop extends OpMode {
     public void init() {
         robot.init(hardwareMap);
         mecanumMotor.init(robot);
+        coreHexStateMachineLifter.init(telemetry, robot, CoreHex.CoreHexMotors.BlockLifter);
+        coreHexStateMachineGrabber.init(telemetry, robot, CoreHex.CoreHexMotors.BlockGrabber);
+
 
         // Is every motor on correctly? This checks each motor and lift.
         this.CheckMotor(robot.left_front_drive, "left_front");
         this.CheckMotor(robot.right_front_drive, "right_front");
         this.CheckMotor(robot.left_back_drive, "left_back");
         this.CheckMotor(robot.right_back_drive, "right_back");
+        this.CheckMotor(robot.Block_Grabber, "Block_Grabber");
+        this.CheckMotor(robot.Block_Lifter, "Block_Lifter");
 
         telemetry.addData("Say", "Hello Driver");    //this shows the robot is ready
 
@@ -96,6 +105,24 @@ public class MecanumSetup_Teleop extends OpMode {
             mecanumMotor.DrivePower(MecanumMotor.WheelControl.RightBackDrive, 0);
         }
 
+        if (gamepad2.x){
+            coreHexStateMachineGrabber.Start(CoreHex.RotationDirection.Up);
+            coreHexStateMachineGrabber.ProcessState();
+        }
+        else if ( gamepad2.b){
+            coreHexStateMachineGrabber.Start(CoreHex.RotationDirection.Down);
+            coreHexStateMachineGrabber.ProcessState();
+        }
+
+        if (gamepad2.y){
+            coreHexStateMachineLifter.Start(CoreHex.RotationDirection.Up);
+            coreHexStateMachineGrabber.ProcessState();
+        }
+        else if (gamepad2.a){
+            coreHexStateMachineLifter.Start(CoreHex.RotationDirection.Down);
+            coreHexStateMachineGrabber.ProcessState();
+        }
+        coreHexStateMachineLifter.ProcessState();
 
     }
 }

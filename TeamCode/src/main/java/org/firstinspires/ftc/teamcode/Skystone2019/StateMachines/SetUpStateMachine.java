@@ -17,7 +17,6 @@ public class SetUpStateMachine {
     HardwareMecanumBase robot;
     Gamepad gamepad1;
     public boolean BlueTeam = false;
-    public boolean RedTeam = false;
     public boolean StartDepot = false;
     public boolean StartFoundation = false;
     public boolean EndNeutralBridge = false;
@@ -74,7 +73,7 @@ public class SetUpStateMachine {
                     state = RobotState.FoundationOrDepotQ;
                 }
                 else if (B){
-                    RedTeam = true;
+                    BlueTeam = false;
                     configData = configData + "Alliance: RedTeam || ";
                     state = RobotState.FoundationOrDepotQ;
 

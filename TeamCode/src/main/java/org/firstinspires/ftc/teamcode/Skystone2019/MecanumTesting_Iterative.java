@@ -66,12 +66,12 @@ public class MecanumTesting_Iterative extends OpMode {
     @Override
     public void loop()
     {
-      //  setUpStateMachine.ProcessState();
+        setUpStateMachine.ProcessState();
 
 //        moveStateMachine.ProcessState();
 
 //        if (moveStateMachine.IsDone()) {
-           rotateStateMachine.ProcessState();
+  //         rotateStateMachine.ProcessState();
 //        }
     }
 

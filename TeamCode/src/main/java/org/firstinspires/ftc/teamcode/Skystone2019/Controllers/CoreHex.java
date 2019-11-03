@@ -21,16 +21,22 @@ public class CoreHex {
         BlockGrabber
     }
     DcMotor coreHex = null;
-
+    CoreHexMotors motorType = null;
 
     public void init(HardwareMecanumBase hwBase, CoreHexMotors motor ) {
+        motorType = motor;
         if (motor == CoreHexMotors.BlockLifter){
             coreHex = hwBase.Block_Lifter;
+            coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            coreHex.setTargetPosition(10);
+            coreHex.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            coreHex.setPower(0.01);
         }
         else {
             coreHex = hwBase.Block_Grabber;
+            coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            coreHex.setPower(0);
         }
-        coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         coreHex.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coreHex.setDirection(DcMotorSimple.Direction.FORWARD);
     }
@@ -39,11 +45,20 @@ public class CoreHex {
     public void Start(Telemetry telemetry, RotationDirection direction) {
         int newTarget = -1;
 
-        if (direction == RotationDirection.Down){
-            newTarget = -77;
-        }
-        else {
-            newTarget = 0;
+            if (motorType == CoreHexMotors.BlockLifter) {
+                if (direction == RotationDirection.Down) {
+                    newTarget = 0;
+                } else {
+                    newTarget = 0;
+                }
+            }
+
+        if (motorType == CoreHexMotors.BlockGrabber) {
+            if (direction == RotationDirection.Down) {
+                newTarget = -200;
+            } else {
+                newTarget = -130;
+            }
         }
         coreHex.setTargetPosition(newTarget);
         coreHex.setMode(DcMotor.RunMode.RUN_TO_POSITION);

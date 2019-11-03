@@ -10,19 +10,21 @@ import com.qualcomm.robotcore.robot.RobotState;
 
 import com.vuforia.Image;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.Config.IConfiguration;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
+import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
 
 public class MecanumSkyStoneStateMachine {
 
     Telemetry telemetry;
     MecanumEncoderMove moveRobot;
-
     ColorFinder colorFinder;
     MecanumSkyStoneStateMachine.RobotState state;
+    IConfiguration robotConfig;
 
     // THIS IS IF THE ROBOT IS FACING FORWARDS
     static final double FORWARD_SPEED = 0.1;
@@ -35,7 +37,6 @@ public class MecanumSkyStoneStateMachine {
     private Bitmap bitmapFromVuforia;
     int foundColumn = -1;
     public int skyStonePosition = -1;
-
 
     enum RobotState
     {
