@@ -34,8 +34,12 @@ public class CoreHexStateMachine {
         this.coreHex = new CoreHex();
         this.coreHex.init(robot, motor);
 
-
         state = CoreHexStateMachine.RobotState.Start;
+    }
+
+    public int GetCoreHexNextPosition()
+    {
+        return this.coreHex.newTarget;
     }
 
     public void Start( RotationDirection rotationDirection)
@@ -52,6 +56,7 @@ public class CoreHexStateMachine {
 
     public void ProcessState()
     {
+
         telemetry.addData("Current State", state.toString());
 
         switch (state)

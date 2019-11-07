@@ -60,6 +60,9 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
         JustGoingUnderBridge = setUpStateMachine.JustGoingUnderBridge;
         StartFoundation = setUpStateMachine.StartFoundation;
 
+        this.moveRobot.StartMove(10, 30, -1, 0, 0);
+
+        /*
         if (RedTeam == true && StartDepot && EndWall && JustGoingUnderBridge) {
             this.moveRobot.StartMove(10, 10, -1, 0, 0);
         }
@@ -99,6 +102,7 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
                 this.moveRobot.StartMove(10, 10, -1, 0, 0);
             }
         }
+  */
     }
 
     /*

@@ -123,10 +123,8 @@ public class MecanumTeleop_Iterative extends OpMode{
         }
 
         if (gamepad2.x){
-            //   if (CoreHexLiftCheckLeft == false) {
+
             coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Up);
-            //     CoreHexLiftCheckUp = true;
-            //}
         }
         else if (gamepad2.b){
             coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Down);
@@ -148,6 +146,11 @@ public class MecanumTeleop_Iterative extends OpMode{
 
         telemetry.addData("SpeedMultplier", motors.GetSpeedMultiplier());
         telemetry.addData("right stick x value", gamepad1.right_stick_x);
+        telemetry.addData("Lifter current position", robot.Block_Lifter.getCurrentPosition());
+        telemetry.addData("grabber current position", robot.Block_Grabber.getCurrentPosition());
+        telemetry.addData("target position Lifter", coreHexStateMachineBlockLifter.GetCoreHexNextPosition());
+        telemetry.addData("target position Grabber", coreHexStateMachineBlockGrabber.GetCoreHexNextPosition());
+
     }
 
 

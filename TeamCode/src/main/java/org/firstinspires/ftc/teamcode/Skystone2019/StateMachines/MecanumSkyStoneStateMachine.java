@@ -13,9 +13,11 @@ import com.vuforia.Image;
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.IConfiguration;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.CoreHexStateMachine;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
@@ -28,6 +30,7 @@ public class MecanumSkyStoneStateMachine {
     MecanumSkyStoneStateMachine.RobotState state;
     SetUpStateMachine setUpStateMachine;
     IConfiguration robotConfig;
+    private CoreHexStateMachine coreHexStateMachineBlockGrabber;
 
     // THIS IS IF THE ROBOT IS FACING FORWARDS
     static final double FORWARD_SPEED = 0.1;
@@ -87,13 +90,16 @@ public class MecanumSkyStoneStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, MecanumMotor motors, ColorFinder colorFinder, boolean isCloseSquare, boolean isRed ) {
+    public void init(Telemetry telemetry, MecanumMotor motors, ColorFinder colorFinder, boolean isCloseSquare, boolean isRed, HardwareMecanumBase robot ) {
 
         this.telemetry = telemetry;
         this.colorFinder = colorFinder;
 
         this.moveRobot = new MecanumEncoderMove();
         this.moveRobot.init(motors);
+
+        this.coreHexStateMachineBlockGrabber = new CoreHexStateMachine();
+        this.coreHexStateMachineBlockGrabber.init(telemetry, robot, CoreHex.CoreHexMotors.BlockGrabber);
 
         state = MecanumSkyStoneStateMachine.RobotState.Start;
     }
@@ -179,20 +185,20 @@ public class MecanumSkyStoneStateMachine {
             case CheckForSkystone:
                 if (foundColumn == 0 )
                 {
-                    this.moveRobot.StartMove(20, 24, -1, -.75 ,0 );
+                    this.moveRobot.StartMove(20, 22, -1, -.75 ,0 );
                     state = RobotState.MovingTowardsBlock;
                     skyStonePosition = 0;
                 }
                 else if (foundColumn == 1 )
                 {
-                    this.moveRobot.StartMove(30, 18, 0 , GO_FORWARD,0 );
+                    this.moveRobot.StartMove(30, 16, 0 , GO_FORWARD,0 );
                     state = RobotState.MovingTowardsBlock;
                     skyStonePosition = 1;
 
                 }
                 else if (foundColumn == 2)
                 {
-                    this.moveRobot.StartMove(20, 24, .75, -1, 0 );
+                    this.moveRobot.StartMove(20, 22, .75, -1, 0 );
                     state = RobotState.MovingTowardsBlock;
                     skyStonePosition = 2;
 
@@ -209,8 +215,15 @@ public class MecanumSkyStoneStateMachine {
 
             case CollectBlock:
                 //this.moveRobot.StartMove(20, 2, 0, GO_FORWARD, 0); // We need the robot to go forwards and turn so the block stays in our grip and doesn't move much.
-                //Core Hex stuff
-                state = RobotState.CollectingBlock;
+
+                coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Down);
+
+                coreHexStateMachineBlockGrabber.ProcessState();
+
+                if (this.coreHexStateMachineBlockGrabber.IsDone()) {
+                        state = RobotState.CollectingBlock;
+
+                }
                 break;
 
             case CollectingBlock:
@@ -244,7 +257,7 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case MoveUnderSkyBridge1:
-                moveRobot.StartMove(30, 45, 0, -1, 0);
+                moveRobot.StartMove(30, 50, 0, -1, 0);
                 state = RobotState.MovingUnderSkyBridge1;
                 break;
 
@@ -256,7 +269,8 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case DropBlock:
-                //Drop Block with core Hex
+                coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Up);
+                coreHexStateMachineBlockGrabber.ProcessState();
                 state = RobotState.DropingBlock;
 //                moveRobot.StartMove(10, 10, 0, -1, 0);
                 break;
@@ -267,8 +281,10 @@ public class MecanumSkyStoneStateMachine {
                 state = RobotState.BackUp1;
                 //            }
                 break;
+
+
             case BackUp1:
-                this.moveRobot.StartMove(50, 15, 0, 1, 0);
+                this.moveRobot.StartMove(50, 5, 0, 1, 0);
                 state = RobotState.BackingUp1;
                 break;
 

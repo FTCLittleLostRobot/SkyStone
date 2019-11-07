@@ -40,7 +40,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         this.colorFinder.init(hardwareMap);
 
         /* Step 4: Setup of state machines  */
-        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, false);
+        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, false, robot);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
