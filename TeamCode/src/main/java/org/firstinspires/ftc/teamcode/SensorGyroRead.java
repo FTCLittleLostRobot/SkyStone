@@ -1,5 +1,5 @@
 /* Little Lost Robots
-   Core Devs: Danielle
+   Core Devs:
 */
 
 package org.firstinspires.ftc.teamcode;
@@ -28,6 +28,7 @@ public class SensorGyroRead extends OpMode
     {
         telemetry.addData("Gyro Z Reading" , gyro.getIntegratedZValue());
         telemetry.update();
+
     }
 
 }

@@ -141,6 +141,14 @@ public class MecanumTeleop_Iterative extends OpMode{
         }
         coreHexStateMachineBlockLifter.ProcessState();
 
+        if (gamepad2.right_bumper){
+            coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.ControlledUp);
+        }
+        else if (gamepad2.left_bumper){
+            coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.ControlledDown);
+        }
+        coreHexStateMachineBlockGrabber.ProcessState();
+
 
         motors.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
 

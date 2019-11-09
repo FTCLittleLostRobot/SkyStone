@@ -6,16 +6,16 @@ package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class CoreHex {
     public enum RotationDirection {
         Down,
-        Up
-
+        Up,
+        ControlledUp,
+        ControlledDown
     }
 
     public enum CoreHexMotors{
@@ -51,10 +51,8 @@ public class CoreHex {
                 newTarget = 0;
                 directionOfMotor = -1;
                 //coreHex.setDirection(DcMotorSimple.Direction.REVERSE);
-            } else if (direction == RotationDirection.Up){
-                newTarget = 30;
-
-                //coreHex.setDirection(DcMotorSimple.Direction.FORWARD);
+            } else if (direction == RotationDirection.Up) {
+                newTarget = 50;
             }
         }
 
@@ -62,18 +60,21 @@ public class CoreHex {
             if (direction == RotationDirection.Down) {
                 newTarget = -205;
                 directionOfMotor = -1;
-
-                //coreHex.setDirection(DcMotorSimple.Direction.REVERSE);
-
-            } else if (direction == RotationDirection.Up){
+            } else if (direction == RotationDirection.Up) {
                 newTarget = -130;
-                //coreHex.setDirection(DcMotorSimple.Direction.FORWARD);
-
+            } else if (direction == RotationDirection.ControlledUp){
+                newTarget = coreHex.getCurrentPosition() + 5;
+            } else if (direction == RotationDirection.ControlledDown){
+                newTarget = coreHex.getCurrentPosition() - 5;
+                directionOfMotor = -1;
             }
+
         }
 
         if ( ((direction == RotationDirection.Up) && (startingPosition <= newTarget))
-                || ((direction == RotationDirection.Down) && (startingPosition >= newTarget)) ){
+                || ((direction == RotationDirection.Down) && (startingPosition >= newTarget))
+                || (direction == RotationDirection.ControlledDown && (startingPosition >= newTarget))
+                || (direction == RotationDirection.ControlledUp) && (startingPosition <= newTarget)){
             coreHex.setPower(0.8 * directionOfMotor);
         }
         else
