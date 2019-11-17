@@ -213,11 +213,11 @@ public class MecanumMotor {
 
     ////////////////////////////////Gyro Stuff////////////////////////////////////////////////////
 
-    public boolean MovingToHeadingGyro(double speed, double angle, double PCoeff, ModernRoboticsI2cGyro gyro) {
+    public boolean MovingToHeadingGyro(int speed, double angle, double PCoeff, ModernRoboticsI2cGyro gyro) {
         double   error ;
         double   steer ;
         boolean  onTarget = false ;
-
+        this.SetSpeedToValue(speed);
 
         // determine turn power based on +/- error
         error = getGyroError(angle, gyro);
