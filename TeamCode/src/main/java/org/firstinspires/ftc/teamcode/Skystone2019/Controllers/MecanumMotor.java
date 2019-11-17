@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 
@@ -200,4 +201,59 @@ public class MecanumMotor {
     {
         this.SpeedMultiplier = 50;
     }// main speed
+
+    public void SetMecanumBreak (){
+
+        this.LeftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.RightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.LeftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.RightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+
+    ////////////////////////////////Gyro Stuff////////////////////////////////////////////////////
+
+    public boolean MovingToHeadingGyro(double speed, double angle, double PCoeff, ModernRoboticsI2cGyro gyro) {
+        double   error ;
+        double   steer ;
+        boolean  onTarget = false ;
+
+
+        // determine turn power based on +/- error
+        error = getGyroError(angle, gyro);
+
+        if (Math.abs(error) <= 5) {
+            this.ResetMotors();
+
+            onTarget = true;
+        }
+        else {
+            steer = this.getGyroSteer(error, PCoeff);
+            this.MoveMecanum(0,0, steer);
+        }
+
+        return onTarget;
+    }
+
+    public double getGyroError(double targetAngle, ModernRoboticsI2cGyro gyro) {
+
+        double robotError;
+
+        // calculate error in -179 to +180 range  (
+        robotError = targetAngle - gyro.getIntegratedZValue();
+        while (robotError > 180) robotError -= 360;
+        while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
+
+    /**
+     * returns desired steering force.  +/- 1 range.  +ve = steer left
+     * @param error   Error angle in robot relative degrees
+     * @param PCoeff  Proportional Gain Coefficient
+     * @return
+     */
+
+    public double getGyroSteer(double error, double PCoeff) {
+        return Range.clip(error * PCoeff, -1, 1);
+    }
 }

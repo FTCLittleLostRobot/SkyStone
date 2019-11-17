@@ -4,6 +4,7 @@
 
 package org.firstinspires.ftc.teamcode.Skystone2019;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumGyroRotateStateMachine;
 
 @Autonomous(name="Mecanum:Test (random code)", group="Mecanum")
 public class MecanumTesting_Iterative extends OpMode {
@@ -20,39 +22,43 @@ public class MecanumTesting_Iterative extends OpMode {
     private MecanumRotateStateMachine rotateStateMachine;
     private MecanumMoveStateMachine moveStateMachine;
     private SetUpStateMachine setUpStateMachine;
-
+    private MecanumGyroRotateStateMachine mecanumGyroRotateStateMachine;
+    ModernRoboticsI2cGyro gyro;
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
         this.rotateStateMachine = new MecanumRotateStateMachine();
         this.moveStateMachine = new MecanumMoveStateMachine();
         this.setUpStateMachine = new SetUpStateMachine();
-
+        this.mecanumGyroRotateStateMachine = new MecanumGyroRotateStateMachine();
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
         motors.init(robot);
 
         /* Step 3: Setup of controllers  */
+        gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
         /* Step 4: Setup of state machines  */
         this.rotateStateMachine.init(telemetry, motors);
         this.moveStateMachine.init(telemetry, motors);
         this.setUpStateMachine.init(telemetry, gamepad1);
-
+        this.mecanumGyroRotateStateMachine.init(telemetry, motors, gyro);
 //        this.rotateStateMachine = new MecanumRotateStateMachine();
-  //      this.rotateStateMachine.init(telemetry, 90.0 , robot);
+        //      this.rotateStateMachine.init(telemetry, 90.0 , robot);
 
         //moveRobot.StartRotate(telemetry, 2, 90, MecanumEncoderMove.RotationDirection.Right);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
         setUpStateMachine.Start();
+        mecanumGyroRotateStateMachine.Start(5, 89);
     }
 
     @Override
     public void init_loop()
     {
-        setUpStateMachine.ProcessState();
+        //setUpStateMachine.ProcessState();
+        mecanumGyroRotateStateMachine.ProcessState();
     }
 
     @Override
@@ -66,12 +72,12 @@ public class MecanumTesting_Iterative extends OpMode {
     @Override
     public void loop()
     {
-        setUpStateMachine.ProcessState();
-
+        //  setUpStateMachine.ProcessState();
+        mecanumGyroRotateStateMachine.ProcessState();
 //        moveStateMachine.ProcessState();
 
 //        if (moveStateMachine.IsDone()) {
-  //         rotateStateMachine.ProcessState();
+        //         rotateStateMachine.ProcessState();
 //        }
     }
 

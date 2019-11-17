@@ -122,7 +122,7 @@ public class MecanumTurnByGyro_Linear extends LinearOpMode {
         if (Math.abs(error) <= HEADING_THRESHOLD) {
             mecanumMotor.ResetMotors();
 
-            onTarget = true;
+            //onTarget = true;
         }
         else {
             steer = getSteer(error, PCoeff);
@@ -131,7 +131,6 @@ public class MecanumTurnByGyro_Linear extends LinearOpMode {
 
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);
-        telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
 
 
         return onTarget;
