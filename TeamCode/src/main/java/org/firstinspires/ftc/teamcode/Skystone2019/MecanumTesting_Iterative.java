@@ -39,45 +39,45 @@ public class MecanumTesting_Iterative extends OpMode {
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
         /* Step 4: Setup of state machines  */
-        this.rotateStateMachine.init(telemetry, motors);
         this.moveStateMachine.init(telemetry, motors);
         this.setUpStateMachine.init(telemetry, gamepad1);
         this.mecanumGyroRotateStateMachine.init(telemetry, motors, gyro);
-//        this.rotateStateMachine = new MecanumRotateStateMachine();
-        //      this.rotateStateMachine.init(telemetry, 90.0 , robot);
 
-        //moveRobot.StartRotate(telemetry, 2, 90, MecanumEncoderMove.RotationDirection.Right);
+        this.rotateStateMachine = new MecanumRotateStateMachine();
+        this.rotateStateMachine.init(telemetry, motors);
+
+        //     moveRobot.StartRotate(telemetry, 2, 90, MecanumEncoderMove.RotationDirection.Right);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
-        setUpStateMachine.Start();
-        mecanumGyroRotateStateMachine.Start(5, 89);
+        //   setUpStateMachine.Start();
+        //mecanumGyroRotateStateMachine.Start(20, 180);
     }
 
     @Override
     public void init_loop()
     {
         //setUpStateMachine.ProcessState();
-        mecanumGyroRotateStateMachine.ProcessState();
+       // mecanumGyroRotateStateMachine.ProcessState();
     }
 
     @Override
     public void start() {
 
 
-//        rotateStateMachine.Start(90.0);
-//        moveStateMachine.Start(10, 0, 1, 0)
+ //       rotateStateMachine.Start(90.0);
+        moveStateMachine.Start(12, 0, 1, 0);
     }
 
     @Override
     public void loop()
     {
         //  setUpStateMachine.ProcessState();
-        mecanumGyroRotateStateMachine.ProcessState();
-//        moveStateMachine.ProcessState();
+ //       mecanumGyroRotateStateMachine.ProcessState();
+        moveStateMachine.ProcessState();
 
 //        if (moveStateMachine.IsDone()) {
-        //         rotateStateMachine.ProcessState();
+       // rotateStateMachine.ProcessState();
 //        }
     }
 

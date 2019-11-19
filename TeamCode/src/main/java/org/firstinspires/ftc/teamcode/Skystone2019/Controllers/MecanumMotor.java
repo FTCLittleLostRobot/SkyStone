@@ -213,7 +213,7 @@ public class MecanumMotor {
 
     ////////////////////////////////Gyro Stuff////////////////////////////////////////////////////
 
-    public boolean MovingToHeadingGyro(int speed, double angle, double PCoeff, ModernRoboticsI2cGyro gyro) {
+    public boolean MovingToHeadingGyro(int speed, double angle, double PCoeff, ModernRoboticsI2cGyro gyro, int threshold) {
         double   error ;
         double   steer ;
         boolean  onTarget = false ;
@@ -222,7 +222,7 @@ public class MecanumMotor {
         // determine turn power based on +/- error
         error = getGyroError(angle, gyro);
 
-        if (Math.abs(error) <= 5) {
+        if (Math.abs(error) <= threshold) {
             this.ResetMotors();
 
             onTarget = true;

@@ -141,7 +141,7 @@ public class MecanumEncoderMove {
         int encoderTicks = 0;
 
         if (angle == 90) {
-            encoderTicks = 580; //23
+            encoderTicks = 600; //23
         }
         else if (angle == 180) {
             encoderTicks = 1325;

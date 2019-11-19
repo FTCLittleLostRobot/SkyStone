@@ -18,12 +18,11 @@ public class MecanumGyroRotateStateMachine {
     MecanumGyroRotateStateMachine.RobotState state;
     MecanumMotor motors;
     ModernRoboticsI2cGyro gyro;
-    double speed;
+    int speed;
     double angle;
     ElapsedTime holdTimer = new ElapsedTime();
 
     static final double     TURN_SPEED              = 0.4;     // Nominal half speed for better accuracy.
-    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     enum RobotState
     {
@@ -43,7 +42,7 @@ public class MecanumGyroRotateStateMachine {
         gyro.calibrate();
     }
 
-    public void Start(double speed, double angle)
+    public void Start(int speed, double angle)
     {
         this.speed = speed;
         this.angle = angle;
@@ -69,7 +68,7 @@ public class MecanumGyroRotateStateMachine {
 
             case StartRotation:
 
-                if (motors.MovingToHeadingGyro(speed, angle, P_TURN_COEFF, gyro)){
+                if (motors.MovingToHeadingGyro(speed, angle, P_TURN_COEFF, gyro, 5)){
                     holdTimer.reset();
                     state = RobotState.StartHold;
                 }
@@ -80,7 +79,7 @@ public class MecanumGyroRotateStateMachine {
             case StartHold:
                 if ((holdTimer.time() <= 2)) {
                     // Update telemetry & Allow time for other processes to run.
-                    motors.MovingToHeadingGyro(speed, angle, P_TURN_COEFF, gyro);
+                    motors.MovingToHeadingGyro(10, angle, P_TURN_COEFF, gyro, 0);
                  }
                 else {
                     state = MecanumGyroRotateStateMachine.RobotState.Done;
