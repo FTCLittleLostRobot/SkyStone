@@ -140,8 +140,11 @@ public class MecanumEncoderMove {
     public void StartRotate(Telemetry telemetry, int speed, double angle, RotationDirection direction) {
         int encoderTicks = 0;
 
-        if (angle == 90) {
-            encoderTicks = 600; //23
+        if (angle == 90 && direction == RotationDirection.Right) {
+            encoderTicks = 640;
+        }
+        else if (angle == 90 && direction == RotationDirection.Left){
+            encoderTicks = 675;
         }
         else if (angle == 180) {
             encoderTicks = 1325;
