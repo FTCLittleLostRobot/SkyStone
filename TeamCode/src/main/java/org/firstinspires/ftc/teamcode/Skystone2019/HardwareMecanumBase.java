@@ -4,6 +4,7 @@
 
 package org.firstinspires.ftc.teamcode.Skystone2019;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -47,6 +48,7 @@ public class HardwareMecanumBase {
     public DcMotor Block_Lifter = null;
     public DcMotor Block_Grabber = null;
     public ModernRoboticsI2cGyro ExternalGyro = null;
+    public BNO055IMU IMU = null;
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
@@ -86,6 +88,8 @@ public class HardwareMecanumBase {
         }
         catch (IllegalArgumentException ex) {}
 
+        // Part of the rev hub, will always be present.
+        this.IMU = HardwareMecanumBase.HardwareMap.get(BNO055IMU .class, "imu");
     }
 }
 

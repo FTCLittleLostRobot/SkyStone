@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.robot.RobotState;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -133,10 +134,10 @@ public class MecanumRotateStateMachine {
 
             case StartGyroHold:
                 if ((holdTimer.time() <= 2)) {
-                    this.motors.SetSpeedToValue(10);
+                    this.motors.SetSpeedToValue(15);
 
                     error = gyro.GetErrorToTarget(this.degrees);
-                    steer = gyro.GetSteeringForce(error, .5);
+                    steer = gyro.GetSteeringForce(error, .8);
                     this.motors.MoveMecanum(0,0, steer);
                 }
                 else {
