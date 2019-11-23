@@ -38,11 +38,10 @@ public class MecanumTurnByGyro_Linear extends LinearOpMode {
          * The init() method of the hardware class does most of the work here
          */
         robot.init(hardwareMap);
-        gyro = robot.Gyro;
+        gyro = robot.ExternalGyro;
         if (gyro != null){
             telemetry.addData(">", "Gyro found");    //
         }
-
         mecanumMotor.init(robot);
         robot.left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

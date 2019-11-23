@@ -8,7 +8,6 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 import android.graphics.Bitmap;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
-import com.qualcomm.robotcore.robot.RobotState;
 
 import com.vuforia.Image;
 
@@ -18,12 +17,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumGyroRotateStateMachine;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.CoreHexStateMachine;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
 
 public class MecanumSkyStoneStateMachine {
 
@@ -34,7 +29,7 @@ public class MecanumSkyStoneStateMachine {
     SetUpStateMachine setUpStateMachine;
     IConfiguration robotConfig;
     private CoreHexStateMachine coreHexStateMachineBlockGrabber;
-    private MecanumGyroRotateStateMachine mecanumGyroRotateStateMachine;
+    private MecanumRotateStateMachine mecanumRotateStateMachine;
 
     // THIS IS IF THE ROBOT IS FACING FORWARDS
     static final double FORWARD_SPEED = 0.1;

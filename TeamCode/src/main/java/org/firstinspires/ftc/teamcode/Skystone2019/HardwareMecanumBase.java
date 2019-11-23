@@ -46,7 +46,7 @@ public class HardwareMecanumBase {
     public DcMotor right_back_drive = null;
     public DcMotor Block_Lifter = null;
     public DcMotor Block_Grabber = null;
-    public ModernRoboticsI2cGyro Gyro = null;
+    public ModernRoboticsI2cGyro ExternalGyro = null;
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
@@ -82,7 +82,7 @@ public class HardwareMecanumBase {
         catch (IllegalArgumentException ex) {}
 
         try {
-            this.Gyro = (ModernRoboticsI2cGyro)HardwareMecanumBase.HardwareMap.gyroSensor.get("gyro");
+            this.ExternalGyro = (ModernRoboticsI2cGyro)HardwareMecanumBase.HardwareMap.gyroSensor.get("gyro");
         }
         catch (IllegalArgumentException ex) {}
 

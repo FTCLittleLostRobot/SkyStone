@@ -8,45 +8,46 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.GyroController;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.GyroInitStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumGyroRotateStateMachine;
 
 @Autonomous(name="Mecanum:Test (random code)", group="Mecanum")
 public class MecanumTesting_Iterative extends OpMode {
 
     private HardwareMecanumBase robot = new HardwareMecanumBase();
     private MecanumMotor motors = new MecanumMotor();
+    private GyroController gyro = new GyroController();
     private MecanumRotateStateMachine rotateStateMachine;
     private MecanumMoveStateMachine moveStateMachine;
     private SetUpStateMachine setUpStateMachine;
     private GyroInitStateMachine gyroInitStateMachine;
-    private MecanumGyroRotateStateMachine mecanumGyroRotateStateMachine;
-    ModernRoboticsI2cGyro gyro;
+    private MecanumRotateStateMachine mecanumRotateStateMachine;
+
     @Override
     public void init() {
         /* Step 1: Setup of variables  */
         this.rotateStateMachine = new MecanumRotateStateMachine();
         this.moveStateMachine = new MecanumMoveStateMachine();
         this.setUpStateMachine = new SetUpStateMachine();
-        this.mecanumGyroRotateStateMachine = new MecanumGyroRotateStateMachine();
+        this.mecanumRotateStateMachine = new MecanumRotateStateMachine();
+        this.gyro = new GyroController();
+
         /* Step 2: Setup of hardware  */
         robot.init(hardwareMap);
         motors.init(robot);
 
         /* Step 3: Setup of controllers  */
+        this.gyro.init(robot);
 
         /* Step 4: Setup of state machines  */
         this.moveStateMachine.init(telemetry, motors);
         this.setUpStateMachine.init(telemetry, gamepad1);
-        this.gyroInitStateMachine.init(telemetry, robot.Gyro);
-        this.mecanumGyroRotateStateMachine.init(telemetry, motors, robot.Gyro);
-
-        this.rotateStateMachine = new MecanumRotateStateMachine();
-        this.rotateStateMachine.init(telemetry, motors, robot.Gyro);
+        this.gyroInitStateMachine.init(telemetry, this.gyro);
+        this.mecanumRotateStateMachine.init(telemetry, motors, this.gyro);
 
         //     moveRobot.StartRotate(telemetry, 2, 90, MecanumEncoderMove.RotationDirection.Right);
 

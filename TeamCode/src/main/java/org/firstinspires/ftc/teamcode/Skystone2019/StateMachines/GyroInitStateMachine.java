@@ -9,24 +9,26 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.GyroController;
 
 public class GyroInitStateMachine {
 
     Telemetry telemetry;
     GyroInitStateMachine.RobotState state;
-    ModernRoboticsI2cGyro gyro;
+    GyroController gyro;
 
     enum RobotState
     {
+        Start,
         Calibrating,
         Done
     }
 
-    public void init(Telemetry telemetry, ModernRoboticsI2cGyro gyro) {
+    public void init(Telemetry telemetry, GyroController gyro) {
         this.gyro = gyro;
-        gyro.calibrate();
+        gyro.StartCalibration();
+        this.state = RobotState.Calibrating;
+
     }
 
     // Note that the Gyro MUST have this called in the primary run function's init loop to get the gyro ready.
@@ -39,8 +41,8 @@ public class GyroInitStateMachine {
     {
         switch (state) {
             case Calibrating:
-                if (!gyro.isCalibrating()) {
-                    gyro.resetZAxisIntegrator();
+                if (!gyro.IsDoneCalibrating()) {
+                    gyro.ResetZIndexIntegrator();
                     state = GyroInitStateMachine.RobotState.Done;
                 }
                 break;

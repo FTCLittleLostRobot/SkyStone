@@ -9,6 +9,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.GyroController;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
@@ -19,12 +20,13 @@ public class MecanumRotateStateMachine {
     Telemetry telemetry;
     MecanumMotor motors;
     MecanumEncoderMove moveRobot;
-    ModernRoboticsI2cGyro gyro;
+    GyroController gyro;
 
     Double degrees;
+    int origSpeed = 50;
     int speed = 20;
     MecanumRotateStateMachine.RobotState state;
-    ElapsedTime holdTimer = new ElapsedTime();
+    ElapsedTime holdTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
 
     enum RobotState
@@ -32,14 +34,15 @@ public class MecanumRotateStateMachine {
         Start,
         StartEncoderRotate,
         CheckEncoderRotate,
+
         StartGyroRotation,
+        WaitForGyroRotate,
         StartGyroHold,
         Done
     }
 
-    public void init(Telemetry telemetry, MecanumMotor motors, ModernRoboticsI2cGyro gyro)
+    public void init(Telemetry telemetry, MecanumMotor motors, GyroController gyro)
     {
-
         this.telemetry = telemetry;
         this.motors = motors;
         this.moveRobot = new MecanumEncoderMove();
@@ -47,17 +50,24 @@ public class MecanumRotateStateMachine {
 
         // For Gyro Support
         this.gyro = gyro;
-        motors.SetMecanumBreak();
 
         state = MecanumRotateStateMachine.RobotState.Start;
     }
 
     // SPeed is not used when moving via Encoders
-    public void Start(Double degrees, int speed)
+    public void StartWithEncoder(Double degrees)
+    {
+        this.degrees= degrees;
+        this.speed = 50;
+        state = MecanumRotateStateMachine.RobotState.StartEncoderRotate;
+    }
+
+    public void StartWithGyro(Double degrees, int speed)
     {
         this.degrees= degrees;
         this.speed = speed;
-        state = MecanumRotateStateMachine.RobotState.StartEncoderRotate;
+        motors.SetMecanumBreak();
+        state = RobotState.StartGyroRotation;
     }
 
     public boolean IsDone()
@@ -68,6 +78,8 @@ public class MecanumRotateStateMachine {
     public void ProcessState()
     {
         telemetry.addData("Current State", state.toString());
+        double error;
+        double steer;
 
         switch (state)
         {
@@ -85,25 +97,59 @@ public class MecanumRotateStateMachine {
 
             case StartGyroRotation:
 
-                if (this.motors.MovingToHeadingGyro(speed, this.degrees, .1, gyro, 5)){
+                // Before we rotate, save the current speed multiplier and update it to what user wants
+                this.origSpeed = this.motors.GetSpeedMultiplier();
+                this.motors.SetSpeedToValue(speed);
+
+                // determine turn power based on +/- error
+                error = gyro.GetErrorToTarget(this.degrees);
+
+                // Get turning force and rotate
+                steer = gyro.GetSteeringForce(error, .1);
+                this.motors.MoveMecanum(0,0, steer);
+
+                state = RobotState.WaitForGyroRotate;
+
+                break;
+            case WaitForGyroRotate:
+
+                // determine turn power based on +/- error
+                error = gyro.GetErrorToTarget(this.degrees);
+
+                if (Math.abs(error) <= 10) {
+                    // If we are close enough, change to hold on time.
                     holdTimer.reset();
                     state = RobotState.StartGyroHold;
+                }
+                else
+                {
+                    // If not close enough, then find out what the steer force we should
+                    // get and continue moving.
+                    steer = gyro.GetSteeringForce(error, .1);
+                    this.motors.MoveMecanum(0,0, steer);
                 }
 
                 break;
 
             case StartGyroHold:
                 if ((holdTimer.time() <= 2)) {
-                    // Update telemetry & Allow time for other processes to run.
-                    motors.MovingToHeadingGyro(10, this.degrees, .1, gyro, 0);
+                    this.motors.SetSpeedToValue(10);
+
+                    error = gyro.GetErrorToTarget(this.degrees);
+                    steer = gyro.GetSteeringForce(error, .1);
+                    this.motors.MoveMecanum(0,0, steer);
                 }
                 else {
-                    state = MecanumRotateStateMachine.RobotState.Done;
-                }
-                break;
+                    // Reset the motors
+                    this.motors.MoveMecanum(0,0, 0);
+                    this.motors.ResetMotors();
 
-            case Done:
-                state = MecanumRotateStateMachine.RobotState.Done;
+                    // Before we finish, reset the motor speed to prevent other robot actions
+                    // from using the updated speed value
+                    this.motors.SetSpeedToValue(origSpeed);
+
+                    state = RobotState.Done;
+                }
                 break;
         }
     }

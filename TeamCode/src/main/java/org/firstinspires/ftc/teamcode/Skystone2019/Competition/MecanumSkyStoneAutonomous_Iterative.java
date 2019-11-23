@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.GyroController;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
@@ -22,6 +23,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     private GyroInitStateMachine gyroInitStateMachine ;
     private MecanumEncoderMove moveRobot;
     private MecanumMotor mecanumRobot;
+    private GyroController gyro;
     private ColorFinder colorFinder;
 
     @Override
@@ -31,6 +33,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         this.mecanumRobot = new MecanumMotor();
         this.moveRobot = new MecanumEncoderMove();
         this.colorFinder = new ColorFinder();
+        this.gyro = new GyroController();
         this.MecanumSkyStoneStateMachine = new MecanumSkyStoneStateMachine();
         this.gyroInitStateMachine = new GyroInitStateMachine();
 
@@ -41,10 +44,11 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         /* Step 3: Setup of controllers  */
         this.moveRobot.init(this.mecanumRobot);
         this.colorFinder.init(hardwareMap);
+        this.gyro.init(robot);
 
         /* Step 4: Setup of state machines  */
+        this.gyroInitStateMachine.init(telemetry, this.gyro);
         this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, false, robot);
-        this.gyroInitStateMachine .init(telemetry, this.robot.Gyro);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
