@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.GyroInitStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumSkyStoneStateMachine;
 
 @Autonomous(name="Mecanum: Skystone", group="Mecanum")
@@ -18,6 +19,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;
     private MecanumSkyStoneStateMachine MecanumSkyStoneStateMachine;
+    private GyroInitStateMachine gyroInitStateMachine ;
     private MecanumEncoderMove moveRobot;
     private MecanumMotor mecanumRobot;
     private ColorFinder colorFinder;
@@ -30,6 +32,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         this.moveRobot = new MecanumEncoderMove();
         this.colorFinder = new ColorFinder();
         this.MecanumSkyStoneStateMachine = new MecanumSkyStoneStateMachine();
+        this.gyroInitStateMachine = new GyroInitStateMachine();
 
         /* Step 2: Setup of hardware  */
         this.robot.init(hardwareMap);
@@ -41,12 +44,18 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
 
         /* Step 4: Setup of state machines  */
         this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, false, robot);
+        this.gyroInitStateMachine .init(telemetry, this.robot.Gyro);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
     }
 
-    /*
+    @Override
+    public void init_loop() {
+        this.gyroInitStateMachine.ProcessState();
+    }
+
+        /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
 

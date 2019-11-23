@@ -22,15 +22,11 @@ public class MecanumGyroRotateStateMachine {
     double angle;
     ElapsedTime holdTimer = new ElapsedTime();
 
-    static final double     TURN_SPEED              = 0.4;     // Nominal half speed for better accuracy.
-    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     enum RobotState
     {
-        Calibrating,
+        ReadyForStart,
         StartRotation,
-        DoneRotating,
         StartHold,
-        Holding,
         Done
     }
 
@@ -39,14 +35,15 @@ public class MecanumGyroRotateStateMachine {
         this.telemetry = telemetry;
         this.gyro = gyro;
         motors.SetMecanumBreak();
-        gyro.calibrate();
+        this.state = RobotState.ReadyForStart;
+
     }
 
     public void Start(int speed, double angle)
     {
         this.speed = speed;
         this.angle = angle;
-        state = MecanumGyroRotateStateMachine.RobotState.Calibrating;
+        state = MecanumGyroRotateStateMachine.RobotState.StartRotation;
     }
 
     public boolean IsDone()
@@ -56,30 +53,21 @@ public class MecanumGyroRotateStateMachine {
 
     public void ProcessState()
     {
-
         switch (state)
         {
-            case Calibrating:
-                if(!gyro.isCalibrating()){
-                    gyro.resetZAxisIntegrator();
-                    state = MecanumGyroRotateStateMachine.RobotState.StartRotation;
-                }
-                break;
-
             case StartRotation:
 
-                if (motors.MovingToHeadingGyro(speed, angle, P_TURN_COEFF, gyro, 5)){
+                if (motors.MovingToHeadingGyro(speed, angle, .1, gyro, 5)){
                     holdTimer.reset();
                     state = RobotState.StartHold;
                 }
-
 
                 break;
 
             case StartHold:
                 if ((holdTimer.time() <= 2)) {
                     // Update telemetry & Allow time for other processes to run.
-                    motors.MovingToHeadingGyro(10, angle, P_TURN_COEFF, gyro, 0);
+                    motors.MovingToHeadingGyro(10, angle, .1, gyro, 0);
                  }
                 else {
                     state = MecanumGyroRotateStateMachine.RobotState.Done;

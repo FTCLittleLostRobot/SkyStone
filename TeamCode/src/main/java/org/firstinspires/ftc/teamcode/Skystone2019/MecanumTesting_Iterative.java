@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.GyroInitStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumMoveStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumRotateStateMachine;
@@ -22,6 +23,7 @@ public class MecanumTesting_Iterative extends OpMode {
     private MecanumRotateStateMachine rotateStateMachine;
     private MecanumMoveStateMachine moveStateMachine;
     private SetUpStateMachine setUpStateMachine;
+    private GyroInitStateMachine gyroInitStateMachine;
     private MecanumGyroRotateStateMachine mecanumGyroRotateStateMachine;
     ModernRoboticsI2cGyro gyro;
     @Override
@@ -36,15 +38,15 @@ public class MecanumTesting_Iterative extends OpMode {
         motors.init(robot);
 
         /* Step 3: Setup of controllers  */
-        gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
         /* Step 4: Setup of state machines  */
         this.moveStateMachine.init(telemetry, motors);
         this.setUpStateMachine.init(telemetry, gamepad1);
-        this.mecanumGyroRotateStateMachine.init(telemetry, motors, gyro);
+        this.gyroInitStateMachine.init(telemetry, robot.Gyro);
+        this.mecanumGyroRotateStateMachine.init(telemetry, motors, robot.Gyro);
 
         this.rotateStateMachine = new MecanumRotateStateMachine();
-        this.rotateStateMachine.init(telemetry, motors);
+        this.rotateStateMachine.init(telemetry, motors, robot.Gyro);
 
         //     moveRobot.StartRotate(telemetry, 2, 90, MecanumEncoderMove.RotationDirection.Right);
 
@@ -57,6 +59,7 @@ public class MecanumTesting_Iterative extends OpMode {
     @Override
     public void init_loop()
     {
+        gyroInitStateMachine.ProcessState();
         //setUpStateMachine.ProcessState();
        // mecanumGyroRotateStateMachine.ProcessState();
     }

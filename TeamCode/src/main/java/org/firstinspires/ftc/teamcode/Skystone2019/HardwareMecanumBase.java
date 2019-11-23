@@ -4,6 +4,7 @@
 
 package org.firstinspires.ftc.teamcode.Skystone2019;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -45,6 +46,7 @@ public class HardwareMecanumBase {
     public DcMotor right_back_drive = null;
     public DcMotor Block_Lifter = null;
     public DcMotor Block_Grabber = null;
+    public ModernRoboticsI2cGyro Gyro = null;
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
@@ -78,6 +80,12 @@ public class HardwareMecanumBase {
             Block_Grabber = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "Block_Grabber");
         }
         catch (IllegalArgumentException ex) {}
+
+        try {
+            this.Gyro = (ModernRoboticsI2cGyro)HardwareMecanumBase.HardwareMap.gyroSensor.get("gyro");
+        }
+        catch (IllegalArgumentException ex) {}
+
     }
 }
 
