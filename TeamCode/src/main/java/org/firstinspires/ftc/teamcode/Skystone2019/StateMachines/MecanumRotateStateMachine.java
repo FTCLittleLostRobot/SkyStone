@@ -136,7 +136,7 @@ public class MecanumRotateStateMachine {
                     this.motors.SetSpeedToValue(10);
 
                     error = gyro.GetErrorToTarget(this.degrees);
-                    steer = gyro.GetSteeringForce(error, .1);
+                    steer = gyro.GetSteeringForce(error, .5);
                     this.motors.MoveMecanum(0,0, steer);
                 }
                 else {

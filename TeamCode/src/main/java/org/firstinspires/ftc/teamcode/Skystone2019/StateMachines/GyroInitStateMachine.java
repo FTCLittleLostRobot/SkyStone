@@ -41,7 +41,7 @@ public class GyroInitStateMachine {
     {
         switch (state) {
             case Calibrating:
-                if (!gyro.IsDoneCalibrating()) {
+                if (gyro.IsDoneCalibrating()) {
                     gyro.ResetZIndexIntegrator();
                     state = GyroInitStateMachine.RobotState.Done;
                 }

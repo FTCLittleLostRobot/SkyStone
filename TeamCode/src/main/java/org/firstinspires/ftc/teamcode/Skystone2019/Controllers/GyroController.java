@@ -22,7 +22,7 @@ public class GyroController {
 
     public Boolean IsDoneCalibrating()
     {
-        return externalGyro.isCalibrating();
+        return !externalGyro.isCalibrating();
     }
 
     public int GetCurrentRobotHeading()
@@ -53,6 +53,8 @@ public class GyroController {
      * @return
      */
     public double GetSteeringForce(double error, double PCoeff) {
+        // Takes an error, such as -90 degrees, multiplies it by the PCoeff (.1) to get a new value.
+        // That would be -9.  -9 is below the min, so it will be a negative value to that direction.
         return Range.clip(error * PCoeff, -1, 1);
     }
 
