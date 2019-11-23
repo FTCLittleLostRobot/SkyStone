@@ -57,6 +57,8 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     @Override
     public void init_loop() {
         this.gyroInitStateMachine.ProcessState();
+        telemetry.addData("Gyro Init State", gyroInitStateMachine.IsDone());    //
+        telemetry.update();
     }
 
         /*
