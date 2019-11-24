@@ -40,7 +40,6 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
         this.moveRobot.init(this.mecanumRobot);
         this.setUpStateMachine = new SetUpStateMachine();
 
-        /* Step 4: Setup of state machines  */
         this.setUpStateMachine.init(telemetry, gamepad1);
         setUpStateMachine.Start();
 

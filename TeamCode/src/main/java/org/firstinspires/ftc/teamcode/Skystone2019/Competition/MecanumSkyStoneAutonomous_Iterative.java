@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.GyroInitStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumSkyStoneStateMachine;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
 
 @Autonomous(name="Mecanum: Skystone", group="Mecanum")
 public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
@@ -25,6 +26,8 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     private MecanumMotor mecanumRobot;
     private GyroController gyro;
     private ColorFinder colorFinder;
+    private SetUpStateMachine setUpStateMachine;
+    private boolean RedTeam;
 
     @Override
     public void init() {
@@ -36,6 +39,8 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         this.gyro = new GyroController();
         this.MecanumSkyStoneStateMachine = new MecanumSkyStoneStateMachine();
         this.gyroInitStateMachine = new GyroInitStateMachine();
+        this.setUpStateMachine = new SetUpStateMachine();
+
 
         /* Step 2: Setup of hardware  */
         this.robot.init(hardwareMap);
@@ -48,7 +53,8 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
 
         /* Step 4: Setup of state machines  */
         this.gyroInitStateMachine.init(telemetry, this.gyro);
-        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, false, robot);
+        this.setUpStateMachine.init(telemetry, gamepad1);
+        setUpStateMachine.Start();
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -57,6 +63,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     @Override
     public void init_loop() {
         this.gyroInitStateMachine.ProcessState();
+        setUpStateMachine.ProcessState();
         telemetry.addData("Gyro Init State", gyroInitStateMachine.IsDone());    //
         telemetry.update();
     }
@@ -67,16 +74,16 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
 
     @Override
     public void start() {
+        RedTeam = setUpStateMachine.RedTeam;
+
+        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, RedTeam, robot);
         MecanumSkyStoneStateMachine.Start();
+
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
     @Override
     public void loop()
     {
-        //this goes into the StateMachine, "SamplingStateMachine" and then goes through all the states it needs
         MecanumSkyStoneStateMachine.ProcessState();
     }
 

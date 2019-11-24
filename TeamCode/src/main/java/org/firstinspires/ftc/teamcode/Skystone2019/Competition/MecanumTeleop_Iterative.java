@@ -8,8 +8,9 @@ package org.firstinspires.ftc.teamcode.Skystone2019.Competition;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.CoreHexStateMachine;
@@ -38,6 +39,8 @@ public class MecanumTeleop_Iterative extends OpMode{
     private float starting_left_y = 0;  //this makes the robot go forwards and backwards
     private float starting_right_x = 0; // this makes the robot rotate
     private boolean ButtonCheck = false;    //left and right bumper; faster, slower
+    MecanumEncoderMove moveRobot;
+    ElapsedTime holdTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -131,15 +134,12 @@ public class MecanumTeleop_Iterative extends OpMode{
 
         }
 
-        coreHexStateMachineBlockGrabber.ProcessState();
-
         if (gamepad2.y){
             coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.Up);
         }
         else if (gamepad2.a){
             coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.Down);
         }
-        coreHexStateMachineBlockLifter.ProcessState();
 
         if (gamepad2.right_bumper){
             coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.ControlledUp);
@@ -147,7 +147,27 @@ public class MecanumTeleop_Iterative extends OpMode{
         else if (gamepad2.left_bumper){
             coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.ControlledDown);
         }
+
+        if (gamepad2.dpad_down){
+            coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.DropBlockLifter);
+            coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.DropBlockGrabber);
+            this.moveRobot.StartMove(20, 1, 0, MecanumEncoderMove.GO_BACK, 0);
+            holdTimer.reset();
+           /*
+            if ((holdTimer.time() <= 2)){
+                this.motors.SetSpeedToValue(15);
+            }
+            else {
+                this.motors.MoveMecanum(0, 0, 0);
+                this.motors.ResetMotors();
+            }
+
+            */
+        }
+
+
         coreHexStateMachineBlockGrabber.ProcessState();
+        coreHexStateMachineBlockLifter.ProcessState();
 
 
         motors.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
@@ -158,6 +178,7 @@ public class MecanumTeleop_Iterative extends OpMode{
         telemetry.addData("grabber current position", robot.Block_Grabber.getCurrentPosition());
         telemetry.addData("target position Lifter", coreHexStateMachineBlockLifter.GetCoreHexNextPosition());
         telemetry.addData("target position Grabber", coreHexStateMachineBlockGrabber.GetCoreHexNextPosition());
+        telemetry.update();
 
     }
 
