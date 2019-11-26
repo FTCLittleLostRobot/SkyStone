@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.GyroController;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
@@ -26,6 +27,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     private MecanumMotor mecanumRobot;
     private GyroController gyro;
     private ColorFinder colorFinder;
+    private CoreHex coreHex;
     private SetUpStateMachine setUpStateMachine;
     private boolean RedTeam;
 
@@ -40,7 +42,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         this.MecanumSkyStoneStateMachine = new MecanumSkyStoneStateMachine();
         this.gyroInitStateMachine = new GyroInitStateMachine();
         this.setUpStateMachine = new SetUpStateMachine();
-
+        this.coreHex = new CoreHex();
 
         /* Step 2: Setup of hardware  */
         this.robot.init(hardwareMap);
@@ -66,6 +68,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         setUpStateMachine.ProcessState();
         telemetry.addData("Gyro Init State", gyroInitStateMachine.IsDone());    //
         telemetry.update();
+
     }
 
         /*

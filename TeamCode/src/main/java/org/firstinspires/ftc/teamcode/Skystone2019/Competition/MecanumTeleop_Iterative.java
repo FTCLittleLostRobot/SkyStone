@@ -58,6 +58,9 @@ public class MecanumTeleop_Iterative extends OpMode{
 
         this.coreHexStateMachineBlockLifter = new CoreHexStateMachine();
         this.coreHexStateMachineBlockLifter.init(telemetry, robot, CoreHex.CoreHexMotors.BlockLifter);
+
+        this.moveRobot = new MecanumEncoderMove();
+        this.moveRobot.init(motors);
         /* Step 3: Setup of controllers  */
         /* Step 4: Setup of state machines  */
         // NONE

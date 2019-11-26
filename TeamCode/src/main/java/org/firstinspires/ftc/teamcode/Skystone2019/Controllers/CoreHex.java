@@ -66,7 +66,7 @@ public class CoreHex {
                 newTarget = -205;
                 directionOfMotor = -1;
             } else if (direction == RotationDirection.Up) {
-                newTarget = -130;
+                newTarget = -100; // 130
             } else if (direction == RotationDirection.ControlledUp){
                 newTarget = coreHex.getCurrentPosition() + 5;
             } else if (direction == RotationDirection.ControlledDown){
