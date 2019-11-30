@@ -65,7 +65,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     @Override
     public void init_loop() {
         this.gyroInitStateMachine.ProcessState();
-        setUpStateMachine.ProcessState();
+//        setUpStateMachine.ProcessState();
         telemetry.addData("Gyro Init State", gyroInitStateMachine.IsDone());    //
         telemetry.update();
 
@@ -79,7 +79,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     public void start() {
         RedTeam = setUpStateMachine.RedTeam;
 
-        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, false, RedTeam, robot);
+        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, gyro,false, RedTeam, robot);
         MecanumSkyStoneStateMachine.Start();
 
     }

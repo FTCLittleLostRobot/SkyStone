@@ -49,6 +49,12 @@ public class CoreHexStateMachine {
 
     }
 
+    public void ReleaseGrip( )
+    {
+        state = CoreHexStateMachine.RobotState.Done ;
+        this.coreHex.Complete();
+    }
+
     public boolean IsDone()
     {
         return (state == CoreHexStateMachine.RobotState.Done);

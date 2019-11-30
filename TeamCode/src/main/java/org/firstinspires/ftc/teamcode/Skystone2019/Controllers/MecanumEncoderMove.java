@@ -125,10 +125,10 @@ public class MecanumEncoderMove {
             this.mecanumMotors.PrepareRunMotorToPosition(this.mecanumMotors.LeftBackMotor, this.targetLeftBackEncoderValue);
             this.mecanumMotors.PrepareRunMotorToPosition(this.mecanumMotors.RightBackMotor, this.targetRightBackEncoderValue);
 
-            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.LeftFrontMotor,  .5);
-            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.RightFrontMotor, .5);
-            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.LeftBackMotor, .5);
-            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.RightBackMotor, .5);
+            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.LeftFrontMotor,  .01 * (double)speed);
+            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.RightFrontMotor, .01 * (double)speed);
+            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.LeftBackMotor,  .01 * (double)speed);
+            this.mecanumMotors.RunMotorToPosition(this.mecanumMotors.RightBackMotor,  .01 * (double)speed);
         }
         else {
             this.mecanumMotors.SetSpeedToValue(speed);

@@ -133,7 +133,7 @@ public class MecanumRotateStateMachine {
                 break;
 
             case StartGyroHold:
-                if ((holdTimer.time() <= 2)) {
+                if ((holdTimer.time() <= 1)) {
                     this.motors.SetSpeedToValue(15);
 
                     error = gyro.GetErrorToTarget(this.degrees);
