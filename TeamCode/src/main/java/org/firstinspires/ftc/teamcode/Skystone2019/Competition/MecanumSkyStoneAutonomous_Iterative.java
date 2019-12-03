@@ -30,6 +30,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     private CoreHex coreHex;
     private SetUpStateMachine setUpStateMachine;
     private boolean RedTeam;
+    private boolean EndByWall;
 
     @Override
     public void init() {
@@ -78,8 +79,9 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     @Override
     public void start() {
         RedTeam = setUpStateMachine.RedTeam;
+        EndByWall = setUpStateMachine.EndWall;
 
-        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, gyro,false, RedTeam, robot);
+        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, gyro, EndByWall, RedTeam, robot);
         MecanumSkyStoneStateMachine.Start();
 
     }

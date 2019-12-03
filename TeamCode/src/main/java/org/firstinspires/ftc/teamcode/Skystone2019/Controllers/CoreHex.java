@@ -16,6 +16,7 @@ public class CoreHex {
         Up,
         DropBlockLifter,
         DropBlockGrabber,
+        PositionZeroGrabber,
         ControlledUp,
         ControlledDown
     }
@@ -74,6 +75,9 @@ public class CoreHex {
                 directionOfMotor = -1;
             } else if (direction == RotationDirection.DropBlockGrabber){
                 newTarget = -100;
+            } else if (direction == RotationDirection.PositionZeroGrabber){
+                newTarget = 0;
+                directionOfMotor = 1;
             }
 
         }
@@ -83,7 +87,8 @@ public class CoreHex {
                 || (direction == RotationDirection.ControlledDown && (startingPosition >= newTarget))
                 || (direction == RotationDirection.ControlledUp) && (startingPosition <= newTarget)
                 || (direction == RotationDirection.DropBlockLifter) && (startingPosition >= newTarget)
-                || (direction == RotationDirection.DropBlockGrabber) && (startingPosition <= newTarget)){
+                || (direction == RotationDirection.DropBlockGrabber) && (startingPosition <= newTarget)
+                || (direction == RotationDirection.PositionZeroGrabber) && (startingPosition <= newTarget)){
             coreHex.setPower(0.8 * directionOfMotor);
         }
         else

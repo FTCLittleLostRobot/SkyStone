@@ -46,7 +46,7 @@ public class MecanumSkyStoneStateMachine {
     static final double GO_BACK = 1;
     static final double GO_RIGHT = -1;
     static final double GO_LEFT = 1;
-    private int DistanceUnderBridge = 80;
+    private int DistanceUnderBridge = 57;
     private Image vuforiaImageObject;
     private Bitmap bitmapFromVuforia;
     int foundColumn = -1;
@@ -56,6 +56,7 @@ public class MecanumSkyStoneStateMachine {
     private int origSpeed = 50;
     private int robotHeading = 0;
     private boolean RedTeam;
+    private boolean EndWall;
     ElapsedTime holdTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     enum RobotState
@@ -73,7 +74,9 @@ public class MecanumSkyStoneStateMachine {
         Block0PositionGoingLeft,
         Block0Position90FaceFront,
         Block0Position90FaceingFront,
-        Block1Position180Turn,
+        Block1Position90Turn,
+        Block1Position902ndturn,
+        Block1Position902ndTurning,
         Block2Position90Turn,
         Block2PositionGoRight,
         Block2PositionGoingRight,
@@ -115,7 +118,7 @@ public class MecanumSkyStoneStateMachine {
         Done
     }
 
-    public void init(Telemetry telemetry, MecanumMotor motors, ColorFinder colorFinder, GyroController gyro, boolean isCloseSquare, boolean isRed, HardwareMecanumBase robot ) {
+    public void init(Telemetry telemetry, MecanumMotor motors, ColorFinder colorFinder, GyroController gyro, boolean EndByWall, boolean isRed, HardwareMecanumBase robot ) {
 
         this.telemetry = telemetry;
         this.colorFinder = colorFinder;
@@ -130,6 +133,7 @@ public class MecanumSkyStoneStateMachine {
         this.mecanumRotateStateMachine = new MecanumRotateStateMachine();
         this.mecanumRotateStateMachine.init(telemetry, motors, gyro);
         this.RedTeam = isRed;
+        this.EndWall = EndByWall;
         this.robotHeading = gyro.GetCurrentRobotHeading();
 
         state = MecanumSkyStoneStateMachine.RobotState.Start;
@@ -218,16 +222,18 @@ public class MecanumSkyStoneStateMachine {
             case CheckForSkystone:
                 if (foundColumn == 2 )
                 {
-                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading +  90), 40);
+                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading +  90), 20);
                     state = RobotState.Block2Position90Turn;
                     skyStonePosition = 2;
-                    this.DistanceUnderBridge = DistanceUnderBridge + 8;
+                    this.DistanceUnderBridge = DistanceUnderBridge + 8; //DO NOT CHANGE
                 }
                 else if (foundColumn == 1 )
                 {
-                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 180), 40);
-                    state = RobotState.Block1Position180Turn;
+                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 40);
                     skyStonePosition = 1;
+                    this.DistanceUnderBridge = DistanceUnderBridge + 16;
+                    this.InchesTowardsBlock = InchesTowardsBlock + 7;
+                    state = RobotState.Block1Position90Turn;
 
                 }
                 else if (foundColumn == 0)
@@ -235,13 +241,9 @@ public class MecanumSkyStoneStateMachine {
                     mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading - 90), 40);
                     state = RobotState.Block0Position90Turn;
                     skyStonePosition = 0;
-                    this.DistanceUnderBridge = DistanceUnderBridge - 8;
+                    this.DistanceUnderBridge = DistanceUnderBridge + 28;
 
                 }
-                break;
-
-            case MovingTowardsBlock:
-                this.CheckIfDone(RobotState.GrabBlock);
                 break;
 
             case Block2Position90Turn:
@@ -262,7 +264,14 @@ public class MecanumSkyStoneStateMachine {
                 this.CheckIfDoneRotating(RobotState.MoveTowardsBlock1);
                 break;
 
-            case Block1Position180Turn:
+            case Block1Position90Turn:
+                this.CheckIfDoneRotating(RobotState.Block1Position902ndturn);
+                break;
+            case Block1Position902ndturn:
+                mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 180), 40);
+                state = RobotState.Block1Position902ndTurning;
+                break;
+            case Block1Position902ndTurning:
                 this.CheckIfDoneRotating(RobotState.MoveTowardsBlock1);
                 break;
 
@@ -286,7 +295,7 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case MoveTowardsBlock1:
-                this.moveRobot.StartMove(40, InchesTowardsBlock, 0 , GO_FORWARD,0 );
+                this.moveRobot.StartMove(20, InchesTowardsBlock, 0 , GO_FORWARD,0 );
                 state = RobotState.MovingTowardsBlock1;
                 break;
 
@@ -325,8 +334,13 @@ public class MecanumSkyStoneStateMachine {
                 break;
 */
             case ReOrientate:
-                this.moveRobot.StartMove(20, 14, 0, GO_BACK, 0);
-                state = RobotState.ReOrienting;
+                if (EndWall == true){
+                    this.moveRobot.StartMove(20, 30, 0, GO_BACK, 0);
+                }
+                else {
+                    this.moveRobot.StartMove(20, 16, 0, GO_BACK, 0);
+                    state = RobotState.ReOrienting;
+                }
                 break;
 
             case ReOrienting:
@@ -342,6 +356,7 @@ public class MecanumSkyStoneStateMachine {
                     mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 40);
                     state = RobotState.SpinAfterReOrienting;
                 }
+
                 break;
 
             case SpinAfterReOrienting:
@@ -349,17 +364,39 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case MoveUnderSkyBridge1:
-                coreHexStateMachineBlockGrabber.ReleaseGrip();
-                coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Up);
-
-                moveRobot.StartMove(65, DistanceUnderBridge, 0, GO_FORWARD, 0);
+                moveRobot.StartMove(35, DistanceUnderBridge, 0, GO_FORWARD, 0);
                 state = RobotState.MovingUnderSkyBridge1;
-
                 break;
 
             case MovingUnderSkyBridge1:
                 this.CheckIfDone(RobotState.StraightenBeforeBackup);
                 break;
+
+            case StraightenBeforeBackup:
+                mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 20);
+                state = RobotState.StraighteningBeforeBackup;
+                break;
+            case StraighteningBeforeBackup:
+                this.CheckIfDoneRotating(RobotState.DropBlock);
+                break;
+
+
+            case DropBlock:
+                holdTimer.reset();
+                coreHexStateMachineBlockGrabber.ReleaseGrip();
+                coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.PositionZeroGrabber);
+                coreHexStateMachineBlockGrabber.ProcessState();
+                state = RobotState.DropingBlock;
+                break;
+            case DropingBlock:
+                if ((holdTimer.time() >= 5000)) {
+                    state = RobotState.ParkUnderBridge;
+                }
+                else {
+                    coreHexStateMachineBlockGrabber.ProcessState();
+                }
+                break;
+
 /*
             case DropBlock:
                 holdTimer.reset();
@@ -399,14 +436,9 @@ public class MecanumSkyStoneStateMachine {
                 }
                 break;
 */
-            case StraightenBeforeBackup:
-                mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 20);
-                state = RobotState.StraighteningBeforeBackup;
-                break;
-            case StraighteningBeforeBackup:
-                this.CheckIfDoneRotating(RobotState.BackUp1);
-                break;
 
+
+            //For the 2nd competition we decide to just do one skystone so for now after it straightens up it will go to park under bridge
             case BackUp1:
                 moveRobot.StartMove(45,110, 0, GO_BACK, 0);
                 state = RobotState.BackingUp1;
@@ -445,7 +477,7 @@ public class MecanumSkyStoneStateMachine {
                 this.CheckIfDoneRotating(RobotState.MoveTowardsBlock1);
                 break;
             case ParkUnderBridge:
-                moveRobot.StartMove(20,20, 0, GO_BACK, 0);
+                moveRobot.StartMove(20,25, 0, GO_BACK, 0);
                 state = RobotState.ParkingUnderBridge;
                 break;
             case ParkingUnderBridge:
