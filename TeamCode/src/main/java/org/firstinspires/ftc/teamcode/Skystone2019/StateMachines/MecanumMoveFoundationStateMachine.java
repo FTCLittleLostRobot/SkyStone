@@ -1,25 +1,17 @@
 /* Little Lost Robots
-   Core Devs: Danielle, Ryan
+   Core Devs: Danielle
 */
 
 package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapRegionDecoder;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.qualcomm.robotcore.robot.RobotState;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.vuforia.Image;
-
 import org.firstinspires.ftc.teamcode.Skystone2019.Config.IConfiguration;
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.CoreHex;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.Skystone2019.Config.ConfigFactory;
 
 public class MecanumMoveFoundationStateMachine {
     Telemetry telemetry;
@@ -92,7 +84,6 @@ public class MecanumMoveFoundationStateMachine {
         this.RedTeam = RedTeam;
         this.EndWall = EndByWall;
         // Setup the configuration object
-        robotConfig = new ConfigFactory().Get();
         this.coreHexStateMachineBlockGrabber = new CoreHexStateMachine();
         this.coreHexStateMachineBlockGrabber.init(telemetry, robot, CoreHex.CoreHexMotors.BlockGrabber);
         this.coreHexStateMachineBlockLifter = new CoreHexStateMachine();
