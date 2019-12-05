@@ -73,12 +73,12 @@ public class SetUpStateMachine {
                 if (X){
                     BlueTeam = true;
                     configData = configData + "Alliance: BlueTeam || ";
-                    state = RobotState.FoundationOrDepotQ;
+                    state = RobotState.EndingPositionFartherOrCloserQ;
                 }
                 else if (B){
                     RedTeam = true;
                     configData = configData + "Alliance: RedTeam || ";
-                    state = RobotState.FoundationOrDepotQ;
+                    state = RobotState.EndingPositionFartherOrCloserQ;
 
                 }
                 else {
@@ -87,7 +87,7 @@ public class SetUpStateMachine {
 
                 break;
 
-            case FoundationOrDepotQ:
+          /*  case FoundationOrDepotQ:
                 telemetry.addData("What side of the field are we on?", "A: Depot || Y: Foundation");
 
                 if (A){
@@ -104,6 +104,8 @@ public class SetUpStateMachine {
                     state = RobotState.FoundationOrDepotQ;
                 }
                 break;
+
+           */
 
             case EndingPositionFartherOrCloserQ:
                 telemetry.addData("Where are we ending in Autonomous?","B: closer to the wall || X: towards the neutral bridge");
@@ -142,7 +144,7 @@ public class SetUpStateMachine {
                 state = SetUpStateMachine.RobotState.Done;
                 break;
         }
-        telemetry.addData("ConfigData", configData);
+        telemetry.addData("GamePlan", configData);
 
     }
 }

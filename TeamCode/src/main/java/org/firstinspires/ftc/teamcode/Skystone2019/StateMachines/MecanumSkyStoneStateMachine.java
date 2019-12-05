@@ -335,7 +335,8 @@ public class MecanumSkyStoneStateMachine {
 */
             case ReOrientate:
                 if (EndWall == true){
-                    this.moveRobot.StartMove(20, 30, 0, GO_BACK, 0);
+                    this.moveRobot.StartMove(20, 40, 0, GO_BACK, 0);
+                    state = RobotState.ReOrienting;
                 }
                 else {
                     this.moveRobot.StartMove(20, 16, 0, GO_BACK, 0);
@@ -349,11 +350,11 @@ public class MecanumSkyStoneStateMachine {
 
             case SpinAfterReOrientate:
                 if (RedTeam == true) {
-                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading - 90), 40);
+                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 40);
                     state = RobotState.SpinAfterReOrienting;
                 }
                 else {
-                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 40);
+                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading - 90), 40);
                     state = RobotState.SpinAfterReOrienting;
                 }
 
@@ -483,6 +484,7 @@ public class MecanumSkyStoneStateMachine {
             case ParkingUnderBridge:
                 this.CheckIfDone(RobotState.Done);
                 break;
+            //ThatOneBoi
 
         }
 
