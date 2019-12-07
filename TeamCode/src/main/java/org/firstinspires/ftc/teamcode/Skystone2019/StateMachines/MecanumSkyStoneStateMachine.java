@@ -386,6 +386,8 @@ public class MecanumSkyStoneStateMachine {
                 holdTimer.reset();
                 coreHexStateMachineBlockGrabber.ReleaseGrip();
                 coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.PositionZeroGrabber);
+                coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.Down);
+                coreHexStateMachineBlockLifter.ProcessState();
                 coreHexStateMachineBlockGrabber.ProcessState();
                 state = RobotState.DropingBlock;
                 break;
@@ -479,6 +481,8 @@ public class MecanumSkyStoneStateMachine {
                 break;
             case ParkUnderBridge:
                 moveRobot.StartMove(20,25, 0, GO_BACK, 0);
+                coreHexStateMachineBlockLifter.ProcessState();
+                coreHexStateMachineBlockGrabber.ProcessState();
                 state = RobotState.ParkingUnderBridge;
                 break;
             case ParkingUnderBridge:

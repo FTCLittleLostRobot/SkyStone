@@ -65,7 +65,7 @@ public class MecanumFoundationAutonomous_Iterative extends OpMode {
         RedTeam = setUpStateMachine.RedTeam;
         EndByWall = setUpStateMachine.EndWall;
 
-        this.moveFoundationStateMachine.init(telemetry, motors, EndByWall, RedTeam, robot);
+        this.moveFoundationStateMachine.init(telemetry, motors, EndByWall, RedTeam, robot, gyro);
         moveFoundationStateMachine.Start();
     }
 
