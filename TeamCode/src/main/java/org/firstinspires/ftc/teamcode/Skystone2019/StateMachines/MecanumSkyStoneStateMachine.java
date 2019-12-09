@@ -225,7 +225,12 @@ public class MecanumSkyStoneStateMachine {
                     mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading +  90), 20);
                     state = RobotState.Block2Position90Turn;
                     skyStonePosition = 2;
-                    this.DistanceUnderBridge = DistanceUnderBridge + 8; //DO NOT CHANGE
+                    if (RedTeam == true){
+                        this.DistanceUnderBridge = DistanceUnderBridge + 8; //DO NOT CHANGE
+                    }
+                    else {
+                        this.DistanceUnderBridge = DistanceUnderBridge + 28; //DO NOT CHANGE
+                    }
                 }
                 else if (foundColumn == 1 )
                 {
@@ -241,7 +246,13 @@ public class MecanumSkyStoneStateMachine {
                     mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading - 90), 40);
                     state = RobotState.Block0Position90Turn;
                     skyStonePosition = 0;
-                    this.DistanceUnderBridge = DistanceUnderBridge + 28;
+                    if (RedTeam == true){
+                        this.DistanceUnderBridge = DistanceUnderBridge + 28;
+                    }
+                    else {
+                        this.DistanceUnderBridge = DistanceUnderBridge + 8;
+
+                    }
 
                 }
                 break;
@@ -334,14 +345,16 @@ public class MecanumSkyStoneStateMachine {
                 break;
 */
             case ReOrientate:
-                if (EndWall == true){
-                    this.moveRobot.StartMove(20, 40, 0, GO_BACK, 0);
-                    state = RobotState.ReOrienting;
-                }
-                else {
-                    this.moveRobot.StartMove(20, 16, 0, GO_BACK, 0);
-                    state = RobotState.ReOrienting;
-                }
+                //if (EndWall == true){
+                   // this.moveRobot.StartMove(20, 40, 0, GO_BACK, 0);
+                 this.moveRobot.StartMove(20, 15, 0, GO_BACK, 0);
+
+                state = RobotState.ReOrienting;
+              //  }
+               // else {
+                //    this.moveRobot.StartMove(20, 14, 0, GO_BACK, 0);
+                //    state = RobotState.ReOrienting;
+                //}
                 break;
 
             case ReOrienting:
@@ -374,7 +387,12 @@ public class MecanumSkyStoneStateMachine {
                 break;
 
             case StraightenBeforeBackup:
-                mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 20);
+                if (RedTeam == true){
+                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading + 90), 20);
+                }
+                else {
+                    mecanumRotateStateMachine.StartWithGyro((double)(this.robotHeading - 90), 20);
+                }
                 state = RobotState.StraighteningBeforeBackup;
                 break;
             case StraighteningBeforeBackup:
@@ -480,7 +498,7 @@ public class MecanumSkyStoneStateMachine {
                 this.CheckIfDoneRotating(RobotState.MoveTowardsBlock1);
                 break;
             case ParkUnderBridge:
-                moveRobot.StartMove(20,25, 0, GO_BACK, 0);
+                moveRobot.StartMove(20,21, 0, GO_BACK, 0);
                 coreHexStateMachineBlockLifter.ProcessState();
                 coreHexStateMachineBlockGrabber.ProcessState();
                 state = RobotState.ParkingUnderBridge;

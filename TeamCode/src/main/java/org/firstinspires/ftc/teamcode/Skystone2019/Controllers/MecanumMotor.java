@@ -201,6 +201,7 @@ public class MecanumMotor {
     {
         this.SpeedMultiplier = 50;
     }// main speed
+    public void HighestSpeed(){this.SpeedMultiplier = 80;}
 
     public void SetMecanumBreak (){
 

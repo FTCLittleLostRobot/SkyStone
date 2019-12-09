@@ -108,19 +108,22 @@ public class MecanumTeleop_Iterative extends OpMode{
         // if you hit the right bumper it will go faster if you hit the left bumper it will go slower, both will set it to regular
         if (left_bumper && right_bumper) {
             if (ButtonCheck == false){
-                motors.ResetSpeed();
+                motors.HighestSpeed();
+                // motors.ResetSpeed();
                 ButtonCheck = true;
             }
         }
         else if (left_bumper) {
             if (ButtonCheck == false){
-                motors.DecreaseSpeed();
+                motors.ResetSpeed();
+                // motors.DecreaseSpeed();
                 ButtonCheck = true;
             }
         }
         else if (right_bumper) {
             if (ButtonCheck == false) {
-                motors.IncreaseSpeed();
+                motors.HighestSpeed();
+                //motors.IncreaseSpeed();
                 ButtonCheck = true;
             }
         }
