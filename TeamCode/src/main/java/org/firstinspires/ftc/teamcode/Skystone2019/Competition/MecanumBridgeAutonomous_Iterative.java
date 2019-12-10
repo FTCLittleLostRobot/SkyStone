@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMov
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.StayOutOfAlliancesWay;
+
 
 @Autonomous(name="Mecanum: Autonomous v1", group="Mecanum")
 public class MecanumBridgeAutonomous_Iterative extends OpMode {
@@ -19,7 +21,7 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
     private HardwareMecanumBase robot;
     private MecanumEncoderMove moveRobot;
     private MecanumMotor mecanumRobot;
-    private SetUpStateMachine setUpStateMachine;
+    private StayOutOfAlliancesWay setUpStateMachine;
 
     boolean BlueTeam;
     boolean RedTeam;
@@ -38,7 +40,7 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
         this.robot.init(hardwareMap);
         this.mecanumRobot.init(robot);
         this.moveRobot.init(this.mecanumRobot);
-        this.setUpStateMachine = new SetUpStateMachine();
+        this.setUpStateMachine = new StayOutOfAlliancesWay(); //setUpStateMachine
 
         this.setUpStateMachine.init(telemetry, gamepad1);
         setUpStateMachine.Start();
@@ -53,12 +55,13 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
 
     @Override
     public void start() {
-        RedTeam = setUpStateMachine.RedTeam;
+      /*  RedTeam = setUpStateMachine.RedTeam;
         StartDepot = setUpStateMachine.RedTeam;
         EndWall = setUpStateMachine.EndWall;
         JustGoingUnderBridge = setUpStateMachine.JustGoingUnderBridge;
         StartFoundation = setUpStateMachine.StartFoundation;
 
+       */
         this.moveRobot.StartMove(10, 30, -1, 0, 0);
 
         /*

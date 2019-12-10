@@ -81,7 +81,7 @@ public class MecanumMoveStateMachine {
         switch (state)
         {
             case Move:
-                this.moveRobot.StartMove(10, inches, x, y, rotation);
+                this.moveRobot.StartMove(30, inches, x, y, rotation);
                 state = RobotState.Moving;
                 break;
 
