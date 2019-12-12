@@ -7,12 +7,10 @@ package org.firstinspires.ftc.teamcode.Skystone2019.Competition;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
-import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.StayOutOfAlliancesWay;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.StayOutOfAlliancesWayCollectInfo;
 
 
 @Autonomous(name="Mecanum: Autonomous v1", group="Mecanum")
@@ -21,16 +19,14 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
     private HardwareMecanumBase robot;
     private MecanumEncoderMove moveRobot;
     private MecanumMotor mecanumRobot;
-    private StayOutOfAlliancesWay setUpStateMachine;
+    private StayOutOfAlliancesWayCollectInfo stayOutOfAlliancesWay;
 
-    boolean BlueTeam;
-    boolean RedTeam;
-    boolean IsRed;
-    boolean StartDepot;
-    boolean StartFoundation;
-    boolean EndNeutralBridge;
-    boolean EndWall;
-    boolean JustGoingUnderBridge;
+
+    boolean MoveForwards;
+    boolean MoveBackwards;
+    boolean ParkNeutralBridge;
+    int WaitTimeAutonomous;
+
 
     @Override
     public void init() {
@@ -40,71 +36,36 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
         this.robot.init(hardwareMap);
         this.mecanumRobot.init(robot);
         this.moveRobot.init(this.mecanumRobot);
-        this.setUpStateMachine = new StayOutOfAlliancesWay(); //setUpStateMachine
 
-        this.setUpStateMachine.init(telemetry, gamepad1);
-        setUpStateMachine.Start();
+        this.stayOutOfAlliancesWay = new StayOutOfAlliancesWayCollectInfo();
+        this.stayOutOfAlliancesWay.init(telemetry, gamepad1);
+        stayOutOfAlliancesWay.Start();
 
     }
 
     @Override
     public void init_loop()
     {
-        setUpStateMachine.ProcessState();
+        stayOutOfAlliancesWay.ProcessState();
     }
 
     @Override
     public void start() {
-      /*  RedTeam = setUpStateMachine.RedTeam;
-        StartDepot = setUpStateMachine.RedTeam;
-        EndWall = setUpStateMachine.EndWall;
-        JustGoingUnderBridge = setUpStateMachine.JustGoingUnderBridge;
-        StartFoundation = setUpStateMachine.StartFoundation;
+        MoveForwards = stayOutOfAlliancesWay.MoveForwards;
+        MoveBackwards = stayOutOfAlliancesWay.MoveBackwards;
+        ParkNeutralBridge = stayOutOfAlliancesWay.ParkNeutralBridge;
+        WaitTimeAutonomous = stayOutOfAlliancesWay.WaitTimeAutonomous;
 
-       */
-        this.moveRobot.StartMove(10, 30, -1, 0, 0);
-
-        /*
-        if (RedTeam == true && StartDepot && EndWall && JustGoingUnderBridge) {
-            this.moveRobot.StartMove(10, 10, -1, 0, 0);
-        }
-        else if (RedTeam == true && StartFoundation && EndWall && JustGoingUnderBridge){
-            this.moveRobot.StartMove(10, 10, 1, 0, 0);
-        }
-        else if (RedTeam == true && StartDepot && EndNeutralBridge &&JustGoingUnderBridge){
-            this.moveRobot.StartMove(10, 10, 0, -1, 0);
-            if (this.moveRobot.IsDone()) {
-                this.moveRobot.StartMove(10, 10, -1, 0, 0);
-            }
-        }
-        else if (RedTeam == true && StartFoundation && EndNeutralBridge &&JustGoingUnderBridge){
-            this.moveRobot.StartMove(10, 10, 0, -1, 0);
-            if (this.moveRobot.IsDone()) {
-                this.moveRobot.StartMove(10, 10, 1, 0, 0);
-            }
+        if (MoveForwards == true){
+            this.moveRobot.StartMove(30, 15, 0, MecanumEncoderMove.GO_FORWARD, 0); //todo: check where to line up
+        }else if (MoveBackwards == true){
+            this.moveRobot.StartMove(30, 15, 0, MecanumEncoderMove.GO_BACK, 0); //todo: check where to line up
         }
 
-        if (BlueTeam = true && StartDepot && EndWall && JustGoingUnderBridge) {
-            this.moveRobot.StartMove(10, 10, 1, 0, 0);
-        }
-        else if (BlueTeam = true && StartFoundation && EndWall && JustGoingUnderBridge){
-            this.moveRobot.StartMove(10, 10, -1, 0, 0);
+        if (ParkNeutralBridge == true){
+
         }
 
-        else if (BlueTeam == true && StartDepot && EndNeutralBridge &&JustGoingUnderBridge){
-            this.moveRobot.StartMove(10, 10, 0, -1, 0);
-            if (this.moveRobot.IsDone()) {
-                this.moveRobot.StartMove(10, 10, 1, 0, 0);
-            }
-        }
-
-        else if (BlueTeam == true && StartFoundation && EndNeutralBridge &&JustGoingUnderBridge){
-            this.moveRobot.StartMove(10, 10, 0, -1, 0);
-            if (this.moveRobot.IsDone()) {
-                this.moveRobot.StartMove(10, 10, -1, 0, 0);
-            }
-        }
-  */
     }
 
     /*

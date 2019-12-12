@@ -171,21 +171,22 @@ public class MecanumTeleop_Iterative extends OpMode{
             */
         }
 
-
-        coreHexStateMachineBlockGrabber.ProcessState();
-        coreHexStateMachineBlockLifter.ProcessState();
-
+        if (robot.Block_Grabber != null && robot.Block_Lifter != null) {
+            coreHexStateMachineBlockGrabber.ProcessState();
+            coreHexStateMachineBlockLifter.ProcessState();
+        }
 
         motors.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
 
         telemetry.addData("SpeedMultplier", motors.GetSpeedMultiplier());
         telemetry.addData("right stick x value", gamepad1.right_stick_x);
-        telemetry.addData("Lifter current position", robot.Block_Lifter.getCurrentPosition());
-        telemetry.addData("grabber current position", robot.Block_Grabber.getCurrentPosition());
         telemetry.addData("target position Lifter", coreHexStateMachineBlockLifter.GetCoreHexNextPosition());
         telemetry.addData("target position Grabber", coreHexStateMachineBlockGrabber.GetCoreHexNextPosition());
-        telemetry.update();
-
+        if (robot.Block_Grabber != null && robot.Block_Lifter != null) {
+            telemetry.addData("Lifter current position", robot.Block_Lifter.getCurrentPosition());
+            telemetry.addData("grabber current position", robot.Block_Grabber.getCurrentPosition());
+            telemetry.update();
+        }
     }
 
 

@@ -38,10 +38,13 @@ public class CoreHex {
         else {
             coreHex = hwBase.Block_Grabber;
         }
-        coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        coreHex.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        coreHex.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ((DcMotorEx)coreHex).setTargetPositionTolerance(10);
+
+        if (coreHex != null) {
+            coreHex.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            coreHex.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            coreHex.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            ((DcMotorEx) coreHex).setTargetPositionTolerance(10);
+        }
     }
 
 
