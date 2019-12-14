@@ -70,7 +70,7 @@ public class MecanumTesting_Iterative extends OpMode {
 
 
         //       rotateStateMachine.Start(90.0);
-        moveStateMachine.Start(12, 1, 0, 0);
+        moveStateMachine.Start(20, -1, 0, 0);
     }
 
     @Override

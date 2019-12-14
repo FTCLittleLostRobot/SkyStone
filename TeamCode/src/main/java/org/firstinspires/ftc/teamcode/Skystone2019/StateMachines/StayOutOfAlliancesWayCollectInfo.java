@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.Skystone2019.StateMachines;
 
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.robot.RobotState;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
@@ -92,7 +93,7 @@ public class StayOutOfAlliancesWayCollectInfo {
                 break;
 
             case MoveBackwards:
-                telemetry.addData("Which way under bridge?", "X: Backwards || B: Forwards ");
+                telemetry.addData("Move Backwards Under bridge", "X: yes || B: no ");
                 telemetry.update();
                 if ((holdTimer.time() >= 500)) {
 

@@ -11,15 +11,17 @@ import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMov
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.StayOutOfAlliancesWayCollectInfo;
+import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumStayOutOfAllianceWayStateMachine;
 
 
-@Autonomous(name="Mecanum: Autonomous v1", group="Mecanum")
+@Autonomous(name="Mecanum: Autonomous AllianceMoving", group="Mecanum")
 public class MecanumBridgeAutonomous_Iterative extends OpMode {
 
     private HardwareMecanumBase robot;
     private MecanumEncoderMove moveRobot;
     private MecanumMotor mecanumRobot;
     private StayOutOfAlliancesWayCollectInfo stayOutOfAlliancesWay;
+    private MecanumStayOutOfAllianceWayStateMachine mecanumStayOutOfAllianceWayStateMachine;
 
 
     boolean MoveForwards;
@@ -41,6 +43,7 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
         this.stayOutOfAlliancesWay.init(telemetry, gamepad1);
         stayOutOfAlliancesWay.Start();
 
+        this.mecanumStayOutOfAllianceWayStateMachine = new MecanumStayOutOfAllianceWayStateMachine();
     }
 
     @Override
@@ -56,27 +59,16 @@ public class MecanumBridgeAutonomous_Iterative extends OpMode {
         ParkNeutralBridge = stayOutOfAlliancesWay.ParkNeutralBridge;
         WaitTimeAutonomous = stayOutOfAlliancesWay.WaitTimeAutonomous;
 
-        if (MoveForwards == true){
-            this.moveRobot.StartMove(30, 15, 0, MecanumEncoderMove.GO_FORWARD, 0); //todo: check where to line up
-        }else if (MoveBackwards == true){
-            this.moveRobot.StartMove(30, 15, 0, MecanumEncoderMove.GO_BACK, 0); //todo: check where to line up
-        }
 
-        if (ParkNeutralBridge == true){
-
-        }
+        this.mecanumStayOutOfAllianceWayStateMachine.init(telemetry, mecanumRobot, MoveForwards, MoveBackwards, ParkNeutralBridge, WaitTimeAutonomous, gamepad1);
+        this.mecanumStayOutOfAllianceWayStateMachine.Start();
 
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
     @Override
     public void loop()
     {
-        if (this.moveRobot.IsDone()) {
-            this.moveRobot.Complete();
-        }
+        mecanumStayOutOfAllianceWayStateMachine.ProcessState();
     }
 
     /*
