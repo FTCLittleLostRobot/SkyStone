@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.GyroController;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.GyroInitStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
@@ -26,6 +27,7 @@ public class MecanumTesting_Iterative extends OpMode {
     private SetUpStateMachine setUpStateMachine;
     private GyroInitStateMachine gyroInitStateMachine;
     private MecanumRotateStateMachine mecanumRotateStateMachine;
+    MecanumEncoderMove moveRobot;
 
     @Override
     public void init() {
@@ -33,6 +35,8 @@ public class MecanumTesting_Iterative extends OpMode {
         this.rotateStateMachine = new MecanumRotateStateMachine();
         this.moveStateMachine = new MecanumMoveStateMachine();
         //   this.setUpStateMachine = new SetUpStateMachine();
+        this.moveRobot = new MecanumEncoderMove();
+        this.moveRobot.init(motors);
         //  this.mecanumRotateStateMachine = new MecanumRotateStateMachine();
         // this.gyro = new GyroController();
 
@@ -70,7 +74,9 @@ public class MecanumTesting_Iterative extends OpMode {
 
 
         //       rotateStateMachine.Start(90.0);
-        moveStateMachine.Start(20, -1, 0, 0);
+       // moveStateMachine.Start(20, -1, 0, 0);
+        this.moveRobot.StartMove(40, 12, 0 , -1,0 );
+
     }
 
     @Override
@@ -78,7 +84,7 @@ public class MecanumTesting_Iterative extends OpMode {
     {
         //  setUpStateMachine.ProcessState();
         //       mecanumGyroRotateStateMachine.ProcessState();
-        moveStateMachine.ProcessState();
+       // moveStateMachine.ProcessState();
 
 //        if (moveStateMachine.IsDone()) {
         // rotateStateMachine.ProcessState();

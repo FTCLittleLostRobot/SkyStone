@@ -179,9 +179,14 @@ public class MecanumTeleop_Iterative extends OpMode{
         motors.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);
 
         telemetry.addData("SpeedMultplier", motors.GetSpeedMultiplier());
+        telemetry.addData("left stick y value", gamepad1.left_stick_y);
+        telemetry.addData("left stick x value", gamepad1.left_stick_x);
         telemetry.addData("right stick x value", gamepad1.right_stick_x);
+
+
         telemetry.addData("target position Lifter", coreHexStateMachineBlockLifter.GetCoreHexNextPosition());
         telemetry.addData("target position Grabber", coreHexStateMachineBlockGrabber.GetCoreHexNextPosition());
+        telemetry.update();
         if (robot.Block_Grabber != null && robot.Block_Lifter != null) {
             telemetry.addData("Lifter current position", robot.Block_Lifter.getCurrentPosition());
             telemetry.addData("grabber current position", robot.Block_Grabber.getCurrentPosition());

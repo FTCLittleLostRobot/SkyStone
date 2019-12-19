@@ -22,7 +22,8 @@ public class MecanumEncoderMove {
         Left
     }
 
-    private static final double COUNTS_PER_MOTOR_REV = 400.6;  // eg: Countable events per revolution of Output shaft
+    // old robot      private static final double COUNTS_PER_MOTOR_REV = 400.6;  // eg: Countable events per revolution of Output shaft
+    private static final double COUNTS_PER_MOTOR_REV = 560.6;  // eg: Countable events per revolution of Output shaft
     private static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
     private static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     private  static final double WHEEL_COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -86,7 +87,6 @@ public class MecanumEncoderMove {
     }
 
     public void StartMove(int speed, double inches, double x, double y, double rotation ) {
-
         if (x != 0 && y != 0)
         {
             useRunToPosition = false;
@@ -95,6 +95,16 @@ public class MecanumEncoderMove {
         {
             useRunToPosition = true;
         }
+
+        StartMoveInternal(speed, inches, x, y, rotation);
+    }
+
+    public void StartMoveNoPid(int speed, double inches, double x, double y, double rotation ) {
+        useRunToPosition = false;
+        StartMoveInternal(speed, inches, x, y, rotation);
+    }
+
+    private void StartMoveInternal(int speed, double inches, double x, double y, double rotation ) {
 
         targetLeftFrontPower = this.mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.LeftFrontDrive,x,y,rotation);
         targetRightFrontPower = this.mecanumMotors.CalculateMecanumPosition(MecanumMotor.WheelControl.RightFrontDrive,x,y,rotation);
