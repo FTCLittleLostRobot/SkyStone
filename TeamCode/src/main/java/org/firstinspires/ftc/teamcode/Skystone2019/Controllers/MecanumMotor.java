@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
@@ -19,6 +20,7 @@ public class MecanumMotor {
     public DcMotor RightFrontMotor = null;
     public DcMotor LeftBackMotor = null;
     public DcMotor RightBackMotor = null;
+    public Rev2mDistanceSensor DistanceSensor = null;
 
     private HardwareMecanumBase hardwareBase = null;
 
@@ -37,6 +39,7 @@ public class MecanumMotor {
         this.RightFrontMotor = this.hardwareBase.right_front_drive;
         this.LeftBackMotor = this.hardwareBase.left_back_drive;
         this.RightBackMotor = this.hardwareBase.right_back_drive;
+        this.DistanceSensor = this.hardwareBase.Distance_Sensor;
 
         if (this.LeftFrontMotor != null) {
             this.LeftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

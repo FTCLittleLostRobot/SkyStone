@@ -6,7 +6,9 @@ package org.firstinspires.ftc.teamcode.Skystone2019;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -47,6 +49,7 @@ public class HardwareMecanumBase {
     public DcMotor right_back_drive = null;
     public DcMotor Block_Lifter = null;
     public DcMotor Block_Grabber = null;
+    public Rev2mDistanceSensor Distance_Sensor = null;
     public ModernRoboticsI2cGyro ExternalGyro = null;
     public BNO055IMU IMU = null;
 
@@ -85,6 +88,11 @@ public class HardwareMecanumBase {
 
         try {
             this.ExternalGyro = (ModernRoboticsI2cGyro)HardwareMecanumBase.HardwareMap.gyroSensor.get("gyro");
+        }
+        catch (IllegalArgumentException ex) {}
+
+        try {
+            this.Distance_Sensor = (Rev2mDistanceSensor)HardwareMecanumBase.HardwareMap.get(DistanceSensor.class, "distance");
         }
         catch (IllegalArgumentException ex) {}
 

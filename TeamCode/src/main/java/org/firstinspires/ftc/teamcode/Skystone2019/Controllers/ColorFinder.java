@@ -1,5 +1,5 @@
 /* Little Lost Robots
-   Core Devs: Caden
+   Core Devs:
 */
 
 package org.firstinspires.ftc.teamcode.Skystone2019.Controllers;

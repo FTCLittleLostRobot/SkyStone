@@ -65,7 +65,7 @@ public class MecanumRotateStateMachine {
 
     public void StartWithGyro(Double degrees, int speed)
     {
-        this.degrees= degrees;
+        this.degrees= degrees  -1;
         this.speed = speed;
         motors.SetMecanumBreak();
         state = RobotState.StartGyroRotation;

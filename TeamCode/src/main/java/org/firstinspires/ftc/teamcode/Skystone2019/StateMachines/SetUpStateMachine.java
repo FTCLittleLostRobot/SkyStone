@@ -22,6 +22,7 @@ public class SetUpStateMachine {
     public boolean StartFoundation = false;
     public boolean EndNeutralBridge = false;
     public boolean EndWall = false;
+    public boolean TwoSkystones = false;
     public boolean JustGoingUnderBridge;
     public String configData = "";
 
@@ -29,9 +30,9 @@ public class SetUpStateMachine {
     {
         Start,
         RedOrBlueQ,
-        FoundationOrDepotQ,
         EndingPositionFartherOrCloserQ,
-        JustGoingUnderBridge,
+        Skystones,
+        Foundation,
         Done
     }
 
@@ -87,56 +88,36 @@ public class SetUpStateMachine {
 
                 break;
 
-          /*  case FoundationOrDepotQ:
-                telemetry.addData("What side of the field are we on?", "A: Depot || Y: Foundation");
-
-                if (A){
-                    StartDepot = true;
-                    configData = configData + "StartingPosition: Depot || ";
-                    state = RobotState.EndingPositionFartherOrCloserQ;
-                }
-                else if (Y){
-                    StartFoundation = true;
-                    configData = configData + "StartingPosition: Foundation || ";
-                    state = RobotState.EndingPositionFartherOrCloserQ;
-                }
-                else {
-                    state = RobotState.FoundationOrDepotQ;
-                }
-                break;
-
-           */
 
             case EndingPositionFartherOrCloserQ:
-                telemetry.addData("Where are we ending in Autonomous?","B: closer to the wall || X: towards the neutral bridge");
-                if (B){
+                telemetry.addData("Where are we ending in Autonomous?","A: closer to the wall || Y: towards the neutral bridge");
+                if (A){
                     EndWall = true;
                     configData = configData + "EndingPosition: Closer to Wall ";
-                    state = RobotState.JustGoingUnderBridge;
+                    state = RobotState.Skystones;
                 }
-                else if (X){
+                else if (Y){
                     EndNeutralBridge = true;
                     configData = configData + "EndingPosition: Closer to Neutral Bridge ";
-                    state = RobotState.JustGoingUnderBridge;
+                    state = RobotState.Skystones;
                 }
                 else {
                     state = RobotState.EndingPositionFartherOrCloserQ;
                 }
                 break;
-            case JustGoingUnderBridge:
-                telemetry.addData("Are we just going under the bridge?", "Y: yes || A: no");
-                if (Y){
-                    JustGoingUnderBridge = true;
-                    configData = configData + "JustGoingUnderBridge";
-                    state = RobotState.Done;
+            case Skystones:
+                telemetry.addData("How many Skystones are we getting?", "X: 1 || B: 2");
+                if (X){
+                    TwoSkystones = false;
+                    configData = configData + "Skystones: 1 ";
+                    state = RobotState.Skystones;
+
                 }
-                else if (A){
-                    JustGoingUnderBridge = false;
-                    configData = configData + "Doing Autonomous program";
-                    state = RobotState.Done;
-                }
-                else {
-                    state = RobotState.JustGoingUnderBridge;
+                else if (B){
+                    TwoSkystones = true;
+                    configData = configData + "Skystones: 2 ";
+                    state = RobotState.Skystones;
+
                 }
                 break;
 
@@ -144,6 +125,7 @@ public class SetUpStateMachine {
                 state = SetUpStateMachine.RobotState.Done;
                 break;
         }
+        telemetry.addLine();
         telemetry.addData("GamePlan", configData);
 
     }

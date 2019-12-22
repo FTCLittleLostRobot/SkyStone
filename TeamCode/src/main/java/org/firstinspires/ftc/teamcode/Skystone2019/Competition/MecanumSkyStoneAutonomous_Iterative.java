@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.Skystone2019.HardwareMecanumBase;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.GyroInitStateMachine;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumSkyStoneStateMachineV2;
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.MecanumSkyStoneStateMachineV1;
-
 import org.firstinspires.ftc.teamcode.Skystone2019.StateMachines.SetUpStateMachine;
 
 @Autonomous(name="Mecanum: Skystone", group="Mecanum")
@@ -33,6 +32,7 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     private SetUpStateMachine setUpStateMachine;
     private boolean RedTeam;
     private boolean EndByWall;
+    private boolean TwoSkystones;
 
     @Override
     public void init() {
@@ -82,8 +82,9 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
     public void start() {
         RedTeam = setUpStateMachine.RedTeam;
         EndByWall = setUpStateMachine.EndWall;
-  //red team is set to default for testing purposes
-        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, gyro, EndByWall, true, robot);
+        TwoSkystones = setUpStateMachine.TwoSkystones;
+        //red team is set to default for testing purposes
+        this.MecanumSkyStoneStateMachine.init(telemetry, mecanumRobot, colorFinder, gyro, EndByWall, true, TwoSkystones, robot);
         MecanumSkyStoneStateMachine.Start();
 
     }
