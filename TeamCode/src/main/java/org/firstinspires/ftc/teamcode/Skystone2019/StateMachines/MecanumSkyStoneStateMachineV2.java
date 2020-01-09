@@ -249,8 +249,8 @@ public class MecanumSkyStoneStateMachineV2 {
 
             case GrabBlock:
                 holdTimer.reset();
-                // coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Down);
-                // coreHexStateMachineBlockGrabber.ProcessState();
+                coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.Down);
+                coreHexStateMachineBlockGrabber.ProcessState();
                 state = RobotState.GrabbingBlock;
                 break;
 
@@ -259,7 +259,7 @@ public class MecanumSkyStoneStateMachineV2 {
                     state = RobotState.ReOrientate;
                 }
                 else {
-                    //  coreHexStateMachineBlockGrabber.ProcessState();
+                    coreHexStateMachineBlockGrabber.ProcessState();
                 }
                 break;
 
@@ -318,11 +318,11 @@ public class MecanumSkyStoneStateMachineV2 {
 ///////////////////////////////
             case DropBlock:
                 holdTimer.reset();
-                // coreHexStateMachineBlockGrabber.ReleaseGrip();
-                // coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.PositionZeroGrabber);
-                // coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.Down);
-                //coreHexStateMachineBlockLifter.ProcessState();
-                // coreHexStateMachineBlockGrabber.ProcessState();
+                coreHexStateMachineBlockGrabber.ReleaseGrip();
+                coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.PositionZeroGrabber);
+                coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.Down);
+                coreHexStateMachineBlockLifter.ProcessState();
+                coreHexStateMachineBlockGrabber.ProcessState();
                 state = RobotState.DroppingBlock;
             case DroppingBlock:
                 if ((holdTimer.time() >= 1000)) {

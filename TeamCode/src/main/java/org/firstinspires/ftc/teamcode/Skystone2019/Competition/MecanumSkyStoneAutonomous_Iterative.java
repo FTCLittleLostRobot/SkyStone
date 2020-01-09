@@ -55,6 +55,8 @@ public class MecanumSkyStoneAutonomous_Iterative extends OpMode {
         this.moveRobot.init(this.mecanumRobot);
         this.colorFinder.init(hardwareMap);
         this.gyro.init(robot);
+        mecanumRobot.SetRobotBackwardDirection();
+
 
         /* Step 4: Setup of state machines  */
         this.gyroInitStateMachine.init(telemetry, this.gyro);

@@ -24,9 +24,10 @@ public class MecanumMotor {
 
     private HardwareMecanumBase hardwareBase = null;
 
+    private int DirectionMultiplier = 1;
     private double LeftFrontMotorPowerAdjustment = 1;
-    private double RightFrontMotorPowerAdjustment = 1.1;
-    private double LeftBackMotorPowerAdjustment = 1.1;
+    private double RightFrontMotorPowerAdjustment = 1;
+    private double LeftBackMotorPowerAdjustment = 1;
     private double RightBackMotorPowerAdjustment = 1;
 
     private int SpeedMultiplier = 50;
@@ -158,24 +159,44 @@ public class MecanumMotor {
         double robotAngle = Math.atan2(y,x) - Math.PI / (double)4;
         double v = 0;
 
-        switch (wheel)
-        {
+        if (DirectionMultiplier <0)  {
+            switch (wheel) {
+                case LeftFrontDrive:
+                    wheel = WheelControl.RightBackDrive;
+                    break;
+
+                case RightFrontDrive:
+                    wheel = WheelControl.LeftBackDrive;
+                    break;
+
+                case LeftBackDrive:
+                    wheel = WheelControl.RightFrontDrive;
+                    break;
+
+                case RightBackDrive:
+                    wheel = WheelControl.LeftFrontDrive;
+                    break;
+            }
+        }
+
+        switch (wheel) {
             case LeftFrontDrive:
-                v = r * Math.cos(robotAngle) + rotation;
+                v = DirectionMultiplier * r * Math.cos(robotAngle) + rotation;
                 break;
 
             case RightFrontDrive:
-                v = r * Math.sin(robotAngle) - rotation;
+                v = DirectionMultiplier *r * Math.sin(robotAngle) - rotation;
                 break;
 
             case LeftBackDrive:
-                v = r * Math.sin(robotAngle) + rotation;
+                v = DirectionMultiplier *r * Math.sin(robotAngle) + rotation;
                 break;
 
             case RightBackDrive:
-                v = r * Math.cos(robotAngle) - rotation;
+                v = DirectionMultiplier *r * Math.cos(robotAngle) - rotation;
                 break;
         }
+
 
         return v;
     }
@@ -205,6 +226,9 @@ public class MecanumMotor {
         this.SpeedMultiplier = 50;
     }// main speed
     public void HighestSpeed(){this.SpeedMultiplier = 100;}
+
+    public void SetRobotForwardDirection() { this.DirectionMultiplier = 1; }
+    public void SetRobotBackwardDirection() { this.DirectionMultiplier = -1; }
 
     public void SetMecanumBreak (){
 

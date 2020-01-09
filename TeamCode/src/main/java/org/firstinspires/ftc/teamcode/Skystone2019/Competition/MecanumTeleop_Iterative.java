@@ -130,6 +130,13 @@ public class MecanumTeleop_Iterative extends OpMode{
         else{
             ButtonCheck = false;
         }
+        if (gamepad1.y){
+            motors.SetRobotForwardDirection();
+        }
+        if (gamepad1.a){
+            motors.SetRobotBackwardDirection();
+
+        }
 
         if (gamepad2.x){
 
