@@ -84,7 +84,7 @@ public class MecanumTesting_Iterative extends OpMode {
     {
         //  setUpStateMachine.ProcessState();
         //       mecanumGyroRotateStateMachine.ProcessState();
-       // moveStateMachine.ProcessState();
+        moveStateMachine.ProcessState();
 
 //        if (moveStateMachine.IsDone()) {
         // rotateStateMachine.ProcessState();

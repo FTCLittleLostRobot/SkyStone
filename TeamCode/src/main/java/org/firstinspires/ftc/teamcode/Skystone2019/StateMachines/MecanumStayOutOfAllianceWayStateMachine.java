@@ -113,7 +113,7 @@ public class MecanumStayOutOfAllianceWayStateMachine {
 
                 break;
             case MoveForwards:
-                this.moveRobot.StartMove(30, 20, 0, MecanumEncoderMove.GO_FORWARD, 0);
+                this.moveRobot.StartMove(30, 5, 0, MecanumEncoderMove.GO_FORWARD, 0);
                 state = RobotState.MovingForwards;
                 break;
             case MovingForwards:
@@ -129,14 +129,14 @@ public class MecanumStayOutOfAllianceWayStateMachine {
                 break;
 
             case MoveForwardsNeutralBridge:
-                this.moveRobot.StartMove(30, 38, 0, MecanumEncoderMove.GO_FORWARD, 0);
+                this.moveRobot.StartMove(30, 20, 0, MecanumEncoderMove.GO_FORWARD, 0);
                 state = RobotState.MovingForwardsNeutralBridge;
                 break;
             case MovingForwardsNeutralBridge:
                 this.CheckIfDone(RobotState.StraffeUnderBridge);
                 break;
             case StraffeUnderBridge:
-                this.moveRobot.StartMove(30, 23, 1, 0, 0);
+                this.moveRobot.StartMove(30, 10, -1, 0, 0);
                 state = RobotState.StraffingUnderBridge;
                 break;
             case StraffingUnderBridge:

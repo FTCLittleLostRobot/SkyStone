@@ -67,7 +67,6 @@ public class StayOutOfAlliancesWayCollectInfo {
         B = gamepad1.b;
         A = gamepad1.a;
         // telemetry.addData("targetLeftFrontEncoderValue", this.moveRobot.targetLeftFrontEncoderValue);
-
         switch (state)
         {
 

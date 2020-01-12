@@ -49,6 +49,8 @@ public class HardwareMecanumBase {
     public DcMotor right_back_drive = null;
     public DcMotor Block_Lifter = null;
     public DcMotor Block_Grabber = null;
+    public DcMotor ElevatorClaw = null;
+    public DcMotor ElevatorLifter = null;
     public Rev2mDistanceSensor Distance_Sensor = null;
     public ModernRoboticsI2cGyro ExternalGyro = null;
     public BNO055IMU IMU = null;
@@ -83,6 +85,15 @@ public class HardwareMecanumBase {
 
         try {
             Block_Grabber = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "Block_Grabber");
+        }
+        catch (IllegalArgumentException ex) {}
+
+        try {
+            ElevatorClaw = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "ElevatorClaw");
+        }
+        catch (IllegalArgumentException ex) {}
+        try {
+            ElevatorLifter = HardwareMecanumBase.HardwareMap.get(DcMotor.class, "ElevatorLifter");
         }
         catch (IllegalArgumentException ex) {}
 

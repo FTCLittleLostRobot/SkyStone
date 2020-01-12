@@ -35,6 +35,7 @@ public class MecanumTeleop_Iterative extends OpMode{
     private MecanumMotor motors = new MecanumMotor();
     private CoreHexStateMachine coreHexStateMachineBlockGrabber;
     private CoreHexStateMachine coreHexStateMachineBlockLifter;
+    private CoreHexStateMachine coreHexStateMachineElevatorLifter;
     private float starting_left_x = 0;  //this makes the robot strafe right and left
     private float starting_left_y = 0;  //this makes the robot go forwards and backwards
     private float starting_right_x = 0; // this makes the robot rotate
@@ -58,6 +59,9 @@ public class MecanumTeleop_Iterative extends OpMode{
 
         this.coreHexStateMachineBlockLifter = new CoreHexStateMachine();
         this.coreHexStateMachineBlockLifter.init(telemetry, robot, CoreHex.CoreHexMotors.BlockLifter);
+
+        this.coreHexStateMachineElevatorLifter = new CoreHexStateMachine();
+        this.coreHexStateMachineElevatorLifter.init(telemetry, robot, CoreHex.CoreHexMotors.ElevatorClaw);
 
         this.moveRobot = new MecanumEncoderMove();
         this.moveRobot.init(motors);
@@ -130,6 +134,7 @@ public class MecanumTeleop_Iterative extends OpMode{
         else{
             ButtonCheck = false;
         }
+
         if (gamepad1.y){
             motors.SetRobotForwardDirection();
         }
@@ -162,25 +167,18 @@ public class MecanumTeleop_Iterative extends OpMode{
         }
 
         if (gamepad2.dpad_down){
-            coreHexStateMachineBlockLifter.Start(CoreHex.RotationDirection.DropBlockLifter);
-            coreHexStateMachineBlockGrabber.Start(CoreHex.RotationDirection.DropBlockGrabber);
-            this.moveRobot.StartMove(20, 1, 0, MecanumEncoderMove.GO_BACK, 0);
-            holdTimer.reset();
-           /*
-            if ((holdTimer.time() <= 2)){
-                this.motors.SetSpeedToValue(15);
-            }
-            else {
-                this.motors.MoveMecanum(0, 0, 0);
-                this.motors.ResetMotors();
-            }
-
-            */
+            coreHexStateMachineElevatorLifter.Start(CoreHex.RotationDirection.Down);
+        }
+        else if (gamepad2.dpad_up){
+            coreHexStateMachineElevatorLifter.Start(CoreHex.RotationDirection.Up);
         }
 
         if (robot.Block_Grabber != null && robot.Block_Lifter != null) {
             coreHexStateMachineBlockGrabber.ProcessState();
             coreHexStateMachineBlockLifter.ProcessState();
+        }
+        if (robot.ElevatorClaw != null){
+            coreHexStateMachineElevatorLifter.ProcessState();
         }
 
         motors.MoveMecanum(left_stick_x, left_stick_y, right_stick_x);

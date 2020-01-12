@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.vuforia.Image;
 
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinder;
+import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.ColorFinderV2;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumEncoderMove;
 import org.firstinspires.ftc.teamcode.Skystone2019.Controllers.MecanumMotor;
 
@@ -22,7 +23,7 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
     /* Declare OpMode members. */
     HardwareMecanumBase robot = new HardwareMecanumBase(); // use the class created to define a Pushbot's hardware
     MecanumMotor mecanumMotor = new MecanumMotor();
-    ColorFinder colorFinder = null;
+    ColorFinderV2 colorFinder = null;
     MecanumEncoderMove moveRobot;
 
 
@@ -63,7 +64,7 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
         this.robot.init(hardwareMap);
         this.mecanumMotor.init(this.robot);
         this.moveRobot = new MecanumEncoderMove();
-        this.colorFinder = new ColorFinder();
+        this.colorFinder = new ColorFinderV2();
 
         this.colorFinder.init(hardwareMap);
         this.moveRobot.init(mecanumMotor);
@@ -108,7 +109,7 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
                 break;
 
             case DetectColorFromImage:
-                foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinder.ColorTarget.Black, telemetry);
+                foundColumn =  colorFinder.FindColor(bitmapFromVuforia, ColorFinderV2.ColorTarget.Black, telemetry);
                 telemetry.addData("column", foundColumn);
                 state = RobotState.Done;
                 break;
@@ -178,6 +179,7 @@ public class MecanumTestCameraTeleop_Iterative extends OpMode {
         telemetry.addData ("Found In", this.foundColumn);
         telemetry.addData("Width", colorFinder.width);
         telemetry.addData("Height", colorFinder.height);
+        telemetry.addData("Column Counter", colorFinder.columnCounter);
         telemetry.addData("Column 0", colorFinder.column0);
         telemetry.addData("Column 1", colorFinder.column1);
         telemetry.addData("Column 2", colorFinder.column2);

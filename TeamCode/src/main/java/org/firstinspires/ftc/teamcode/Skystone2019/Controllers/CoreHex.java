@@ -18,12 +18,14 @@ public class CoreHex {
         DropBlockGrabber,
         PositionZeroGrabber,
         ControlledUp,
-        ControlledDown
+        ControlledDown,
+        ElevatorClaw
     }
 
     public enum CoreHexMotors{
         BlockLifter,
-        BlockGrabber
+        BlockGrabber,
+        ElevatorClaw
     }
     DcMotor coreHex = null;
     CoreHexMotors motorType = null;
@@ -35,8 +37,11 @@ public class CoreHex {
         if (motor == CoreHexMotors.BlockLifter){
             coreHex = hwBase.Block_Lifter;
         }
-        else {
+        else if (motor == CoreHexMotors.BlockGrabber){
             coreHex = hwBase.Block_Grabber;
+        }
+        else if( motor == CoreHexMotors.ElevatorClaw){
+            coreHex = hwBase.ElevatorClaw;
         }
 
         if (coreHex != null) {
@@ -83,6 +88,14 @@ public class CoreHex {
                 directionOfMotor = 1;
             }
 
+        }
+
+        if (motorType == CoreHexMotors.ElevatorClaw){
+            if (direction == RotationDirection.Up){
+                newTarget = coreHex.getCurrentPosition() + 5;
+            } else if (direction == RotationDirection.Down){
+                newTarget = coreHex.getCurrentPosition() - 5;
+            }
         }
 
         if ( ((direction == RotationDirection.Up) && (startingPosition <= newTarget))
